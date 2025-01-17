@@ -1,4 +1,4 @@
-const MenuIcon = ({ className }: any) => (
+const CloseIcon = ({ className }: any) => (
   <svg
     className={className}
     aria-hidden="true"
@@ -9,10 +9,11 @@ const MenuIcon = ({ className }: any) => (
     <path
       stroke="currentColor"
       strokeLinecap="round"
+      strokeLinejoin="round"
       strokeWidth="2"
-      d="M5 7h14M5 12h14M5 17h14"
+      d="M6 18 17.94 6M18 18 6.06 6"
     />
   </svg>
 );
 
-export default MenuIcon;
+export default CloseIcon;

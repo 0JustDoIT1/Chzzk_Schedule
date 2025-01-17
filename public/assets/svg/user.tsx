@@ -1,4 +1,4 @@
-const MenuIcon = ({ className }: any) => (
+const UserIcon = ({ className }: any) => (
   <svg
     className={className}
     aria-hidden="true"
@@ -8,11 +8,9 @@ const MenuIcon = ({ className }: any) => (
   >
     <path
       stroke="currentColor"
-      strokeLinecap="round"
       strokeWidth="2"
-      d="M5 7h14M5 12h14M5 17h14"
+      d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
     />
   </svg>
 );
-
-export default MenuIcon;
+export default UserIcon;
