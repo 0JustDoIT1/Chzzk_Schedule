@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/header";
+import "dayjs/locale/ko";
+import dayjs from "dayjs";
+import { ReactNode } from "react";
+
+dayjs.locale("ko");
 
 const gmarket = localFont({
   src: [
@@ -30,16 +35,17 @@ export const metadata: Metadata = {
 
 const RootLayout = ({
   children,
+  modal,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
+  modal: ReactNode;
 }>) => {
   return (
     <html lang="en">
       <body className={gmarket.className}>
-        <div>
-          <Header />
-          <div>{children}</div>
-        </div>
+        <Header />
+        {children}
+        {modal}
       </body>
     </html>
   );
