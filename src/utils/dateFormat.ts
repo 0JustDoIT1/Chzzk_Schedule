@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 // DateType을 원하는 형식 String으로 변환
 export const dateToFormatString = (
-  date: Date | string | number,
+  date: Date | string | number | dayjs.Dayjs,
   format: string
 ) => {
   if (!date) return "";
@@ -24,6 +24,6 @@ export const dateToSeoulTime = (
 };
 
 // calendar에서 DateType을 Date로 변환
-export const dateTypeToDate = (date: Date | string | number) => {
+export const dateTypeToDate = (date: Date | string | number | dayjs.Dayjs) => {
   return dayjs(date).toDate();
 };

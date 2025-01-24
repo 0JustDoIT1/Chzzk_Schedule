@@ -23,13 +23,13 @@ const HomePage = () => {
           <div className="flex flex-col">
             <p className="text-2xl">오늘의 일정</p>
             <p className="text-sm text-gray-500">
-              <span className="text-base text-green-500">
+              <span className="text-base text-brandMain">
                 {dateToFormatString(new Date(), "YYYY년 MM월 DD일 dddd")}
               </span>
               &nbsp;치지직 방송일정입니다.
             </p>
           </div>
-          <div className="px-8 w-full md:px-4 md:w-auto">
+          <div className="w-full max-w-[332px] md:w-auto">
             <Link
               href="/schedule/add"
               className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
@@ -41,12 +41,12 @@ const HomePage = () => {
         </div>
       </section>
       <section className="w-full py-6">
-        <div className="container mx-auto py-6 md:pl-16 md:flex-row lg:max-w-[1200px]">
+        <div className="container mx-auto py-6 md:pl-12 md:flex-row lg:max-w-[1200px]">
           <ol className="relative md:border-l md:border-gray-200">
             {TestTodayList.map((list) => {
               const timeText = list.time === -1 ? "미정" : `${list.time}시`;
               return (
-                <li key={list.time} className="mb-16 mx-12">
+                <li key={list.time} className="mb-16 mx-8 md:ml-12 md:mr-8">
                   <div className="hidden absolute items-center justify-center w-12 h-12 bg-blue-100 rounded-full -start-6 md:flex">
                     <p className="text-gray-600">{timeText}</p>
                   </div>

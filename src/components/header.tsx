@@ -30,7 +30,7 @@ const Header = () => {
             오늘
           </Link>
           <Link
-            href="/"
+            href="/all"
             className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2"
           >
             전체
@@ -64,7 +64,7 @@ const Header = () => {
           오늘
         </Link>
         <Link
-          href="/"
+          href="/all"
           className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2 w-full"
         >
           전체
