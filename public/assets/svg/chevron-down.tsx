@@ -1,6 +1,6 @@
-const ChevronDownIcon = ({ props }: any) => (
+const ChevronDownIcon = ({ className }: any) => (
   <svg
-    className="-mr-1 size-5 text-gray-400"
+    className={className}
     viewBox="0 0 20 20"
     fill="currentColor"
     aria-hidden="true"
