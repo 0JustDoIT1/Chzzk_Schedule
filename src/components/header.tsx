@@ -22,7 +22,7 @@ const Header = () => {
             0's Life
           </Link>
         </div>
-        <div className="hidden items-center space-x-12 mx-4 md:flex">
+        <div className="hidden items-center space-x-12 md:flex">
           <Link
             href="/"
             className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2"

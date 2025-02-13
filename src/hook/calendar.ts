@@ -55,7 +55,28 @@ const useCalendar = () => {
     setDayArray(result);
   }, [today]);
 
-  return { today, setToday, dayArray, setDayArray, week };
+  const setPreMonth = () => {
+    setToday(dayjs(today).subtract(1, "month"));
+  };
+
+  const setNextMonth = () => {
+    setToday(dayjs(today).add(1, "month"));
+  };
+
+  const setPresentMonth = () => {
+    setToday(dayjs());
+  };
+
+  return {
+    today,
+    setToday,
+    dayArray,
+    setDayArray,
+    week,
+    setPreMonth,
+    setNextMonth,
+    setPresentMonth,
+  };
 };
 
 export default useCalendar;
