@@ -3,10 +3,11 @@ import { TestTodayList } from "@/constants/test";
 import { dateToFormatString } from "@/utils/dateFormat";
 import PlusIcon from "assets/svg/plus";
 import Link from "next/link";
+import React from "react";
 
 const HomePage = () => {
   return (
-    <main className="bg-white w-full flex flex-col items-center">
+    <React.Fragment>
       {/* <div className="text-center p-4">
         <div className="text-6xl font-bold text-white my-4">0's Life</div>
         <div className="text-2xl text-white my-4">인터넷 방송 스케줄러</div>
@@ -17,7 +18,7 @@ const HomePage = () => {
         </div>
       </div> */}
       <section className="w-full border-b border-b-gray-300 py-6">
-        <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-[1200px]">
+        <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col">
             <p className="text-2xl">오늘의 일정</p>
             <p className="text-sm text-gray-500">
@@ -27,12 +28,12 @@ const HomePage = () => {
               &nbsp;치지직 방송일정입니다.
             </p>
           </div>
-          <div className="w-full max-w-[332px] md:w-auto">
+          <div className="w-full max-w-xs md:w-auto">
             <Link
               href="/schedule/add"
-              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-800 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
-              <PlusIcon className="w-4 h-4 text-gray-900 mt-[0.5]" />
+              <PlusIcon className="w-4 h-4 text-gray-800 mt-[0.5]" />
               일정 추가
             </Link>
           </div>
@@ -41,7 +42,7 @@ const HomePage = () => {
       <section className="w-full py-12">
         <CustomTimeline schedule={TestTodayList} />
       </section>
-    </main>
+    </React.Fragment>
   );
 };
 
