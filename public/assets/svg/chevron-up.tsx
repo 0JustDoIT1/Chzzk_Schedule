@@ -1,10 +1,11 @@
-const ChevronUpIcon = ({ className }: any) => (
+const ChevronUpIcon = ({ className, onClick }: any) => (
   <svg
     className={className}
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
+    onClick={onClick}
   >
     <path
       stroke="currentColor"

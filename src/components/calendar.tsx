@@ -40,11 +40,11 @@ const CustomCalendar = ({
   const streamText = (dateDiff: number, preList: number, column: number) => {
     const index = dateDiff > 6 - column ? 6 - column : dateDiff;
 
-    return `${`${streamWidth[index]} ${streamTopMargin[preList]} flex items-center h-5 px-1 bg-white z-10 border border-brandMain rounded-md text-gray-900 text-xs truncate`}`;
+    return `${`${streamWidth[index]} ${streamTopMargin[preList]} flex items-center h-5 px-1 bg-white z-10 border border-brandMain rounded-md text-gray-800 text-xs truncate`}`;
   };
 
   return (
-    <div className="container mx-auto md:px-8 md:flex-row lg:max-w-[1200px]">
+    <div className="container mx-auto md:px-8 md:flex-row lg:max-w-6xl">
       <div className="box-border w-full border-x border-x-gray-300 divide-y divide-y-gray-300">
         <div className="grid grid-cols-7 divide-x divide-x-gray-300">
           {week.map((item) => (
@@ -55,7 +55,7 @@ const CustomCalendar = ({
                   ? "text-red-600"
                   : item === "토"
                   ? "text-blue-600"
-                  : "text-black"
+                  : "text-gray-800"
               }`}
             >
               {item}
@@ -86,7 +86,7 @@ const CustomCalendar = ({
                         : monthCheck && column === 6
                         ? "text-blue-600"
                         : monthCheck
-                        ? "text-black"
+                        ? "text-gray-800"
                         : "text-gray-600"
                     }`}
                   >

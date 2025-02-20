@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-gray-900/90 p-4 text-white backdrop-blur-md">
-      <div className="mx-auto flex items-center justify-between px-4 md:px-8 md:container lg:max-w-[1200px]">
+      <div className="mx-auto flex items-center justify-between px-4 md:px-8 md:container lg:max-w-6xl">
         <div className="flex items-center space-x-4 text-xl font-bold">
           <Link
             href="/"

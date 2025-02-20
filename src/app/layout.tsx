@@ -44,7 +44,9 @@ const RootLayout = ({
     <html lang="en">
       <body className={gmarket.className}>
         <Header />
-        {children}
+        <main className="bg-white w-full flex flex-col items-center">
+          {children}
+        </main>
         {modal}
       </body>
     </html>
