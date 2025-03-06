@@ -1,8 +1,11 @@
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
-const useSearchableDropdown = (list: any[], keyName: string) => {
-  const [result, setResult] = useState<string>("");
-
+const useSearchBox = (
+  list: any[],
+  keyName: string,
+  result: string[],
+  setResult: React.Dispatch<React.SetStateAction<string[]>>
+) => {
   const [query, setQuery] = useState<string>("");
   const [filterList, setFilterList] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -41,16 +44,8 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
   // Select list item -> result
   const selectItem = (item: any) => {
     setQuery("");
-    setResult(item[keyName]);
+    if (!result.includes(item[keyName])) setResult([...result, item[keyName]]);
     setIsOpen(false);
-  };
-
-  // display value
-  const displayValue = () => {
-    if (query) return query;
-    if (result) return result;
-
-    return "";
   };
 
   // Keyboard press event
@@ -85,16 +80,14 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
 
   // When the list is closed, verify the result
   useEffect(() => {
-    if (!isOpen && !result) {
+    if (!isOpen) {
       setQuery("");
     }
-  }, [isOpen, result]);
+  }, [isOpen]);
 
   return {
     inputRef,
     itemRef,
-    result,
-    setResult,
     query,
     setQuery,
     filterList,
@@ -107,8 +100,7 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
     onKeyPress,
     setKeyboardScroll,
     selectItem,
-    displayValue,
   };
 };
 
-export default useSearchableDropdown;
+export default useSearchBox;

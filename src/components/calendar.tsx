@@ -44,7 +44,7 @@ const CustomCalendar = ({
   };
 
   return (
-    <div className="container mx-auto md:px-8 md:flex-row lg:max-w-6xl">
+    <div className="container mx-auto md:px-8 lg:max-w-6xl">
       <div className="box-border w-full border-x border-x-gray-300 divide-y divide-y-gray-300">
         <div className="grid grid-cols-7 divide-x divide-x-gray-300">
           {week.map((item) => (

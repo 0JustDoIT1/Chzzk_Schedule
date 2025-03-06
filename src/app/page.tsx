@@ -1,8 +1,8 @@
+import { BrandLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
 import { TestTodayList } from "@/constants/test";
 import { dateToFormatString } from "@/utils/dateFormat";
 import PlusIcon from "assets/svg/plus";
-import Link from "next/link";
 import React from "react";
 
 const HomePage = () => {
@@ -29,13 +29,10 @@ const HomePage = () => {
             </p>
           </div>
           <div className="w-full max-w-xs md:w-auto">
-            <Link
-              href="/schedule/add"
-              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-800 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-            >
+            <BrandLink href="/schedule/add" classes="w-full">
               <PlusIcon className="w-4 h-4 text-gray-800 mt-[0.5]" />
               일정 추가
-            </Link>
+            </BrandLink>
           </div>
         </div>
       </section>
