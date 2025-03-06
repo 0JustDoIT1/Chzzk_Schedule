@@ -107,4 +107,13 @@ input::placeholder {
       outline: 3px solid var(--purple);
     }
   }
+
+  /* Placeholder (at the top) */
+  p.is-editor-empty:first-child::before {
+    color: gray;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
 }

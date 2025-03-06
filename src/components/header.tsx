@@ -3,6 +3,8 @@
 import MenuIcon from "assets/svg/menu";
 import Link from "next/link";
 import { useState } from "react";
+import { HeaderLink } from "./link";
+import { CustomButton } from "./button";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -15,72 +17,45 @@ const Header = () => {
     <nav className="sticky top-0 z-50 bg-gray-900/90 p-4 text-white backdrop-blur-md">
       <div className="mx-auto flex items-center justify-between px-4 md:px-8 md:container lg:max-w-6xl">
         <div className="flex items-center space-x-4 text-xl font-bold">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center whitespace-nowrap text-lg h-10 py-2"
-          >
+          <HeaderLink href="/" classes="text-lg">
             0's Life
-          </Link>
+          </HeaderLink>
         </div>
         <div className="hidden items-center space-x-12 md:flex">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2"
-          >
+          <HeaderLink href="/" classes="text-sm">
             오늘
-          </Link>
-          <Link
-            href="/all"
-            className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2"
-          >
+          </HeaderLink>
+          <HeaderLink href="/all" classes="text-sm">
             전체
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2"
-          >
+          </HeaderLink>
+          <HeaderLink href="/" classes="text-sm">
             스트리머별
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2"
-          >
+          </HeaderLink>
+          <HeaderLink href="/" classes="text-sm">
             공식방송
-          </Link>
+          </HeaderLink>
         </div>
-        <button className="md:hidden" onClick={handleMenu}>
+        <CustomButton classes="md:hidden" onClick={handleMenu}>
           <MenuIcon className="w-6 h-6 text-white" />
-        </button>
+        </CustomButton>
       </div>
       <div
         className={`space-y-4 md:hidden transition-all duration-500 ease-in-out overflow-hidden ${
           isOpen ? "h-52" : "h-0"
         }`}
       >
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2 w-full"
-        >
+        <HeaderLink href="/" classes="text-sm w-full">
           오늘
-        </Link>
-        <Link
-          href="/all"
-          className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2 w-full"
-        >
+        </HeaderLink>
+        <HeaderLink href="/all" classes="text-sm w-full">
           전체
-        </Link>
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2 w-full"
-        >
+        </HeaderLink>
+        <HeaderLink href="/" classes="text-sm w-full">
           스트리머별
-        </Link>
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center whitespace-nowrap text-sm h-10 py-2 w-full"
-        >
+        </HeaderLink>
+        <HeaderLink href="/" classes="text-sm w-full">
           공식방송
-        </Link>
+        </HeaderLink>
       </div>
     </nav>
   );

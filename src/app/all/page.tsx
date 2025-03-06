@@ -9,6 +9,8 @@ import React from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
 import CustomCalendar from "@/components/calendar";
+import { BrandButton, CustomButton } from "@/components/button";
+import { BrandLink } from "@/components/link";
 
 const AllSchedulePage = () => {
   const { today, week, dayArray, setPreMonth, setNextMonth, setPresentMonth } =
@@ -25,30 +27,27 @@ const AllSchedulePage = () => {
             </p>
           </div>
           <div className="flex items-center justify-center w-full md:w-1/3">
-            <button onClick={setPreMonth}>
+            <CustomButton onClick={setPreMonth}>
               <AngleLeftIcon className="w-6 h-6 text-gray-800" />
-            </button>
+            </CustomButton>
             <p className="mx-2 mt-1">
               {dateToFormatString(today, "YYYY년 MM월")}
             </p>
-            <button onClick={setNextMonth}>
+            <CustomButton onClick={setNextMonth}>
               <AngleRightIcon className="w-6 h-6 text-gray-800" />
-            </button>
+            </CustomButton>
           </div>
           <div className="flex justify-center w-full md:w-1/3 md:justify-end">
-            <button
-              className="inline-flex max-w-64 justify-center rounded-md bg-white px-3 py-2 mr-2 text-sm text-gray-800 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:w-auto"
+            <BrandButton
+              classes="max-w-64 md:w-auto mr-2"
               onClick={setPresentMonth}
             >
               오늘
-            </button>
-            <Link
-              href="/schedule/add"
-              className="inline-flex w-full max-w-64 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-800 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:w-auto"
-            >
+            </BrandButton>
+            <BrandLink href="/schedule/add" classes="w-full max-w-64 md:w-auto">
               <PlusIcon className="w-4 h-4 text-gray-800 mt-[0.5]" />
               일정 추가
-            </Link>
+            </BrandLink>
           </div>
         </div>
       </section>
