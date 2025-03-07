@@ -10,6 +10,7 @@ import CloseIcon from "~/public/assets/svg/close";
 import CheckIcon from "~/public/assets/svg/check";
 import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
+import { TestStreamerList } from "@/constants/test";
 
 interface ScheduleInput {
   isOfficial: boolean;
@@ -99,7 +100,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             },
           })}
           id="category"
-          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
             "category"
           )}`}
         >
@@ -131,32 +132,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             멤버 &#40;진행 및 게스트&#41;
           </label>
           <SearchBox
-            list={[
-              { _id: 1, member: "hi" },
-              { _id: 2, member: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
-              { _id: 3, member: "hi2" },
-              { _id: 4, member: "test2" },
-              { _id: 5, member: "hi3" },
-              { _id: 6, member: "test3" },
-              { _id: 7, member: "hi4" },
-              { _id: 8, member: "test4" },
-              { _id: 9, member: "hi5" },
-              { _id: 10, member: "test5" },
-              { _id: 11, member: "hi6" },
-              { _id: 12, member: "test6" },
-              { _id: 13, member: "hi7" },
-              { _id: 14, member: "test7" },
-              { _id: 15, member: "hi8" },
-              { _id: 16, member: "test8" },
-              { _id: 17, member: "hi9" },
-              { _id: 18, member: "test9" },
-              { _id: 19, member: "hi10" },
-              { _id: 20, member: "test10" },
-              { _id: 21, member: "hi11" },
-              { _id: 22, member: "test11" },
-              { _id: 23, member: "hi12" },
-              { _id: 24, member: "test12" },
-            ]}
+            list={TestStreamerList}
             keyName="member"
             placeholder="합방 멤버를 추가해 주세요."
             result={member}
@@ -189,32 +165,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             합방 멤버
           </label>
           <SearchBox
-            list={[
-              { _id: 1, member: "hi" },
-              { _id: 2, member: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
-              { _id: 3, member: "hi2" },
-              { _id: 4, member: "test2" },
-              { _id: 5, member: "hi3" },
-              { _id: 6, member: "test3" },
-              { _id: 7, member: "hi4" },
-              { _id: 8, member: "test4" },
-              { _id: 9, member: "hi5" },
-              { _id: 10, member: "test5" },
-              { _id: 11, member: "hi6" },
-              { _id: 12, member: "test6" },
-              { _id: 13, member: "hi7" },
-              { _id: 14, member: "test7" },
-              { _id: 15, member: "hi8" },
-              { _id: 16, member: "test8" },
-              { _id: 17, member: "hi9" },
-              { _id: 18, member: "test9" },
-              { _id: 19, member: "hi10" },
-              { _id: 20, member: "test10" },
-              { _id: 21, member: "hi11" },
-              { _id: 22, member: "test11" },
-              { _id: 23, member: "hi12" },
-              { _id: 24, member: "test12" },
-            ]}
+            list={TestStreamerList}
             keyName="member"
             placeholder="합방 멤버를 추가해 주세요."
             result={member}
@@ -251,7 +202,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             required: { value: true, message: "일정 제목을 입력해 주세요." },
           })}
           id="title"
-          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
             "title"
           )}`}
           type="text"
@@ -297,7 +248,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "시작 일시를 입력해 주세요." },
             })}
             id="startAtDate"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs ring-gray-300 outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs ring-gray-300 outline-none hover:bg-gray-50 ${ringStyle(
               "startAtDate"
             )}`}
             type="date"
@@ -309,7 +260,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "시작 일시를 입력해 주세요." },
             })}
             id="startAtTime"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
               "startAtTime"
             )} disabled:ring-gray-400 disabled:bg-gray-200 disabled:text-gray-400`}
             type="time"
@@ -335,7 +286,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "종료 일시를 입력해 주세요." },
             })}
             id="endAtDate"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
               "endAtDate"
             )} disabled:ring-gray-400 disabled:bg-gray-200 disabled:text-gray-400`}
             type="date"
@@ -348,7 +299,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "종료 일시를 입력해 주세요." },
             })}
             id="endAtTime"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
               "endAtTime"
             )} disabled:ring-gray-400 disabled:bg-gray-200 disabled:text-gray-400`}
             type="time"

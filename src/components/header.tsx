@@ -28,10 +28,10 @@ const Header = () => {
           <HeaderLink href="/all" classes="text-sm">
             전체
           </HeaderLink>
-          <HeaderLink href="/" classes="text-sm">
+          <HeaderLink href="/streamer" classes="text-sm">
             스트리머별
           </HeaderLink>
-          <HeaderLink href="/" classes="text-sm">
+          <HeaderLink href="/chzzk" classes="text-sm">
             공식방송
           </HeaderLink>
         </div>
@@ -50,10 +50,10 @@ const Header = () => {
         <HeaderLink href="/all" classes="text-sm w-full">
           전체
         </HeaderLink>
-        <HeaderLink href="/" classes="text-sm w-full">
+        <HeaderLink href="/streamer" classes="text-sm w-full">
           스트리머별
         </HeaderLink>
-        <HeaderLink href="/" classes="text-sm w-full">
+        <HeaderLink href="/chzzk" classes="text-sm w-full">
           공식방송
         </HeaderLink>
       </div>
