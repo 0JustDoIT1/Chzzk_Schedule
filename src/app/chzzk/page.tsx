@@ -11,7 +11,7 @@ import CustomCalendar from "@/components/calendar";
 import { BrandButton, CustomButton } from "@/components/button";
 import { BrandLink } from "@/components/link";
 
-const AllSchedulePage = () => {
+const ChzzkSchedulePage = () => {
   const { today, week, dayArray, setPreMonth, setNextMonth, setPresentMonth } =
     useCalendar();
 
@@ -20,9 +20,9 @@ const AllSchedulePage = () => {
       <section className="w-full border-b border-b-gray-300 py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
-            <p className="text-2xl">전체 일정</p>
+            <p className="text-2xl">치지직 공식 일정</p>
             <p className="text-sm text-gray-500">
-              치지직 방송 일정을 한눈에 살펴보세요.
+              치지직 공식 방송 일정을 한눈에 살펴보세요.
             </p>
           </div>
           <div className="flex items-center justify-center w-full md:w-1/3">
@@ -63,4 +63,4 @@ const AllSchedulePage = () => {
   );
 };
 
-export default AllSchedulePage;
+export default ChzzkSchedulePage;
