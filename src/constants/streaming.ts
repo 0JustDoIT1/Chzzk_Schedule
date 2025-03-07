@@ -1,6 +1,13 @@
-export const streamingType = [
-  { value: "personal", label: "개인 방송" },
-  { value: "together", label: "합동 방송" },
-  { value: "content", label: "컨텐츠 방송" },
-  { value: "match", label: "대회 방송" },
+import { Option } from "@/types/option";
+
+export const category: Option[] = [
+  { value: "personal", label: "개인" },
+  { value: "together", label: "합방" },
+  { value: "content", label: "컨텐츠" },
+  { value: "match", label: "대회" },
+];
+
+export const chzzkCategory: Option[] = [
+  { value: "official", label: "공식 컨텐츠" },
+  { value: "watch", label: "같이 보기" },
 ];

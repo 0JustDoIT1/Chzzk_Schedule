@@ -1,4 +1,4 @@
-import { streamingType } from "@/constants/streaming";
+import { category, chzzkCategory } from "@/constants/streaming";
 import TiptapEditor from "./tiptapEditor";
 import { BrandButton } from "./button";
 import { Controller } from "react-hook-form";
@@ -46,87 +46,89 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
       onSubmit={onSubmit}
     >
       {!isOfficial && (
-        <React.Fragment>
-          <div className="flex flex-col mb-4">
-            <label htmlFor="streamer" className="text-sm text-gray-700 mb-2">
-              <span className="text-brandMain">&#42;</span> 스트리머
-            </label>
-            <SearchableDropdown
-              list={[
-                { _id: 1, streamer: "hi" },
-                { _id: 2, streamer: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
-                { _id: 3, streamer: "hi2" },
-                { _id: 4, streamer: "test2" },
-                { _id: 5, streamer: "hi3" },
-                { _id: 6, streamer: "test3" },
-                { _id: 7, streamer: "hi4" },
-                { _id: 8, streamer: "test4" },
-                { _id: 9, streamer: "hi5" },
-                { _id: 10, streamer: "test5" },
-                { _id: 11, streamer: "hi6" },
-                { _id: 12, streamer: "test6" },
-                { _id: 13, streamer: "hi7" },
-                { _id: 14, streamer: "test7" },
-                { _id: 15, streamer: "hi8" },
-                { _id: 16, streamer: "test8" },
-                { _id: 17, streamer: "hi9" },
-                { _id: 18, streamer: "test9" },
-                { _id: 19, streamer: "hi10" },
-                { _id: 20, streamer: "test10" },
-                { _id: 21, streamer: "hi11" },
-                { _id: 22, streamer: "test11" },
-                { _id: 23, streamer: "hi12" },
-                { _id: 24, streamer: "test12" },
-              ]}
-              keyName="streamer"
-              placeholder="스트리머를 선택해 주세요."
-              register={register}
-              setValue={setValue}
-              errors={errors}
-              ringStyle={ringStyle}
-            />
-          </div>
-          <div className="flex flex-col mb-4">
-            <label
-              htmlFor="streamingType"
-              className="text-sm text-gray-700 mb-2"
-            >
-              <span className="text-brandMain">&#42;</span> 방송 종류
-            </label>
-            <select
-              {...register("streamingType", {
-                value: initValue.streamingType,
-                required: {
-                  value: true,
-                  message: "방송 종류를 선택해 주세요.",
-                },
-              })}
-              id="streamingType"
-              className={`"w-full rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
-                "streamingType"
-              )}`}
-            >
-              <option style={{ color: "gray" }} value="">
-                방송 종류를 선택해 주세요.
-              </option>
-              {streamingType.map((item) => (
+        <div className="flex flex-col mb-4">
+          <label htmlFor="streamer" className="text-sm text-gray-700 mb-2">
+            <span className="text-brandMain">&#42;</span> 스트리머
+          </label>
+          <SearchableDropdown
+            list={[
+              { _id: 1, streamer: "hi" },
+              { _id: 2, streamer: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
+              { _id: 3, streamer: "hi2" },
+              { _id: 4, streamer: "test2" },
+              { _id: 5, streamer: "hi3" },
+              { _id: 6, streamer: "test3" },
+              { _id: 7, streamer: "hi4" },
+              { _id: 8, streamer: "test4" },
+              { _id: 9, streamer: "hi5" },
+              { _id: 10, streamer: "test5" },
+              { _id: 11, streamer: "hi6" },
+              { _id: 12, streamer: "test6" },
+              { _id: 13, streamer: "hi7" },
+              { _id: 14, streamer: "test7" },
+              { _id: 15, streamer: "hi8" },
+              { _id: 16, streamer: "test8" },
+              { _id: 17, streamer: "hi9" },
+              { _id: 18, streamer: "test9" },
+              { _id: 19, streamer: "hi10" },
+              { _id: 20, streamer: "test10" },
+              { _id: 21, streamer: "hi11" },
+              { _id: 22, streamer: "test11" },
+              { _id: 23, streamer: "hi12" },
+              { _id: 24, streamer: "test12" },
+            ]}
+            keyName="streamer"
+            placeholder="스트리머를 선택해 주세요."
+            register={register}
+            setValue={setValue}
+            errors={errors}
+            ringStyle={ringStyle}
+          />
+        </div>
+      )}
+      <div className="flex flex-col mb-4">
+        <label htmlFor="category" className="text-sm text-gray-700 mb-2">
+          <span className="text-brandMain">&#42;</span> 방송 종류
+        </label>
+        <select
+          {...register("category", {
+            value: initValue.category,
+            required: {
+              value: true,
+              message: "방송 종류를 선택해 주세요.",
+            },
+          })}
+          id="category"
+          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-800 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            "category"
+          )}`}
+        >
+          <option style={{ color: "gray" }} value="">
+            방송 종류를 선택해 주세요.
+          </option>
+          {isOfficial
+            ? chzzkCategory.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))
+            : category.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
                 </option>
               ))}
-            </select>
-            {errors.streamingType && (
-              <HelperText className="text-error">
-                {errors.streamingType?.message as string}
-              </HelperText>
-            )}
-          </div>
-        </React.Fragment>
-      )}
-      {isOfficial ? (
+        </select>
+        {errors.category && (
+          <HelperText className="text-error">
+            {errors.category?.message as string}
+          </HelperText>
+        )}
+      </div>
+
+      {isOfficial && watch("category") && watch("category") !== "watch" && (
         <div className="flex flex-col mb-4">
           <label htmlFor="member" className="text-sm text-gray-700 mb-2">
-            멤버
+            멤버 &#40;진행 및 게스트&#41;
           </label>
           <SearchBox
             list={[
@@ -180,66 +182,64 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               ))}
           </div>
         </div>
-      ) : (
-        watch("streamingType") &&
-        watch("streamingType") !== "personal" && (
-          <div className="flex flex-col mb-4">
-            <label htmlFor="member" className="text-sm text-gray-700 mb-2">
-              합방 멤버
-            </label>
-            <SearchBox
-              list={[
-                { _id: 1, member: "hi" },
-                { _id: 2, member: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
-                { _id: 3, member: "hi2" },
-                { _id: 4, member: "test2" },
-                { _id: 5, member: "hi3" },
-                { _id: 6, member: "test3" },
-                { _id: 7, member: "hi4" },
-                { _id: 8, member: "test4" },
-                { _id: 9, member: "hi5" },
-                { _id: 10, member: "test5" },
-                { _id: 11, member: "hi6" },
-                { _id: 12, member: "test6" },
-                { _id: 13, member: "hi7" },
-                { _id: 14, member: "test7" },
-                { _id: 15, member: "hi8" },
-                { _id: 16, member: "test8" },
-                { _id: 17, member: "hi9" },
-                { _id: 18, member: "test9" },
-                { _id: 19, member: "hi10" },
-                { _id: 20, member: "test10" },
-                { _id: 21, member: "hi11" },
-                { _id: 22, member: "test11" },
-                { _id: 23, member: "hi12" },
-                { _id: 24, member: "test12" },
-              ]}
-              keyName="member"
-              placeholder="합방 멤버를 추가해 주세요."
-              result={member}
-              setResult={setMember}
-            />
-            <div className="flex flex-wrap gap-1 items-center w-full mt-2">
-              {member &&
-                member.map((name) => (
-                  <div
-                    key={name}
-                    className="flex items-center justify-between rounded-md border border-green-500 bg-green-500 text-xs text-white py-1 pl-2 pr-1"
+      )}
+      {!isOfficial && watch("category") && watch("category") !== "personal" && (
+        <div className="flex flex-col mb-4">
+          <label htmlFor="member" className="text-sm text-gray-700 mb-2">
+            합방 멤버
+          </label>
+          <SearchBox
+            list={[
+              { _id: 1, member: "hi" },
+              { _id: 2, member: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
+              { _id: 3, member: "hi2" },
+              { _id: 4, member: "test2" },
+              { _id: 5, member: "hi3" },
+              { _id: 6, member: "test3" },
+              { _id: 7, member: "hi4" },
+              { _id: 8, member: "test4" },
+              { _id: 9, member: "hi5" },
+              { _id: 10, member: "test5" },
+              { _id: 11, member: "hi6" },
+              { _id: 12, member: "test6" },
+              { _id: 13, member: "hi7" },
+              { _id: 14, member: "test7" },
+              { _id: 15, member: "hi8" },
+              { _id: 16, member: "test8" },
+              { _id: 17, member: "hi9" },
+              { _id: 18, member: "test9" },
+              { _id: 19, member: "hi10" },
+              { _id: 20, member: "test10" },
+              { _id: 21, member: "hi11" },
+              { _id: 22, member: "test11" },
+              { _id: 23, member: "hi12" },
+              { _id: 24, member: "test12" },
+            ]}
+            keyName="member"
+            placeholder="합방 멤버를 추가해 주세요."
+            result={member}
+            setResult={setMember}
+          />
+          <div className="flex flex-wrap gap-1 items-center w-full mt-2">
+            {member &&
+              member.map((name) => (
+                <div
+                  key={name}
+                  className="flex items-center justify-between rounded-md border border-green-500 bg-green-500 text-xs text-white py-1 pl-2 pr-1"
+                >
+                  {name}
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setMember(member.filter((item) => item !== name));
+                    }}
                   >
-                    {name}
-                    <span
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setMember(member.filter((item) => item !== name));
-                      }}
-                    >
-                      <CloseIcon className="w-4 h-4 ml-2 text-white" />
-                    </span>
-                  </div>
-                ))}
-            </div>
+                    <CloseIcon className="w-4 h-4 ml-2 text-white" />
+                  </span>
+                </div>
+              ))}
           </div>
-        )
+        </div>
       )}
       <div className="flex flex-col mb-4">
         <label htmlFor="title" className="text-sm text-gray-700 mb-2">

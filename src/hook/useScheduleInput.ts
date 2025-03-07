@@ -28,16 +28,20 @@ const useScheduleInput = (
 
   useEffect(() => {
     if (isOfficial) {
-      setValue("streamer", "", { shouldValidate: true });
-      setValue("streamingType", "", { shouldValidate: true });
-      setMember([]);
-    } else {
+      setValue("streamer", "");
+      clearErrors(["streamer"]);
+    }
+    setMember([]);
+  }, [isOfficial]);
+
+  useEffect(() => {
+    if (
+      watch("category") &&
+      (watch("category") === "personal" || watch("category") === "watch")
+    ) {
       setMember([]);
     }
-    if (watch("streamingType") && watch("streamingType") === "personal") {
-      setMember([]);
-    }
-  }, [watch("streamingType"), isOfficial]);
+  }, [watch("category")]);
 
   useEffect(() => {
     if (fullDay) {
@@ -73,7 +77,7 @@ const useScheduleInput = (
 
   const initValue: { [x: string]: string } = {
     streamer: "",
-    streamingType: "",
+    category: "",
     title: "",
     startAtDate: setDateAndTime().date,
     startAtTime: setDateAndTime().time,
@@ -106,6 +110,7 @@ const useScheduleInput = (
       isOfficial,
       member,
     };
+    // if (isOfficial) delete result.streamer;
     console.log("데이터", result);
   });
 
