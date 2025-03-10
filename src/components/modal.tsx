@@ -30,7 +30,7 @@ const Modal = ({
                 router.back();
               }}
             >
-              <CloseIcon className="w-6 h-6 text-gray-600" />
+              <CloseIcon className="w-6 h-6 text-textNormal" />
             </CustomButton>
           </div>
           {children}

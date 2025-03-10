@@ -76,7 +76,7 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
 
   // keyboard scroll event
   const setKeyboardScroll = () => {
-    const result = itemRef.current?.querySelector(".bg-gray-100");
+    const result = itemRef.current?.querySelector(".bg-textBlur");
     result?.scrollIntoView({
       behavior: "smooth",
       block: "end",

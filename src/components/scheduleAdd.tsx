@@ -13,11 +13,11 @@ const ScheduleAdd = () => {
 
   return (
     <React.Fragment>
-      <section className="w-full border-b border-b-gray-300 p-4">
+      <section className="w-full border-b border-b-textLight p-4">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
             <p className="text-2xl">일정 추가</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-textNormal">
               원하는 스트리머의 방송 일정을 추가해 보세요.
             </p>
           </div>
@@ -29,10 +29,10 @@ const ScheduleAdd = () => {
                 checked={isOfficial}
                 onChange={onChangeToggle}
               />
-              <span className="mx-3 text-sm text-gray-700 mt-[2px]">
+              <span className="mx-3 text-sm text-textMain mt-[2px]">
                 치지직 공식
               </span>
-              <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 peer-focus:ring-2 peer-focus:ring-green-400"></div>
+              <div className="relative w-11 h-6 bg-textSuperLight peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-textLight after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandMain peer-focus:ring-2 peer-focus:ring-double peer-focus:ring-brandLight"></div>
             </label>
           </div>
         </div>

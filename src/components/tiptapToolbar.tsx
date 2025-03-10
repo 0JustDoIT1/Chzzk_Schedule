@@ -29,7 +29,7 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-2 bg-gray-700 rounded-t-md">
+    <div className="flex items-center justify-between p-2 bg-textMain rounded-t-md">
       <div className="w-full grid grid-cols-3 divide-x divide-x-white">
         <div className="flex items-center justify-center gap-4">
           <button

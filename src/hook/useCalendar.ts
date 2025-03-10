@@ -1,11 +1,16 @@
-import dayjs from "dayjs";
+import {
+  addDate,
+  dateToFormatString,
+  dayjsType,
+  getStartDate,
+  getToday,
+  subtractDate,
+} from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
 
 const useCalendar = () => {
-  const [today, setToday] = useState<dayjs.Dayjs>(dayjs());
-  const [dayArray, setDayArray] = useState<{ [x: number]: dayjs.Dayjs[] }[]>(
-    []
-  );
+  const [today, setToday] = useState<dayjsType>(getToday());
+  const [dayArray, setDayArray] = useState<{ [x: number]: dayjsType[] }[]>([]);
 
   const week = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -13,7 +18,7 @@ const useCalendar = () => {
   const calendarColumns = 6;
 
   const daysInMonth = today.daysInMonth();
-  const startDayOfMonth = dayjs(today).startOf("month");
+  const startDayOfMonth = getStartDate(today, "month");
 
   const preMonth = today.subtract(1, "month");
   const endDayOfPreMonth = preMonth.endOf("month");
@@ -23,11 +28,11 @@ const useCalendar = () => {
 
   useEffect(() => {
     const days = Array.from({ length: daysInMonth }, (_, index) =>
-      dayjs(startDayOfMonth).add(index, "day")
+      addDate(startDayOfMonth, index, "day")
     );
     const preEmptyDates = Array.from(
       { length: startDayOfMonth.day() },
-      (_, index) => dayjs(endDayOfPreMonth).subtract(index, "day")
+      (_, index) => subtractDate(endDayOfPreMonth, index, "day")
     ).sort((a, b) => -1);
 
     const preCalendar = [...preEmptyDates, ...days];
@@ -37,7 +42,7 @@ const useCalendar = () => {
     const nextDayLength = calendarLength - currentDayLength;
 
     const nextEmptyDates = Array.from({ length: nextDayLength }, (_, index) =>
-      dayjs(startDayOfNextMonth).add(index, "day")
+      addDate(startDayOfNextMonth, index, "day")
     );
 
     const nextCalendar = [...preCalendar, ...nextEmptyDates];
@@ -56,15 +61,19 @@ const useCalendar = () => {
   }, [today]);
 
   const setPreMonth = () => {
-    setToday(dayjs(today).subtract(1, "month"));
+    let date = subtractDate(today, 1, "month");
+    date = getStartDate(date, "M");
+    setToday(date);
   };
 
   const setNextMonth = () => {
-    setToday(dayjs(today).add(1, "month"));
+    let date = addDate(today, 1, "month");
+    date = getStartDate(date, "M");
+    setToday(date);
   };
 
   const setPresentMonth = () => {
-    setToday(dayjs());
+    setToday(getToday());
   };
 
   return {

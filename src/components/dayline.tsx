@@ -3,20 +3,43 @@ import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
+import "dayjs/locale/ko";
+import { useEffect } from "react";
 
-interface CustomTimeLine {
+interface CustomDayLine {
   schedule: {
-    time: number;
+    day: string;
+    preList: {
+      _id: string;
+      title: string;
+      member: string[];
+      startAt: Date | dayjsType;
+      endAt: Date | dayjsType;
+    }[];
     list: {
       _id: string;
       title: string;
       member: string[];
       startAt: Date | dayjsType;
+      endAt: Date | dayjsType;
     }[];
   }[];
 }
 
-const CustomTimeline = ({ schedule }: CustomTimeLine) => {
+const CustomDayline = ({ schedule }: CustomDayLine) => {
+  useEffect(() => {
+    const element = document.getElementById(
+      dateToFormatString(getToday(), "YYYY-MM-DD")
+    );
+    if (element) {
+      const elementRect = element.getBoundingClientRect();
+      const topOfElement = elementRect.top - 72 - 10;
+      window.scroll({ top: topOfElement, behavior: "smooth" });
+    } else {
+      window.scroll({ top: 0, behavior: "smooth" });
+    }
+  }, [schedule]);
+
   return (
     <div className="container mx-auto md:pl-12 lg:max-w-6xl">
       <ol className="relative md:border-l-2 md:border-brandMain">
@@ -24,7 +47,7 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
           let timeCircle = "";
           let circleText = "";
 
-          if (getToday().hour() === list.time) {
+          if (dateToFormatString(getToday(), "YYYY-MM-DD") === list.day) {
             timeCircle +=
               "hidden absolute items-center justify-center w-12 h-12 rounded-full ring-4 ring-white border-2 border-brandMain bg-brandMain -start-6 md:flex";
             circleText = "mt-[1px] text-base font-bold text-white";
@@ -34,19 +57,20 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
             circleText = "mt-[1px] text-base font-bold text-textNormal";
           }
 
-          const timeText =
-            list.time === -1 ? (
-              <p className={circleText}>미정</p>
-            ) : (
-              <p className={circleText}>
-                {list.time}
-                <span className="text-xs font-normal">시</span>
-              </p>
-            );
-
           return (
-            <li key={list.time} className="mb-16 mx-8 md:ml-12 md:mr-8">
-              <div className={timeCircle}>{timeText}</div>
+            <li
+              key={list.day}
+              id={dateToFormatString(list.day, "YYYY-MM-DD")}
+              className="mb-16 mx-8 md:ml-12 md:mr-8"
+            >
+              <div className={timeCircle}>
+                <p className={circleText}>
+                  {dateToFormatString(list.day, "DD")}
+                </p>
+                <p className="absolute top-12 py-1 text-center bg-white text-sm text-brandMain">
+                  {dateToFormatString(list.day, "dddd")}
+                </p>
+              </div>
               {list.list.map((item) => (
                 <div
                   key={item._id}
@@ -86,12 +110,18 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
                       </div>
                     </div>
                   </div>
-                  <div className="w-full md:w-auto">
-                    <BrandLink href={`/streaming/${item._id}`} classes="w-full">
-                      방송 보기
-                      <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
-                    </BrandLink>
-                  </div>
+                  {dateToFormatString(getToday(), "YYYY-MM-DD") ===
+                    list.day && (
+                    <div className="w-full md:w-auto">
+                      <BrandLink
+                        href={`/streaming/${item._id}`}
+                        classes="w-full"
+                      >
+                        방송 보기
+                        <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
+                      </BrandLink>
+                    </div>
+                  )}
                 </div>
               ))}
             </li>
@@ -102,4 +132,4 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
   );
 };
 
-export default CustomTimeline;
+export default CustomDayline;

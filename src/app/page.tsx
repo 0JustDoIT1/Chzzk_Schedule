@@ -1,7 +1,7 @@
 import { BrandLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
 import { TestTodayList } from "@/constants/test";
-import { dateToFormatString } from "@/utils/dateFormat";
+import { dateToFormatString, getToday } from "@/utils/dateFormat";
 import PlusIcon from "assets/svg/plus";
 import React from "react";
 
@@ -17,20 +17,20 @@ const HomePage = () => {
           많은 참여 부탁드립니다.
         </div>
       </div> */}
-      <section className="w-full border-b border-b-gray-300 py-6">
+      <section className="w-full border-b border-b-textLight py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col">
             <p className="text-2xl">오늘의 일정</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-textNormal">
               <span className="text-base text-brandMain">
-                {dateToFormatString(new Date(), "YYYY년 MM월 DD일 dddd")}
+                {dateToFormatString(getToday(), "YYYY년 MM월 DD일 dddd")}
               </span>
               &nbsp;치지직 방송일정입니다.
             </p>
           </div>
           <div className="w-full max-w-xs md:w-auto">
             <BrandLink href="/schedule/add" classes="w-full">
-              <PlusIcon className="w-4 h-4 text-gray-800 mt-[0.5]" />
+              <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
               일정 추가
             </BrandLink>
           </div>

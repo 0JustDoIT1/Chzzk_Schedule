@@ -38,7 +38,7 @@ const SearchBox = ({
     <div className="relative cursor-default">
       <input
         id={keyName}
-        className="w-full rounded-md bg-white py-2 pl-2 pr-16 text-sm text-gray-800 box-border ring-1 shadow-xs ring-gray-300 outline-none hover:bg-gray-50 focus:ring-brandMain focus:border-brandMain"
+        className="w-full rounded-md bg-white py-2 pl-2 pr-16 text-sm text-textMain box-border ring-1 shadow-xs ring-textLight outline-none hover:bg-textHover focus:ring-brandMain focus:border-brandMain"
         ref={inputRef}
         type="text"
         value={query}
@@ -53,34 +53,34 @@ const SearchBox = ({
       />
       {query && (
         <CustomButton
-          classes="absolute top-2.5 right-10 flex items-center justify-center w-4 h-4 rounded-full bg-gray-400"
+          classes="absolute top-2.5 right-10 flex items-center justify-center w-4 h-4 rounded-full bg-textIcon"
           onClick={() => setQuery("")}
         >
           <CloseIcon className="w-3 h-3 text-white" />
         </CustomButton>
       )}
-      <SearchIcon className="absolute top-2 right-2 w-5 h-5 text-gray-400 pointer-events-none" />
+      <SearchIcon className="absolute top-2 right-2 w-5 h-5 text-textIcon pointer-events-none" />
 
       {isOpen && filterList.length > 0 && (
         <ul
           ref={itemRef}
-          className="absolute start-0 z-10 w-full max-h-64 overflow-y-auto box-border rounded-md bg-white text-sm ring-1 shadow-lg ring-gray-300 "
+          className="absolute start-0 z-10 w-full max-h-64 overflow-y-auto box-border rounded-md bg-white text-sm ring-1 shadow-lg ring-textLight "
         >
           {filterList.map((item, index) => {
             let background = "";
             let hover = "";
 
             if (result === item[keyName]) {
-              hover = "hover:bg-green-300";
-              background = "bg-green-200";
+              hover = "hover:bg-brandLight";
+              background = "bg-brandSuperLight";
               if (index === selectIndex) {
-                background = "bg-green-300";
+                background = "bg-brandLight";
               }
             } else {
-              hover = "hover:bg-gray-100";
+              hover = "hover:bg-textBlur";
               background = "bg-white";
               if (index === selectIndex) {
-                background = "bg-gray-100";
+                background = "bg-textBlur";
               }
             }
             setTimeout(() => {

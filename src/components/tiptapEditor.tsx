@@ -50,7 +50,7 @@ const TiptapEditor = ({ text, setText }: TiptapEditor) => {
   return (
     <div
       id="tiptap-box"
-      className="w-full rounded-md bg-white text-sm text-gray-800 box-border ring-1 shadow-xs ring-gray-300 outline-none"
+      className="w-full rounded-md bg-white text-sm text-textMain box-border ring-1 shadow-xs ring-textLight outline-none"
     >
       {editor && <TiptapToolbar editor={editor} />}
       <EditorContent
