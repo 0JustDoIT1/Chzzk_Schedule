@@ -48,7 +48,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
     >
       {!isOfficial && (
         <div className="flex flex-col mb-4">
-          <label htmlFor="streamer" className="text-sm text-gray-700 mb-2">
+          <label htmlFor="streamer" className="text-sm text-textMain mb-2">
             <span className="text-brandMain">&#42;</span> 스트리머
           </label>
           <SearchableDropdown
@@ -88,7 +88,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
         </div>
       )}
       <div className="flex flex-col mb-4">
-        <label htmlFor="category" className="text-sm text-gray-700 mb-2">
+        <label htmlFor="category" className="text-sm text-textMain mb-2">
           <span className="text-brandMain">&#42;</span> 방송 종류
         </label>
         <select
@@ -100,7 +100,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             },
           })}
           id="category"
-          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+          className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
             "category"
           )}`}
         >
@@ -128,7 +128,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
 
       {isOfficial && watch("category") && watch("category") !== "watch" && (
         <div className="flex flex-col mb-4">
-          <label htmlFor="member" className="text-sm text-gray-700 mb-2">
+          <label htmlFor="member" className="text-sm text-textMain mb-2">
             멤버 &#40;진행 및 게스트&#41;
           </label>
           <SearchBox
@@ -143,7 +143,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               member.map((name) => (
                 <div
                   key={name}
-                  className="flex items-center justify-between rounded-md border border-green-500 bg-green-500 text-xs text-white py-1 pl-2 pr-1"
+                  className="flex items-center justify-between rounded-md border border-brandMain bg-brandMain text-xs text-white py-1 pl-2 pr-1"
                 >
                   {name}
                   <span
@@ -161,7 +161,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
       )}
       {!isOfficial && watch("category") && watch("category") !== "personal" && (
         <div className="flex flex-col mb-4">
-          <label htmlFor="member" className="text-sm text-gray-700 mb-2">
+          <label htmlFor="member" className="text-sm text-textMain mb-2">
             합방 멤버
           </label>
           <SearchBox
@@ -176,7 +176,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               member.map((name) => (
                 <div
                   key={name}
-                  className="flex items-center justify-between rounded-md border border-green-500 bg-green-500 text-xs text-white py-1 pl-2 pr-1"
+                  className="flex items-center justify-between rounded-md border border-brandMain bg-brandMain text-xs text-white py-1 pl-2 pr-1"
                 >
                   {name}
                   <span
@@ -193,7 +193,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
         </div>
       )}
       <div className="flex flex-col mb-4">
-        <label htmlFor="title" className="text-sm text-gray-700 mb-2">
+        <label htmlFor="title" className="text-sm text-textMain mb-2">
           <span className="text-brandMain">&#42;</span> 일정 제목
         </label>
         <input
@@ -202,7 +202,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             required: { value: true, message: "일정 제목을 입력해 주세요." },
           })}
           id="title"
-          className={`"w-full rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+          className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
             "title"
           )}`}
           type="text"
@@ -215,14 +215,14 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
         )}
       </div>
       <div className="flex flex-col mb-4">
-        <label htmlFor="startAtDate" className="text-sm text-gray-700 mb-2">
+        <label htmlFor="startAtDate" className="text-sm text-textMain mb-2">
           <span className="text-brandMain">&#42;</span> 시작 일시
         </label>
         <div className="flex gap-2 items-center mb-2">
           <label className="flex items-center cursor-pointer relative">
             <input
               id="fullDay"
-              className="peer h-4 w-4 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-green-500 checked:border-green-500 focus:ring-2 focus:ring-green-400"
+              className="peer h-4 w-4 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-brandMain checked:border-brandMain focus:ring-2 focus:ring-brandLight"
               type="checkbox"
               checked={fullDay}
               onChange={(e) => {
@@ -236,7 +236,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
           </label>
           <label
             htmlFor="fullDay"
-            className="inline-block text-sm text-gray-700 mt-[2px]"
+            className="inline-block text-sm text-textMain mt-[2px]"
           >
             종일
           </label>
@@ -248,7 +248,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "시작 일시를 입력해 주세요." },
             })}
             id="startAtDate"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs ring-gray-300 outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs ring-textLight outline-none hover:bg-textHover ${ringStyle(
               "startAtDate"
             )}`}
             type="date"
@@ -260,9 +260,9 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "시작 일시를 입력해 주세요." },
             })}
             id="startAtTime"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
               "startAtTime"
-            )} disabled:ring-gray-400 disabled:bg-gray-200 disabled:text-gray-400`}
+            )} disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
             type="time"
             onKeyDown={(e) => e.preventDefault()}
             disabled={disabled}
@@ -276,7 +276,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
         )}
       </div>
       <div className="flex flex-col mb-4">
-        <label htmlFor="endAtDate" className="text-sm text-gray-700 mb-2">
+        <label htmlFor="endAtDate" className="text-sm text-textMain mb-2">
           <span className="text-brandMain">&#42;</span> 종료 일시
         </label>
         <div className="flex gap-2">
@@ -286,9 +286,9 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "종료 일시를 입력해 주세요." },
             })}
             id="endAtDate"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
               "endAtDate"
-            )} disabled:ring-gray-400 disabled:bg-gray-200 disabled:text-gray-400`}
+            )} disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
             type="date"
             onKeyDown={(e) => e.preventDefault()}
             disabled={disabled}
@@ -299,9 +299,9 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
               required: { value: true, message: "종료 일시를 입력해 주세요." },
             })}
             id="endAtTime"
-            className={`w-1/2 rounded-md bg-white p-2 text-sm text-gray-700 box-border ring-1 shadow-xs outline-none hover:bg-gray-50 ${ringStyle(
+            className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
               "endAtTime"
-            )} disabled:ring-gray-400 disabled:bg-gray-200 disabled:text-gray-400`}
+            )} disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
             type="time"
             onKeyDown={(e) => e.preventDefault()}
             disabled={disabled}
@@ -317,7 +317,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
       <div className="flex flex-col mb-4">
         <label
           htmlFor="contents"
-          className="text-sm text-gray-700 mb-2"
+          className="text-sm text-textMain mb-2"
           onClick={onFocusTiptapLabel}
         >
           일정 내용
@@ -346,7 +346,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
           >
             취소
           </BrandButton>
-          <BrandButton type="submit" color="blue" classes="w-auto min-w-20">
+          <BrandButton type="submit" color="green" classes="w-auto min-w-20">
             저장
           </BrandButton>
         </div>

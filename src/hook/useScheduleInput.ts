@@ -1,4 +1,4 @@
-import { dateToFormatString } from "@/utils/dateFormat";
+import { addDate, dateToFormatString, getToday } from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -23,7 +23,7 @@ const useScheduleInput = (
 
   const ringStyle = (name: string) => {
     if (errors[name]) return "ring-error focus:ring-2 focus:ring-error";
-    else return "ring-gray-300 focus:ring-brandMain";
+    else return "ring-textLight focus:ring-brandMain";
   };
 
   useEffect(() => {
@@ -61,12 +61,12 @@ const useScheduleInput = (
   }, [errors.streamer, setFocus]);
 
   const setDateAndTime = () => {
-    let dateTime = new Date();
-    if (0 <= dateTime.getMinutes() && dateTime.getMinutes() < 30) {
-      dateTime.setMinutes(30);
+    let dateTime = getToday();
+    if (0 <= dateTime.minute() && dateTime.minute() < 30) {
+      dateTime = dateTime.minute(30);
     } else {
-      dateTime.setHours(dateTime.getHours() + 1);
-      dateTime.setMinutes(0);
+      dateTime = addDate(dateTime, 1, "hour");
+      dateTime = dateTime.minute(0);
     }
 
     const date = dateToFormatString(dateTime, "YYYY-MM-DD");

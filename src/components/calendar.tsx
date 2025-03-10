@@ -1,12 +1,16 @@
-import { dateToFormatString } from "@/utils/dateFormat";
-import dayjs from "dayjs";
+import {
+  dateToFormatString,
+  dayjsType,
+  getDateDiff,
+  getToday,
+} from "@/utils/dateFormat";
 import Link from "next/link";
 import React from "react";
 
 interface CustomCalendar {
-  today: dayjs.Dayjs;
+  today: dayjsType;
   week: string[];
-  dayArray: { [x: number]: dayjs.Dayjs[] }[];
+  dayArray: { [x: number]: dayjsType[] }[];
   isHasSchedule?: boolean;
   schedule?: any;
 }
@@ -40,13 +44,13 @@ const CustomCalendar = ({
   const streamText = (dateDiff: number, preList: number, column: number) => {
     const index = dateDiff > 6 - column ? 6 - column : dateDiff;
 
-    return `${`${streamWidth[index]} ${streamTopMargin[preList]} flex items-center h-5 px-1 bg-white z-10 border border-brandMain rounded-md text-gray-800 text-xs truncate`}`;
+    return `${`${streamWidth[index]} ${streamTopMargin[preList]} flex items-center h-5 px-1 bg-white z-10 border border-brandMain rounded-md text-textMain text-xs truncate`}`;
   };
 
   return (
     <div className="container mx-auto md:px-8 lg:max-w-6xl">
-      <div className="box-border w-full border-x border-x-gray-300 divide-y divide-y-gray-300">
-        <div className="grid grid-cols-7 divide-x divide-x-gray-300">
+      <div className="box-border w-full border-x border-x-textLight divide-y divide-y-textLight">
+        <div className="grid grid-cols-7 divide-x divide-x-textLight">
           {week.map((item) => (
             <div
               key={item}
@@ -55,7 +59,7 @@ const CustomCalendar = ({
                   ? "text-red-600"
                   : item === "토"
                   ? "text-blue-600"
-                  : "text-gray-800"
+                  : "text-textMain"
               }`}
             >
               {item}
@@ -65,11 +69,11 @@ const CustomCalendar = ({
         {dayArray.map((week, row) => (
           <div
             key={row}
-            className="grid grid-cols-7 divide-x divide-x-gray-300"
+            className="grid grid-cols-7 divide-x divide-x-textLight"
           >
             {week[row].map((day, column) => {
               const todayCheck =
-                dateToFormatString(new Date(), "YYYY-MM-DD") ===
+                dateToFormatString(getToday(), "YYYY-MM-DD") ===
                 dateToFormatString(day, "YYYY-MM-DD");
               const monthCheck =
                 dateToFormatString(today, "YYYY-MM") ===
@@ -86,8 +90,8 @@ const CustomCalendar = ({
                         : monthCheck && column === 6
                         ? "text-blue-600"
                         : monthCheck
-                        ? "text-gray-800"
-                        : "text-gray-600"
+                        ? "text-textMain"
+                        : "text-textNormal"
                     }`}
                   >
                     {todayCheck ? (
@@ -118,10 +122,12 @@ const CustomCalendar = ({
                               {dateCheck &&
                                 column === 0 &&
                                 item.preList.map((stream: any) => {
-                                  const dateDiff = dayjs(stream.endAt).diff(
+                                  const dateDiff = getDateDiff(
+                                    stream.endAt,
                                     item.day,
                                     "day"
                                   );
+
                                   return (
                                     <Link
                                       key={stream.title}
@@ -137,7 +143,8 @@ const CustomCalendar = ({
                                 item.list
                                   .slice(0, todayViewLength)
                                   .map((stream: any) => {
-                                    const dateDiff = dayjs(stream.endAt).diff(
+                                    const dateDiff = getDateDiff(
+                                      stream.endAt,
                                       item.day,
                                       "day"
                                     );

@@ -49,7 +49,7 @@ const StreamerPage = () => {
 
   const scrollSection = (initial: string) => {
     const element = document.getElementById(initial);
-    const topOfElement = element!.offsetTop - 72 - 20;
+    const topOfElement = element!.offsetTop - 72 - 10;
     window.scroll({ top: topOfElement, behavior: "smooth" });
   };
 
@@ -67,15 +67,13 @@ const StreamerPage = () => {
     setStreamerList(result);
   }, []);
 
-  console.log("###", streamerList);
-
   return (
     <React.Fragment>
-      <section className="w-full border-b border-b-gray-300 py-6">
+      <section className="w-full border-b border-b-textLight py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
             <p className="text-2xl">스트리머별 일정</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-textNormal">
               원하는 스트리머 방송 일정을 살펴보세요.
             </p>
           </div>
@@ -90,7 +88,7 @@ const StreamerPage = () => {
                   <button
                     key={initial}
                     type="button"
-                    className="py-1 px-6 text-xl text-gray-700 ring-2 ring-brandMain shadow-md rounded-lg"
+                    className="py-1 px-6 text-xl text-textMain ring-2 ring-brandMain shadow-md rounded-lg"
                     onClick={() => scrollSection(initial)}
                   >
                     {initial}
@@ -104,7 +102,7 @@ const StreamerPage = () => {
                     id={initial}
                     className="flex flex-col mt-16"
                   >
-                    <p className="text-lg text-gray-700 mb-2">
+                    <p className="text-lg text-textMain mb-2">
                       &#42; {initial}
                     </p>
                     <div className="flex flex-wrap items-center gap-2">
@@ -112,7 +110,7 @@ const StreamerPage = () => {
                         <Link
                           key={streamer}
                           href={`/streamer/${streamer}`}
-                          className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-gray-300 shadow-sm rounded-lg"
+                          className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-textLight shadow-sm rounded-lg hover:bg-brandMainHover"
                         >
                           {streamer}
                         </Link>

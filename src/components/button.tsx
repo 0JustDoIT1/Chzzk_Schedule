@@ -31,16 +31,16 @@ export const BrandButton = ({
   let colorName = "";
 
   switch (color) {
-    case "blue":
-      colorName = "bg-green-500 text-white hover:bg-green-600";
+    case "green":
+      colorName = "bg-brandMain text-white hover:bg-brandMainHover";
       break;
 
     default:
-      colorName = "bg-white text-gray-800 hover:bg-gray-50";
+      colorName = "bg-white text-textMain hover:bg-textHover";
       break;
   }
 
-  const className = `inline-flex justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm shadow-sm ring-1 ring-gray-300 ring-inset ${colorName} ${classes}`;
+  const className = `inline-flex justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm shadow-sm ring-1 ring-textLight ring-inset ${colorName} ${classes}`;
 
   return (
     <button type={type} className={className} onClick={onClick}>
