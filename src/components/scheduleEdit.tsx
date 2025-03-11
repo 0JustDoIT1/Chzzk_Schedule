@@ -2,8 +2,11 @@
 
 import React, { useState } from "react";
 import ScheduleInput from "./scheduleInput";
+import { useSearchParams } from "next/navigation";
 
-const ScheduleAdd = () => {
+const ScheduleEdit = () => {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("schedule");
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
   const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,10 +19,7 @@ const ScheduleAdd = () => {
       <section className="w-full border-b border-b-textLight p-4">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
-            <p className="text-2xl">일정 추가</p>
-            <p className="text-sm text-textNormal">
-              원하는 스트리머의 방송 일정을 추가해 보세요.
-            </p>
+            <p className="text-2xl">일정 수정</p>
           </div>
           <div className="flex flex-col items-center justify-center w-full md:w-1/3 md:items-end">
             <label className="inline-flex items-center cursor-pointer">
@@ -44,4 +44,4 @@ const ScheduleAdd = () => {
   );
 };
 
-export default ScheduleAdd;
+export default ScheduleEdit;

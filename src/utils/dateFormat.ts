@@ -15,6 +15,10 @@ export const getToday = () => {
   return dayjs();
 };
 
+export const getDayByString = (date: string) => {
+  return dayjs(date);
+};
+
 // DateType을 원하는 형식 String으로 변환
 export const dateToFormatString = (date: dayjs.ConfigType, format: string) => {
   if (!date) return "";

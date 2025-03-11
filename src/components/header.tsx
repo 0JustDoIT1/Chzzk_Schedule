@@ -1,10 +1,10 @@
 "use client";
 
 import MenuIcon from "assets/svg/menu";
-import Link from "next/link";
 import { useState } from "react";
 import { HeaderLink } from "./link";
 import { CustomButton } from "./button";
+import { route } from "@/constants/router";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -17,21 +17,21 @@ const Header = () => {
     <nav className="sticky top-0 z-50 bg-textMain/90 p-4 text-white backdrop-blur-md">
       <div className="mx-auto flex items-center justify-between px-4 md:px-8 md:container lg:max-w-6xl">
         <div className="flex items-center space-x-4 text-xl font-bold">
-          <HeaderLink href="/" classes="text-lg">
+          <HeaderLink href={route.index} classes="text-lg">
             0's Life
           </HeaderLink>
         </div>
         <div className="hidden items-center space-x-12 md:flex">
-          <HeaderLink href="/" classes="text-sm">
+          <HeaderLink href={route.index} classes="text-sm">
             오늘
           </HeaderLink>
-          <HeaderLink href="/all" classes="text-sm">
+          <HeaderLink href={route.allCalendar} classes="text-sm">
             전체
           </HeaderLink>
-          <HeaderLink href="/streamer" classes="text-sm">
+          <HeaderLink href={route.streamer} classes="text-sm">
             스트리머별
           </HeaderLink>
-          <HeaderLink href="/chzzk" classes="text-sm">
+          <HeaderLink href={route.chzzkCalendar} classes="text-sm">
             공식방송
           </HeaderLink>
         </div>
@@ -44,16 +44,16 @@ const Header = () => {
           isOpen ? "h-52" : "h-0"
         }`}
       >
-        <HeaderLink href="/" classes="text-sm w-full">
+        <HeaderLink href={route.index} classes="text-sm w-full">
           오늘
         </HeaderLink>
-        <HeaderLink href="/all" classes="text-sm w-full">
+        <HeaderLink href={route.allCalendar} classes="text-sm w-full">
           전체
         </HeaderLink>
-        <HeaderLink href="/streamer" classes="text-sm w-full">
+        <HeaderLink href={route.streamer} classes="text-sm w-full">
           스트리머별
         </HeaderLink>
-        <HeaderLink href="/chzzk" classes="text-sm w-full">
+        <HeaderLink href={route.chzzkCalendar} classes="text-sm w-full">
           공식방송
         </HeaderLink>
       </div>

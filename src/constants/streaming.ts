@@ -11,3 +11,12 @@ export const chzzkCategory: Option[] = [
   { value: "official", label: "공식 컨텐츠" },
   { value: "watch", label: "같이 보기" },
 ];
+
+export const categoryJson = () => {
+  const allCategory = [...category, ...chzzkCategory];
+
+  const result: { [x: string]: string } = {};
+  allCategory.forEach((item) => (result[item.value] = item.label));
+
+  return result;
+};

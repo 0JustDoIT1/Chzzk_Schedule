@@ -1,5 +1,6 @@
 "use client";
 
+import { getRoute, route } from "@/constants/router";
 import { TestStreamerList } from "@/constants/test";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -54,6 +55,8 @@ const StreamerPage = () => {
   };
 
   useEffect(() => {
+    window.scroll({ top: 0, behavior: "smooth" });
+
     const result: { [x: string]: string[] } = {};
     TestStreamerList.forEach((item) => {
       const initial = getInitials(item.member.slice(0, 1));
@@ -79,7 +82,7 @@ const StreamerPage = () => {
           </div>
         </div>
       </section>
-      <section className="w-full py-12">
+      <main className="w-full py-12">
         <div className="container mx-auto px-4 md:px-8 lg:max-w-6xl">
           {streamerList && (
             <React.Fragment>
@@ -109,7 +112,7 @@ const StreamerPage = () => {
                       {streamerList[initial].map((streamer) => (
                         <Link
                           key={streamer}
-                          href={`/streamer/${streamer}`}
+                          href={getRoute(route.streamerCalendar, streamer)}
                           className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-textLight shadow-sm rounded-lg hover:bg-brandMainHover"
                         >
                           {streamer}
@@ -122,7 +125,7 @@ const StreamerPage = () => {
             </React.Fragment>
           )}
         </div>
-      </section>
+      </main>
     </React.Fragment>
   );
 };

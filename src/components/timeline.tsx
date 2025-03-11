@@ -3,6 +3,7 @@ import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
+import { getRoute, route } from "@/constants/router";
 
 interface CustomTimeLine {
   schedule: {
@@ -72,14 +73,14 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
                         <UserIcon className="w-4 h-4 text-textIcon" />
                       </span>
                       <div className="flex items-center flex-wrap">
-                        {item.member.map((member, index) => {
+                        {item.member.map((name, index) => {
                           const memberLength = item.member.length;
-                          const memberText =
-                            memberLength === index + 1 ? member : `${member},`;
+                          const displayName =
+                            memberLength === index + 1 ? name : `${name},`;
 
                           return (
-                            <p key={member} className="text-sm">
-                              {memberText}&nbsp;
+                            <p key={name} className="text-sm">
+                              {displayName}&nbsp;
                             </p>
                           );
                         })}
@@ -87,7 +88,10 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
                     </div>
                   </div>
                   <div className="w-full md:w-auto">
-                    <BrandLink href={`/streaming/${item._id}`} classes="w-full">
+                    <BrandLink
+                      href={getRoute(route.streaming, item._id)}
+                      classes="w-full"
+                    >
                       방송 보기
                       <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
                     </BrandLink>

@@ -3,8 +3,9 @@ import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
-import "dayjs/locale/ko";
 import { useEffect } from "react";
+import { sorting } from "@/utils/sort";
+import { getRoute, route } from "@/constants/router";
 
 interface CustomDayLine {
   schedule: {
@@ -24,13 +25,14 @@ interface CustomDayLine {
       endAt: Date | dayjsType;
     }[];
   }[];
+  date: dayjsType;
 }
 
-const CustomDayline = ({ schedule }: CustomDayLine) => {
+const CustomDayline = ({ schedule, date }: CustomDayLine) => {
+  const dateString = dateToFormatString(date, "YYYY-MM-DD");
+
   useEffect(() => {
-    const element = document.getElementById(
-      dateToFormatString(getToday(), "YYYY-MM-DD")
-    );
+    const element = document.getElementById(dateString);
     if (element) {
       const elementRect = element.getBoundingClientRect();
       const topOfElement = elementRect.top - 72 - 10;
@@ -38,40 +40,48 @@ const CustomDayline = ({ schedule }: CustomDayLine) => {
     } else {
       window.scroll({ top: 0, behavior: "smooth" });
     }
-  }, [schedule]);
+  }, [schedule, date]);
 
   return (
-    <div className="container mx-auto md:pl-12 lg:max-w-6xl">
-      <ol className="relative md:border-l-2 md:border-brandMain">
+    <div className="w-full mx-auto md:pl-12 lg:max-w-6xl">
+      <ol className="relative ml-12 border-l-2 border-brandMain md:ml-0">
         {schedule.map((list) => {
           let timeCircle = "";
           let circleText = "";
 
-          if (dateToFormatString(getToday(), "YYYY-MM-DD") === list.day) {
+          if (dateString === list.day) {
             timeCircle +=
-              "hidden absolute items-center justify-center w-12 h-12 rounded-full ring-4 ring-white border-2 border-brandMain bg-brandMain -start-6 md:flex";
+              "flex absolute items-center justify-center w-12 h-12 rounded-full ring-4 ring-white border-2 border-brandMain bg-brandMain -start-6";
             circleText = "mt-[1px] text-base font-bold text-white";
           } else {
             timeCircle +=
-              "hidden absolute items-center justify-center w-12 h-12 rounded-full ring-4 ring-white border-2 border-brandMain bg-white -start-6 md:flex";
+              "flex absolute items-center justify-center w-12 h-12 rounded-full ring-4 ring-white border-2 border-brandMain bg-white -start-6";
             circleText = "mt-[1px] text-base font-bold text-textNormal";
           }
+
+          const dayList = sorting(
+            [...list.list, ...list.preList],
+            1,
+            "startAt"
+          );
 
           return (
             <li
               key={list.day}
               id={dateToFormatString(list.day, "YYYY-MM-DD")}
-              className="mb-16 mx-8 md:ml-12 md:mr-8"
+              className="mb-16 ml-12 mr-8 md:mr-0"
             >
-              <div className={timeCircle}>
-                <p className={circleText}>
-                  {dateToFormatString(list.day, "DD")}
-                </p>
-                <p className="absolute top-12 py-1 text-center bg-white text-sm text-brandMain">
-                  {dateToFormatString(list.day, "dddd")}
-                </p>
-              </div>
-              {list.list.map((item) => (
+              {dayList.length > 0 && (
+                <div className={timeCircle}>
+                  <p className={circleText}>
+                    {dateToFormatString(list.day, "DD")}
+                  </p>
+                  <p className="absolute top-12 py-1 text-center bg-white text-sm text-brandMain">
+                    {dateToFormatString(list.day, "dddd")}
+                  </p>
+                </div>
+              )}
+              {dayList.map((item) => (
                 <div
                   key={item._id}
                   className="flex flex-wrap items-center justify-between gap-4 border-b border-textSuperLight pb-2 mb-6"
@@ -96,7 +106,7 @@ const CustomDayline = ({ schedule }: CustomDayLine) => {
                         <UserIcon className="w-4 h-4 text-textIcon" />
                       </span>
                       <div className="flex items-center flex-wrap">
-                        {item.member.map((member, index) => {
+                        {item.member.map((member: string, index: number) => {
                           const memberLength = item.member.length;
                           const memberText =
                             memberLength === index + 1 ? member : `${member},`;
@@ -114,7 +124,7 @@ const CustomDayline = ({ schedule }: CustomDayLine) => {
                     list.day && (
                     <div className="w-full md:w-auto">
                       <BrandLink
-                        href={`/streaming/${item._id}`}
+                        href={getRoute(route.streaming, item._id)}
                         classes="w-full"
                       >
                         방송 보기
