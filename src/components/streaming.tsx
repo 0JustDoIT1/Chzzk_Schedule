@@ -8,7 +8,7 @@ const Streaming = () => {
   const { id } = params;
 
   return (
-    <section className="w-full p-4">
+    <main className="w-full p-4">
       <div className="flex items-center">
         {id}
         <span>채널 보기</span>
@@ -16,7 +16,7 @@ const Streaming = () => {
           <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
         </span>
       </div>
-    </section>
+    </main>
   );
 };
 

@@ -1,3 +1,4 @@
+import { getRoute, route } from "@/constants/router";
 import {
   dateToFormatString,
   dayjsType,
@@ -5,6 +6,7 @@ import {
   getToday,
 } from "@/utils/dateFormat";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface CustomCalendar {
@@ -23,6 +25,9 @@ const CustomCalendar = ({
   schedule,
 }: CustomCalendar) => {
   schedule = isHasSchedule ? schedule : null;
+
+  const pathName = usePathname();
+  const etcLink = pathName.replace(route.calendar, route.timeline);
 
   const streamWidth: { [x: number]: string } = {
     0: "w-full",
@@ -48,8 +53,8 @@ const CustomCalendar = ({
   };
 
   return (
-    <div className="container mx-auto md:px-8 lg:max-w-6xl">
-      <div className="box-border w-full border-x border-x-textLight divide-y divide-y-textLight">
+    <div className="w-full mx-auto lg:max-w-6xl">
+      <div className="box-border w-full border border-textLight border-t-0 divide-y divide-y-textLight md:border-l-0">
         <div className="grid grid-cols-7 divide-x divide-x-textLight">
           {week.map((item) => (
             <div
@@ -131,7 +136,10 @@ const CustomCalendar = ({
                                   return (
                                     <Link
                                       key={stream.title}
-                                      href="/schedule/detail"
+                                      href={getRoute(
+                                        route.schedule,
+                                        stream._id
+                                      )}
                                       className={streamText(dateDiff, 0, 0)}
                                     >
                                       {stream.title}
@@ -151,7 +159,10 @@ const CustomCalendar = ({
                                     return (
                                       <Link
                                         key={stream.title}
-                                        href="/schedule/detail"
+                                        href={getRoute(
+                                          route.schedule,
+                                          stream._id
+                                        )}
                                         className={streamText(
                                           dateDiff,
                                           item.preList.length,
@@ -164,7 +175,10 @@ const CustomCalendar = ({
                                   })}
                               {etcCheck && (
                                 <Link
-                                  href="/all"
+                                  href={`${etcLink}?date=${dateToFormatString(
+                                    day,
+                                    "YYYY-MM-DD"
+                                  )}`}
                                   className="flex items-center justify-center w-full h-5 px-1 bg-brandMain rounded-md text-white text-xs font-light truncate"
                                 >
                                   {etc}개 더보기

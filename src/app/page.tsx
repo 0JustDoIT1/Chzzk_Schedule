@@ -1,11 +1,18 @@
+"use client";
+
 import { BrandLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
+import { route } from "@/constants/router";
 import { TestTodayList } from "@/constants/test";
 import { dateToFormatString, getToday } from "@/utils/dateFormat";
 import PlusIcon from "assets/svg/plus";
-import React from "react";
+import React, { useEffect } from "react";
 
 const HomePage = () => {
+  useEffect(() => {
+    window.scroll({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <React.Fragment>
       {/* <div className="text-center p-4">
@@ -29,7 +36,7 @@ const HomePage = () => {
             </p>
           </div>
           <div className="w-full max-w-xs md:w-auto">
-            <BrandLink href="/schedule/add" classes="w-full">
+            <BrandLink href={route.scheduleAdd} classes="w-full">
               <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
               일정 추가
             </BrandLink>

@@ -1,15 +1,21 @@
 import {
   addDate,
-  dateToFormatString,
   dayjsType,
+  getDayByString,
   getStartDate,
   getToday,
   subtractDate,
 } from "@/utils/dateFormat";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const useCalendar = () => {
-  const [today, setToday] = useState<dayjsType>(getToday());
+  const searchParams = useSearchParams();
+  const date = searchParams.get("date");
+
+  const [today, setToday] = useState<dayjsType>(
+    date ? getDayByString(date) : getToday()
+  );
   const [dayArray, setDayArray] = useState<{ [x: number]: dayjsType[] }[]>([]);
 
   const week = ["일", "월", "화", "수", "목", "금", "토"];
