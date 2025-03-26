@@ -74,6 +74,7 @@ const ScheduleDetail = () => {
         <BrandLink
           href={`${route.scheduleEdit}?schedule=${data._id}`}
           classes="w-auto min-w-20"
+          scroll={false}
         >
           일정 수정
         </BrandLink>

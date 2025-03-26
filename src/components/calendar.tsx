@@ -168,6 +168,7 @@ const CustomCalendar = ({
                                           item.preList.length,
                                           column
                                         )}
+                                        scroll={false}
                                       >
                                         {stream.title}
                                       </Link>
@@ -180,6 +181,7 @@ const CustomCalendar = ({
                                     "YYYY-MM-DD"
                                   )}`}
                                   className="flex items-center justify-center w-full h-5 px-1 bg-brandMain rounded-md text-white text-xs font-light truncate"
+                                  scroll={false}
                                 >
                                   {etc}개 더보기
                                 </Link>
