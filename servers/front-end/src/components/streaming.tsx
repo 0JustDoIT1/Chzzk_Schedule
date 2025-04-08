@@ -11,10 +11,10 @@ const Streaming = () => {
     <main className="w-full p-4">
       <div className="flex items-center">
         {id}
-        <span>채널 보기</span>
-        <span>
+        <p>채널 보기</p>
+        <p>
           <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
-        </span>
+        </p>
       </div>
     </main>
   );

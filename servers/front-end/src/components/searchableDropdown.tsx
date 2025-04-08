@@ -1,40 +1,31 @@
 import useSearchableDropdown from "@/hook/useSearchableDropdown";
 import React from "react";
-import {
-  FieldErrors,
-  FieldValues,
-  UseFormRegister,
-  UseFormSetValue,
-} from "react-hook-form";
+import { RefCallBack } from "react-hook-form";
 import ChevronDownIcon from "~/public/assets/svg/chevron-down";
 import ChevronUpIcon from "~/public/assets/svg/chevron-up";
-import HelperText from "./helperText";
 
 interface SearchableDropdown {
   list: any[];
   keyName: string;
   placeholder: string;
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-  errors: FieldErrors<FieldValues>;
-  ringStyle: (name: string) => string;
+  ref?: RefCallBack;
+  value: string;
+  onChange: (...event: any[]) => void;
+  ringStyle: string;
 }
 
 const SearchableDropdown = ({
   list,
   keyName,
   placeholder,
-  register,
-  setValue,
-  errors,
+  ref,
+  value,
+  onChange,
   ringStyle,
 }: SearchableDropdown) => {
   const {
     inputRef,
     itemRef,
-    result,
-    setResult,
-    query,
     setQuery,
     filterList,
     isOpen,
@@ -46,31 +37,27 @@ const SearchableDropdown = ({
     setKeyboardScroll,
     selectItem,
     displayValue,
-  } = useSearchableDropdown(list, keyName);
-
-  const { ref, ...rest } = register(keyName, {
-    required: { value: true, message: "스트리머를 선택해 주세요." },
-  });
+  } = useSearchableDropdown(list, keyName, value, onChange);
 
   return (
     <React.Fragment>
       <div className="relative cursor-default">
         <input
-          {...rest}
           id={keyName}
-          className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
-            keyName
-          )}`}
+          className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover 
+            ${ringStyle}
+        `}
+          name={keyName}
           ref={(e) => {
-            ref(e);
             inputRef.current = e;
+            ref?.(e);
           }}
           type="text"
           value={displayValue()}
           placeholder={placeholder}
           onChange={(e) => {
             setQuery(e.target.value);
-            setResult("");
+            onChange("");
             setIsOpen(true);
             setSelectIndex(0);
           }}
@@ -92,7 +79,7 @@ const SearchableDropdown = ({
               let background = "";
               let hover = "";
 
-              if (result === item[keyName]) {
+              if (value === item[keyName]) {
                 hover = "hover:bg-brandLight";
                 background = "bg-brandSuperLight";
                 if (index === selectIndex) {
@@ -115,7 +102,7 @@ const SearchableDropdown = ({
                   className={`p-2 box-border cursor-pointer truncate ${background} ${hover}`}
                   onClick={() => {
                     selectItem(item);
-                    setValue(keyName, item[keyName], { shouldValidate: true });
+                    onChange(item[keyName]);
                   }}
                 >
                   {item[keyName]}
@@ -125,11 +112,6 @@ const SearchableDropdown = ({
           </ul>
         )}
       </div>
-      {errors[keyName] && (
-        <HelperText className="text-error">
-          {errors[keyName]?.message as string}
-        </HelperText>
-      )}
     </React.Fragment>
   );
 };

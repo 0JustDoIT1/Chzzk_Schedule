@@ -33,6 +33,7 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
       <div className="w-full grid grid-cols-3 divide-x divide-x-white">
         <div className="flex items-center justify-center gap-4">
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
@@ -41,6 +42,7 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
             <FormatH1Icon className="w-full h-full text-white" />
           </button>
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
@@ -49,6 +51,7 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
             <FormatH2Icon className="w-full h-full text-white" />
           </button>
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
@@ -59,18 +62,21 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
         </div>
         <div className="flex items-center justify-center gap-4">
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() => editor.chain().focus().toggleBold().run()}
           >
             <FormatBoldIcon className="w-full h-full text-white" />
           </button>
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() => editor.chain().focus().toggleItalic().run()}
           >
             <FormatItalicIcon className="w-full h-full text-white" />
           </button>
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
           >
@@ -78,6 +84,7 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
           </button>
 
           <button
+            type="button"
             className="w-6 h-6"
             onClick={() => editor.chain().focus().toggleStrike().run()}
           >
