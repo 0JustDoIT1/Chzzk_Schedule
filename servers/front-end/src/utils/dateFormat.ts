@@ -75,3 +75,19 @@ export const subtractDate = (
 ) => {
   return dayjs(date).subtract(value, type);
 };
+
+// 현재 시간 따라 30분 단위 설정
+export const setDateAndTime = () => {
+  let dateTime = getToday();
+  if (0 <= dateTime.minute() && dateTime.minute() < 30) {
+    dateTime = dateTime.minute(30);
+  } else {
+    dateTime = addDate(dateTime, 1, "hour");
+    dateTime = dateTime.minute(0);
+  }
+
+  const date = dateToFormatString(dateTime, "YYYY-MM-DD");
+  const time = dateToFormatString(dateTime, "HH:mm");
+
+  return { date, time };
+};

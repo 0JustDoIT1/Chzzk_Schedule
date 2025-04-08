@@ -6,6 +6,7 @@ import TiptapToolbar from "./tiptapToolbar";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import { useEffect } from "react";
 
 interface TiptapEditor {
   text: string;
@@ -13,6 +14,10 @@ interface TiptapEditor {
 }
 
 const TiptapEditor = ({ text, setText }: TiptapEditor) => {
+  useEffect(() => {
+    if (!text) editor?.commands.clearContent();
+  }, [text]);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -34,7 +39,7 @@ const TiptapEditor = ({ text, setText }: TiptapEditor) => {
       const value = editor.getText() ? editor.getHTML() : "";
       setText(value);
     },
-    immediatelyRender: false,
+    immediatelyRender: true,
   });
 
   const onFocusTiptap = () => {

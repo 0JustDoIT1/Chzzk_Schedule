@@ -58,20 +58,20 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
                       {item.title}
                     </h3>
                     <div className="flex items-center mb-2 text-sm font-normal leading-none text-textNormal">
-                      <span className="mr-1 mb-1">
+                      <p className="mr-1 mb-1">
                         <CalendarIcon className="w-4 h-4 text-textIcon" />
-                      </span>
-                      <span>
+                      </p>
+                      <p>
                         {dateToFormatString(
                           item.startAt,
                           "YYYY년 MM월 DD일 HH:mm"
                         )}
-                      </span>
+                      </p>
                     </div>
                     <div className="flex items-center text-base font-normal text-textNormal">
-                      <span className="mr-1 mb-1">
+                      <p className="mr-1 mb-1">
                         <UserIcon className="w-4 h-4 text-textIcon" />
-                      </span>
+                      </p>
                       <div className="flex items-center flex-wrap">
                         {item.member.map((name, index) => {
                           const memberLength = item.member.length;

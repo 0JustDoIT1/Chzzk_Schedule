@@ -1,4 +1,4 @@
-import { addDate, dateToFormatString, getToday } from "@/utils/dateFormat";
+import { setDateAndTime } from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -6,22 +6,34 @@ const useScheduleInput = (
   isOfficial: boolean,
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  const initValue: any = {
+    streamer: "",
+    category: "",
+    title: "",
+    member: [],
+    fullDay: false,
+    startAtDate: setDateAndTime().date,
+    startAtTime: setDateAndTime().time,
+    endAtDate: setDateAndTime().date,
+    endAtTime: setDateAndTime().time,
+    contents: "",
+  };
+
   const {
     register,
     control,
     setValue,
     watch,
     setFocus,
+    reset,
     clearErrors,
     handleSubmit,
     formState: { errors },
-  } = useForm({ reValidateMode: "onChange" });
+  } = useForm({ reValidateMode: "onChange", defaultValues: initValue });
 
-  const [fullDay, setFullDay] = useState<boolean>(false);
-  const [disabled, setDisabled] = useState<boolean>(false);
   const [member, setMember] = useState<string[]>([]);
 
-  const ringStyle = (name: string) => {
+  const ringStyle = (name: string): string => {
     if (errors[name]) return "ring-error focus:ring-2 focus:ring-error";
     else return "ring-textLight focus:ring-brandMain";
   };
@@ -31,7 +43,7 @@ const useScheduleInput = (
       setValue("streamer", "");
       clearErrors(["streamer"]);
     }
-    setMember([]);
+    setValue("member", []);
   }, [isOfficial]);
 
   useEffect(() => {
@@ -39,18 +51,18 @@ const useScheduleInput = (
       watch("category") &&
       (watch("category") === "personal" || watch("category") === "watch")
     ) {
-      setMember([]);
+      setValue("member", []);
     }
   }, [watch("category")]);
 
   useEffect(() => {
-    if (fullDay) {
+    if (watch("fullDay")) {
       const date = watch("startAtDate");
       setValue("endAtDate", date, { shouldValidate: true });
       setValue("startAtTime", "00:00", { shouldValidate: true });
       setValue("endAtTime", "23:59", { shouldValidate: true });
     }
-  }, [fullDay, watch("startAtDate")]);
+  }, [watch("fullDay"), watch("startAtDate")]);
 
   useEffect(() => {
     if (errors.streamer) {
@@ -60,30 +72,19 @@ const useScheduleInput = (
     }
   }, [errors.streamer, setFocus]);
 
-  const setDateAndTime = () => {
-    let dateTime = getToday();
-    if (0 <= dateTime.minute() && dateTime.minute() < 30) {
-      dateTime = dateTime.minute(30);
-    } else {
-      dateTime = addDate(dateTime, 1, "hour");
-      dateTime = dateTime.minute(0);
+  const onAddMember = () => {
+    const name = watch("member");
+    if (name) {
+      if (member.includes(name)) setValue("member", "");
+      else {
+        setMember([...member, name]);
+        setValue("member", "");
+      }
     }
-
-    const date = dateToFormatString(dateTime, "YYYY-MM-DD");
-    const time = dateToFormatString(dateTime, "HH:mm");
-
-    return { date, time };
   };
 
-  const initValue: { [x: string]: string } = {
-    streamer: "",
-    category: "",
-    title: "",
-    startAtDate: setDateAndTime().date,
-    startAtTime: setDateAndTime().time,
-    endAtDate: setDateAndTime().date,
-    endAtTime: setDateAndTime().time,
-    contents: "",
+  const onRemoveMember = (name: string) => {
+    setMember(member.filter((item: string) => item !== name));
   };
 
   const onFocusTiptapLabel = () => {
@@ -94,13 +95,8 @@ const useScheduleInput = (
   };
 
   const onReset = () => {
-    Object.keys(initValue).forEach((key) => {
-      setValue(key, initValue[key]);
-      clearErrors();
-    });
-    setFullDay(false);
-    setDisabled(false);
-    setMember([]);
+    reset();
+    clearErrors();
     setIsOfficial(false);
   };
 
@@ -123,13 +119,11 @@ const useScheduleInput = (
     onSubmit,
     onReset,
     initValue,
-    onFocusTiptapLabel,
     member,
     setMember,
-    fullDay,
-    setFullDay,
-    disabled,
-    setDisabled,
+    onAddMember,
+    onRemoveMember,
+    onFocusTiptapLabel,
     ringStyle,
   };
 };

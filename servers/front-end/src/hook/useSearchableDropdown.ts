@@ -1,8 +1,11 @@
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
-const useSearchableDropdown = (list: any[], keyName: string) => {
-  const [result, setResult] = useState<string>("");
-
+const useSearchableDropdown = (
+  list: any[],
+  keyName: string,
+  value: string,
+  onChange: (...event: any[]) => void
+) => {
   const [query, setQuery] = useState<string>("");
   const [filterList, setFilterList] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -25,6 +28,13 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
     setFilterList(filter);
   }, [query]);
 
+  // When the list is closed, verify the result
+  useEffect(() => {
+    if (!isOpen && !value) {
+      setQuery("");
+    }
+  }, [isOpen, value]);
+
   // toggle dropdown event with ref
   const toggleDropdown = (
     e: MouseEvent<HTMLElement, globalThis.MouseEvent> | globalThis.MouseEvent
@@ -41,14 +51,14 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
   // Select list item -> result
   const selectItem = (item: any) => {
     setQuery("");
-    setResult(item[keyName]);
+    onChange(item[keyName]);
     setIsOpen(false);
   };
 
   // display value
   const displayValue = () => {
     if (query) return query;
-    if (result) return result;
+    if (value) return value;
 
     return "";
   };
@@ -83,18 +93,9 @@ const useSearchableDropdown = (list: any[], keyName: string) => {
     });
   };
 
-  // When the list is closed, verify the result
-  useEffect(() => {
-    if (!isOpen && !result) {
-      setQuery("");
-    }
-  }, [isOpen, result]);
-
   return {
     inputRef,
     itemRef,
-    result,
-    setResult,
     query,
     setQuery,
     filterList,

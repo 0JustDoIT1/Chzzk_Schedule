@@ -5,12 +5,10 @@ import { Controller } from "react-hook-form";
 import SearchableDropdown from "./searchableDropdown";
 import React from "react";
 import useScheduleInput from "@/hook/useScheduleInput";
-import SearchBox from "./searchBox";
 import CloseIcon from "~/public/assets/svg/close";
 import CheckIcon from "~/public/assets/svg/check";
 import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
-import { TestStreamerList } from "@/constants/test";
 
 interface ScheduleInput {
   isOfficial: boolean;
@@ -24,18 +22,14 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
     register,
     control,
     errors,
-    setValue,
     watch,
     onSubmit,
     onReset,
     initValue,
-    onFocusTiptapLabel,
     member,
-    setMember,
-    fullDay,
-    setFullDay,
-    disabled,
-    setDisabled,
+    onAddMember,
+    onRemoveMember,
+    onFocusTiptapLabel,
     ringStyle,
   } = useScheduleInput(isOfficial, setIsOfficial);
 
@@ -51,40 +45,54 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
           <label htmlFor="streamer" className="text-sm text-textMain mb-2">
             <span className="text-brandMain">&#42;</span> 스트리머
           </label>
-          <SearchableDropdown
-            list={[
-              { _id: 1, streamer: "hi" },
-              { _id: 2, streamer: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
-              { _id: 3, streamer: "hi2" },
-              { _id: 4, streamer: "test2" },
-              { _id: 5, streamer: "hi3" },
-              { _id: 6, streamer: "test3" },
-              { _id: 7, streamer: "hi4" },
-              { _id: 8, streamer: "test4" },
-              { _id: 9, streamer: "hi5" },
-              { _id: 10, streamer: "test5" },
-              { _id: 11, streamer: "hi6" },
-              { _id: 12, streamer: "test6" },
-              { _id: 13, streamer: "hi7" },
-              { _id: 14, streamer: "test7" },
-              { _id: 15, streamer: "hi8" },
-              { _id: 16, streamer: "test8" },
-              { _id: 17, streamer: "hi9" },
-              { _id: 18, streamer: "test9" },
-              { _id: 19, streamer: "hi10" },
-              { _id: 20, streamer: "test10" },
-              { _id: 21, streamer: "hi11" },
-              { _id: 22, streamer: "test11" },
-              { _id: 23, streamer: "hi12" },
-              { _id: 24, streamer: "test12" },
-            ]}
-            keyName="streamer"
-            placeholder="스트리머를 선택해 주세요."
-            register={register}
-            setValue={setValue}
-            errors={errors}
-            ringStyle={ringStyle}
+          <Controller
+            control={control}
+            name="streamer"
+            rules={{
+              required: { value: true, message: "스트리머를 선택해 주세요." },
+            }}
+            render={({ field: { ref, value, onChange } }) => (
+              <SearchableDropdown
+                list={[
+                  { _id: 1, streamer: "hi" },
+                  { _id: 2, streamer: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
+                  { _id: 3, streamer: "hi2" },
+                  { _id: 4, streamer: "test2" },
+                  { _id: 5, streamer: "hi3" },
+                  { _id: 6, streamer: "test3" },
+                  { _id: 7, streamer: "hi4" },
+                  { _id: 8, streamer: "test4" },
+                  { _id: 9, streamer: "hi5" },
+                  { _id: 10, streamer: "test5" },
+                  { _id: 11, streamer: "hi6" },
+                  { _id: 12, streamer: "test6" },
+                  { _id: 13, streamer: "hi7" },
+                  { _id: 14, streamer: "test7" },
+                  { _id: 15, streamer: "hi8" },
+                  { _id: 16, streamer: "test8" },
+                  { _id: 17, streamer: "hi9" },
+                  { _id: 18, streamer: "test9" },
+                  { _id: 19, streamer: "hi10" },
+                  { _id: 20, streamer: "test10" },
+                  { _id: 21, streamer: "hi11" },
+                  { _id: 22, streamer: "test11" },
+                  { _id: 23, streamer: "hi12" },
+                  { _id: 24, streamer: "test12" },
+                ]}
+                keyName="streamer"
+                placeholder="스트리머를 선택해 주세요."
+                ref={ref}
+                value={value}
+                onChange={onChange}
+                ringStyle={ringStyle("streamer")}
+              />
+            )}
           />
+          {errors.streamer && (
+            <HelperText className="text-error">
+              {errors.streamer?.message as string}
+            </HelperText>
+          )}
         </div>
       )}
       <div className="flex flex-col mb-4">
@@ -131,16 +139,23 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
           <label htmlFor="member" className="text-sm text-textMain mb-2">
             멤버 &#40;진행 및 게스트&#41;
           </label>
-          <SearchBox
-            list={TestStreamerList}
-            keyName="member"
-            placeholder="합방 멤버를 추가해 주세요."
-            result={member}
-            setResult={setMember}
-          />
+          <div className="flex justify-between items-center">
+            <input
+              {...register("member", {
+                value: initValue.member,
+              })}
+              id="member"
+              className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
+              type="text"
+              placeholder="합방 멤버를 추가해 주세요."
+            />
+            <BrandButton classes="w-16" onClick={onAddMember}>
+              추가
+            </BrandButton>
+          </div>
           <div className="flex flex-wrap gap-1 items-center w-full mt-2">
             {member &&
-              member.map((name) => (
+              member.map((name: string) => (
                 <div
                   key={name}
                   className="flex items-center justify-between rounded-md border border-brandMain bg-brandMain text-xs text-white py-1 pl-2 pr-1"
@@ -149,7 +164,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
                   <span
                     className="cursor-pointer"
                     onClick={() => {
-                      setMember(member.filter((item) => item !== name));
+                      onRemoveMember(name);
                     }}
                   >
                     <CloseIcon className="w-4 h-4 ml-2 text-white" />
@@ -164,16 +179,23 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
           <label htmlFor="member" className="text-sm text-textMain mb-2">
             합방 멤버
           </label>
-          <SearchBox
-            list={TestStreamerList}
-            keyName="member"
-            placeholder="합방 멤버를 추가해 주세요."
-            result={member}
-            setResult={setMember}
-          />
+          <div className="flex justify-between items-center">
+            <input
+              {...register("member", {
+                value: initValue.member,
+              })}
+              id="member"
+              className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
+              type="text"
+              placeholder="합방 멤버를 추가해 주세요."
+            />
+            <BrandButton classes="w-16" onClick={onAddMember}>
+              추가
+            </BrandButton>
+          </div>
           <div className="flex flex-wrap gap-1 items-center w-full mt-2">
             {member &&
-              member.map((name) => (
+              member.map((name: string) => (
                 <div
                   key={name}
                   className="flex items-center justify-between rounded-md border border-brandMain bg-brandMain text-xs text-white py-1 pl-2 pr-1"
@@ -182,7 +204,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
                   <span
                     className="cursor-pointer"
                     onClick={() => {
-                      setMember(member.filter((item) => item !== name));
+                      onRemoveMember(name);
                     }}
                   >
                     <CloseIcon className="w-4 h-4 ml-2 text-white" />
@@ -221,14 +243,12 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
         <div className="flex gap-2 items-center mb-2">
           <label className="flex items-center cursor-pointer relative">
             <input
+              {...register("fullDay", {
+                value: initValue.fullDay,
+              })}
               id="fullDay"
               className="peer h-4 w-4 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-brandMain checked:border-brandMain focus:ring-2 focus:ring-brandLight"
               type="checkbox"
-              checked={fullDay}
-              onChange={(e) => {
-                setFullDay(e.target.checked);
-                setDisabled(e.target.checked);
-              }}
             />
             <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <CheckIcon className="w-4 h-4" />
@@ -265,7 +285,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             )} disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
             type="time"
             onKeyDown={(e) => e.preventDefault()}
-            disabled={disabled}
+            disabled={watch("fullDay")}
           />
         </div>
         {(errors.startAtDate || errors.startAtTime) && (
@@ -291,7 +311,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             )} disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
             type="date"
             onKeyDown={(e) => e.preventDefault()}
-            disabled={disabled}
+            disabled={watch("fullDay")}
           />
           <input
             {...register("endAtTime", {
@@ -304,7 +324,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
             )} disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
             type="time"
             onKeyDown={(e) => e.preventDefault()}
-            disabled={disabled}
+            disabled={watch("fullDay")}
           />
         </div>
         {(errors.endAtDate || errors.endAtTime) && (
@@ -325,7 +345,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
         <Controller
           control={control}
           name="contents"
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { value, onChange } }) => (
             <TiptapEditor text={value} setText={onChange} />
           )}
         />
