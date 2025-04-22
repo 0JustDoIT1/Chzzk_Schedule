@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { StreamerModule } from './streamer/streamer.module';
 
 @Module({
   imports: [
@@ -10,7 +11,10 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(process.env.DB_URI as string),
+    MongooseModule.forRoot(process.env.DB_URI as string, {
+      dbName: process.env.DB_Name,
+    }),
+    StreamerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

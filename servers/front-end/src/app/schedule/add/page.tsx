@@ -1,6 +1,6 @@
 "use client";
 
-import ScheduleAdd from "@/components/scheduleAdd";
+import ScheduleAdd from "@/components/screen/scheduleAdd";
 import React from "react";
 
 const ScheduleAddPage = () => {

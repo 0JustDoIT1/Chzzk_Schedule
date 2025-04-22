@@ -1,7 +1,5 @@
-"use client";
-
 import React, { useState } from "react";
-import ScheduleInput from "./scheduleInput";
+import ScheduleInput from "../scheduleInput";
 import { useSearchParams } from "next/navigation";
 
 const ScheduleEdit = () => {

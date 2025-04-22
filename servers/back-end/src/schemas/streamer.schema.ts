@@ -3,16 +3,19 @@ import { Document } from 'mongoose';
 
 export type StreamerDocument = Streamer & Document;
 
-@Schema()
+@Schema({ collection: 'streamer' })
 export class Streamer {
-  @Prop()
+  @Prop({ required: true, unique: true, type: String })
   name: string;
 
-  @Prop()
-  age: number;
+  @Prop({ required: true, unique: true, type: String })
+  chzzkLink: string;
 
-  @Prop()
-  sounds: string[];
+  @Prop({ required: false, type: String })
+  mcn?: string;
+
+  @Prop({ required: false, type: () => [String] })
+  tag?: string[];
 }
 
 export const StreamerSchema = SchemaFactory.createForClass(Streamer);

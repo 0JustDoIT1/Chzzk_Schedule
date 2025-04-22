@@ -100,7 +100,7 @@ const StreamerCalendarPage = () => {
             </div>
           </Link>
         </aside>
-        <section className="w-full">
+        <div className="w-full">
           <CustomCalendar
             today={today}
             week={week}
@@ -108,7 +108,7 @@ const StreamerCalendarPage = () => {
             isHasSchedule={true}
             schedule={TestDayList}
           />
-        </section>
+        </div>
       </main>
     </React.Fragment>
   );

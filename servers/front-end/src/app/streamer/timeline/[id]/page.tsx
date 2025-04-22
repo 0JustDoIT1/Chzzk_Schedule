@@ -94,9 +94,9 @@ const StreamerTimelinePage = () => {
             </div>
           </Link>
         </aside>
-        <section className="w-full pt-12">
+        <div className="w-full pt-12">
           <CustomDayline schedule={TestDayList} date={today} />
-        </section>
+        </div>
       </main>
     </React.Fragment>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { FloatingButton } from "@/components/floatingButton";
 import { BrandLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
 import { route } from "@/constants/router";
@@ -43,9 +44,10 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <section className="w-full py-12">
+      <main className="w-full py-12">
         <CustomTimeline schedule={TestTodayList} />
-      </section>
+      </main>
+      <FloatingButton />
     </React.Fragment>
   );
 };

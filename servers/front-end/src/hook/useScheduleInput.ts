@@ -1,6 +1,6 @@
 import { setDateAndTime } from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import useReactHookForm from "./useReactHookForm";
 
 const useScheduleInput = (
   isOfficial: boolean,
@@ -26,17 +26,13 @@ const useScheduleInput = (
     watch,
     setFocus,
     reset,
+    errors,
     clearErrors,
     handleSubmit,
-    formState: { errors },
-  } = useForm({ reValidateMode: "onChange", defaultValues: initValue });
+    ringStyle,
+  } = useReactHookForm(initValue);
 
   const [member, setMember] = useState<string[]>([]);
-
-  const ringStyle = (name: string): string => {
-    if (errors[name]) return "ring-error focus:ring-2 focus:ring-error";
-    else return "ring-textLight focus:ring-brandMain";
-  };
 
   useEffect(() => {
     if (isOfficial) {
@@ -114,7 +110,6 @@ const useScheduleInput = (
     register,
     control,
     errors,
-    setValue,
     watch,
     onSubmit,
     onReset,

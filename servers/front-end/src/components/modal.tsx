@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 import CloseIcon from "~/public/assets/svg/close";

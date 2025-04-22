@@ -1,4 +1,6 @@
-import Streaming from "@/components/streaming";
+"use client";
+
+import Streaming from "@/components/screen/streaming";
 
 const StreamingPage = () => {
   return <Streaming />;

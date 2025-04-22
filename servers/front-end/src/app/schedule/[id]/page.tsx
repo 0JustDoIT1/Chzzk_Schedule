@@ -1,4 +1,6 @@
-import ScheduleDetail from "@/components/scheduleDetail";
+"use client";
+
+import ScheduleDetail from "@/components/screen/scheduleDetail";
 
 const ScheduleDetailPage = () => {
   return <ScheduleDetail />;
