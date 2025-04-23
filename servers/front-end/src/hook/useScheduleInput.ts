@@ -29,7 +29,6 @@ const useScheduleInput = (
     errors,
     clearErrors,
     handleSubmit,
-    ringStyle,
   } = useReactHookForm(initValue);
 
   const [member, setMember] = useState<string[]>([]);
@@ -93,6 +92,7 @@ const useScheduleInput = (
   const onReset = () => {
     reset();
     clearErrors();
+    setMember(initValue.member);
     setIsOfficial(false);
   };
 
@@ -119,7 +119,6 @@ const useScheduleInput = (
     onAddMember,
     onRemoveMember,
     onFocusTiptapLabel,
-    ringStyle,
   };
 };
 

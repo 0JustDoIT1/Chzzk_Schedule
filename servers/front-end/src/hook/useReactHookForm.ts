@@ -13,11 +13,6 @@ const useReactHookForm = (initValue: any) => {
     formState: { errors },
   } = useForm({ reValidateMode: "onChange", defaultValues: initValue });
 
-  const ringStyle = (name: string): string => {
-    if (errors[name]) return "ring-error focus:ring-2 focus:ring-error";
-    else return "ring-textLight focus:ring-brandMain";
-  };
-
   return {
     register,
     control,
@@ -28,7 +23,6 @@ const useReactHookForm = (initValue: any) => {
     errors,
     clearErrors,
     handleSubmit,
-    ringStyle,
   };
 };
 

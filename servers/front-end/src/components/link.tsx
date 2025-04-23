@@ -1,5 +1,7 @@
+import { getModalRoute, route } from "@/constants/router";
 import Link from "next/link";
 import { ReactNode } from "react";
+import PlusIcon from "~/public/assets/svg/plus";
 
 interface BrandLink {
   children: ReactNode;
@@ -32,5 +34,14 @@ export const HeaderLink = ({ children, classes, href }: BrandLink) => {
     <Link href={href} className={className}>
       {children}
     </Link>
+  );
+};
+
+export const AddScheduleLink = ({ classes }: { classes: string }) => {
+  return (
+    <BrandLink href={getModalRoute(route.scheduleAdd)} classes={classes}>
+      <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
+      일정 추가
+    </BrandLink>
   );
 };

@@ -1,12 +1,9 @@
 "use client";
 
-import { FloatingButton } from "@/components/floatingButton";
-import { BrandLink } from "@/components/link";
+import { AddScheduleLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
-import { route } from "@/constants/router";
 import { TestTodayList } from "@/constants/test";
 import { dateToFormatString, getToday } from "@/utils/dateFormat";
-import PlusIcon from "assets/svg/plus";
 import React, { useEffect } from "react";
 
 const HomePage = () => {
@@ -37,17 +34,13 @@ const HomePage = () => {
             </p>
           </div>
           <div className="w-full max-w-xs md:w-auto">
-            <BrandLink href={route.scheduleAdd} classes="w-full">
-              <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
-              일정 추가
-            </BrandLink>
+            <AddScheduleLink classes="w-full" />
           </div>
         </div>
       </section>
       <main className="w-full py-12">
         <CustomTimeline schedule={TestTodayList} />
       </main>
-      <FloatingButton />
     </React.Fragment>
   );
 };

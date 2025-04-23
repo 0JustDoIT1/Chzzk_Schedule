@@ -11,7 +11,7 @@ interface SearchableDropdown {
   ref?: RefCallBack;
   value: string;
   onChange: (...event: any[]) => void;
-  ringStyle: string;
+  errors: boolean;
 }
 
 const SearchableDropdown = ({
@@ -21,7 +21,7 @@ const SearchableDropdown = ({
   ref,
   value,
   onChange,
-  ringStyle,
+  errors,
 }: SearchableDropdown) => {
   const {
     inputRef,
@@ -45,7 +45,11 @@ const SearchableDropdown = ({
         <input
           id={keyName}
           className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover 
-            ${ringStyle}
+            ${
+              errors
+                ? "ring-error focus:ring-2 focus:ring-error"
+                : "ring-textLight focus:ring-brandMain"
+            }
         `}
           name={keyName}
           ref={(e) => {

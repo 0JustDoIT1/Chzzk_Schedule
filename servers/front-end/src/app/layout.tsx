@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/header";
 import { ReactNode } from "react";
+import { FloatingButton } from "@/components/floatingButton";
+import { AsPathProvider } from "@/context/asPathContext";
 
 const gmarket = localFont({
   src: [
@@ -25,7 +27,7 @@ const gmarket = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "0군의 스케줄",
+  title: "0군의 삶",
   description: "Create your Chzzk Schedule",
 };
 
@@ -39,9 +41,12 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className={gmarket.className}>
-        <Header />
-        {children}
-        {modal}
+        <AsPathProvider>
+          <Header />
+          {children}
+          {modal}
+          <FloatingButton />
+        </AsPathProvider>
       </body>
     </html>
   );

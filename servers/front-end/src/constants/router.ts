@@ -14,6 +14,7 @@ export class route {
 
   static streamerCalendar = route.streamer + route.calendar;
   static streamerTimeline = route.streamer + route.timeline;
+  static streamerAdd = route.streamer + "/add";
 
   static chzzkCalendar = route.chzzk + route.calendar;
   static chzzkTimeline = route.chzzk + route.timeline;
@@ -24,4 +25,9 @@ export class route {
 
 export const getRoute = (path: string, arg: string) => {
   return `${path}/${arg}`;
+};
+
+export const getModalRoute = (path: string) => {
+  const url = path.includes("?") ? `${path}&modal=true` : `${path}?modal=true`;
+  return url;
 };

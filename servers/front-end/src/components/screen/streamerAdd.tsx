@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import HelperText from "../helperText";
 import useReactHookForm from "@/hook/useReactHookForm";
+import { BrandButton } from "../button";
+import { useRouter } from "next/navigation";
+import CloseIcon from "~/public/assets/svg/close";
+import { Streamer } from "@/schemas/streamer.schema";
+import { createStreamer } from "@/api/streamer-api";
+import { useAsPath } from "@/context/asPathContext";
 
 const StreamerAdd = () => {
-  const initValue: any = {
+  const router = useRouter();
+  const { previousAsPath } = useAsPath();
+
+  const initValue: Partial<Streamer> = {
     name: "",
     chzzkLink: "",
     tag: [],
@@ -11,16 +20,49 @@ const StreamerAdd = () => {
 
   const {
     register,
-    control,
     setValue,
     watch,
-    setFocus,
     reset,
     errors,
     clearErrors,
     handleSubmit,
-    ringStyle,
   } = useReactHookForm(initValue);
+
+  const [tag, setTag] = useState<string[]>([]);
+
+  const onAddTag = () => {
+    const value = watch("tag");
+    if (value) {
+      if (tag.includes(value)) setValue("tag", "");
+      else {
+        setTag([...tag, value]);
+        setValue("tag", "");
+      }
+    }
+  };
+
+  const onRemoveTag = (value: string) => {
+    setTag(tag.filter((item: string) => item !== value));
+  };
+
+  const onReset = () => {
+    reset();
+    clearErrors();
+    setTag(initValue.tag!);
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const result = {
+        ...data,
+        tag,
+      };
+      await createStreamer(result);
+      router.push(previousAsPath!);
+    } catch (err) {
+      alert("추가 요청 실패");
+    }
+  });
 
   return (
     <React.Fragment>
@@ -38,94 +80,125 @@ const StreamerAdd = () => {
       </section>
       <main className="w-full p-4">
         <form
-          className="container mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
-          // onSubmit={onSubmit}
+          className="container flex flex-col justify-between mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
+          onSubmit={onSubmit}
         >
-          <div className="flex flex-col mb-4">
-            <label htmlFor="name" className="text-sm text-textMain mb-2">
-              <span className="text-brandMain">&#42;</span> 닉네임
-            </label>
-            <input
-              {...register("name", {
-                value: initValue.name,
-                required: { value: true, message: "닉네임을 입력해 주세요." },
-              })}
-              id="name"
-              // className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
-              //   "name"
-              // )}`}
-              type="text"
-              placeholder="닉네임을 입력해 주세요."
-            />
-            {errors.name && (
-              <HelperText className="text-error">
-                {errors.name?.message as string}
-              </HelperText>
-            )}
-          </div>
-          <div className="flex flex-col mb-4">
-            <label htmlFor="chzzkLink" className="text-sm text-textMain mb-2">
-              <span className="text-brandMain">&#42;</span> 치지직 방송 링크
-            </label>
-            <input
-              {...register("chzzkLink", {
-                value: initValue.chzzkLink,
-                required: {
-                  value: true,
-                  message: "일정 제목을 입력해 주세요.",
-                },
-              })}
-              id="name"
-              // className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${ringStyle(
-              //   "name"
-              // )}`}
-              type="text"
-              placeholder="닉네임을 입력해 주세요."
-            />
-            {errors.chzzkLink && (
-              <HelperText className="text-error">
-                {errors.chzzkLink?.message as string}
-              </HelperText>
-            )}
-          </div>
-          {/* <div className="flex flex-col mb-4">
-            <label htmlFor="member" className="text-sm text-textMain mb-2">
-              멤버 &#40;진행 및 게스트&#41;
-            </label>
-            <div className="flex justify-between items-center">
+          <div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="name" className="text-sm text-textMain mb-2">
+                <span className="text-brandMain">&#42;</span> 닉네임
+              </label>
               <input
-                {...register("member", {
-                  value: initValue.member,
+                {...register("name", {
+                  value: initValue.name,
+                  required: { value: true, message: "닉네임을 입력해 주세요." },
                 })}
-                id="member"
-                className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
+                id="name"
+                className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+                  errors["name"]
+                    ? "ring-error focus:ring-2 focus:ring-error"
+                    : "ring-textLight focus:ring-brandMain"
+                }`}
                 type="text"
-                placeholder="합방 멤버를 추가해 주세요."
+                placeholder="닉네임을 입력해 주세요."
               />
-              <BrandButton classes="w-16" onClick={onAddMember}>
-                추가
+              {errors.name && (
+                <HelperText className="text-error">
+                  {errors.name?.message as string}
+                </HelperText>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="chzzkLink" className="text-sm text-textMain mb-2">
+                <span className="text-brandMain">&#42;</span> 방송 링크
+              </label>
+              <input
+                {...register("chzzkLink", {
+                  value: initValue.chzzkLink,
+                  required: {
+                    value: true,
+                    message: "치지직 방송 링크를 입력해 주세요.",
+                  },
+                })}
+                id="chzzkLink"
+                className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+                  errors["chzzkLink"]
+                    ? "ring-error focus:ring-2 focus:ring-error"
+                    : "ring-textLight focus:ring-brandMain"
+                }`}
+                type="text"
+                placeholder="치지직 방송 링크를 입력해 주세요."
+              />
+              {errors.chzzkLink && (
+                <HelperText className="text-error">
+                  {errors.chzzkLink?.message as string}
+                </HelperText>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="tag" className="text-sm text-textMain mb-2">
+                태그 &#40;MCN이나 소속&#41;
+              </label>
+              <div className="flex justify-between items-center">
+                <input
+                  {...register("tag", {
+                    value: initValue.tag,
+                  })}
+                  id="tag"
+                  className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
+                  type="text"
+                  placeholder="태그를 추가해 주세요."
+                />
+                <BrandButton classes="w-16" onClick={onAddTag}>
+                  추가
+                </BrandButton>
+              </div>
+              <div className="flex flex-wrap gap-1 items-center w-full mt-2">
+                {tag &&
+                  tag.map((name: string) => (
+                    <div
+                      key={name}
+                      className="flex items-center justify-between rounded-md border border-brandMain bg-brandMain text-xs text-white py-1 pl-2 pr-1"
+                    >
+                      {name}
+                      <span
+                        className="cursor-pointer"
+                        onClick={() => {
+                          onRemoveTag(name);
+                        }}
+                      >
+                        <CloseIcon className="w-4 h-4 ml-2 text-white" />
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 mt-8">
+            <BrandButton
+              type="button"
+              classes="w-auto min-w-20"
+              onClick={onReset}
+            >
+              초기화
+            </BrandButton>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <BrandButton
+                type="button"
+                classes="w-auto min-w-20"
+                onClick={() => router.back()}
+              >
+                취소
+              </BrandButton>
+              <BrandButton
+                type="submit"
+                color="green"
+                classes="w-auto min-w-20"
+              >
+                저장
               </BrandButton>
             </div>
-            <div className="flex flex-wrap gap-1 items-center w-full mt-2">
-              {member &&
-                member.map((name: string) => (
-                  <div
-                    key={name}
-                    className="flex items-center justify-between rounded-md border border-brandMain bg-brandMain text-xs text-white py-1 pl-2 pr-1"
-                  >
-                    {name}
-                    <span
-                      className="cursor-pointer"
-                      onClick={() => {
-                        onRemoveMember(name);
-                      }}
-                    >
-                      <CloseIcon className="w-4 h-4 ml-2 text-white" />
-                    </span>
-                  </div>
-                ))}
-            </div>
-          </div> */}
+          </div>
         </form>
       </main>
     </React.Fragment>

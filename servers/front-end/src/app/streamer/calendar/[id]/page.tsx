@@ -2,14 +2,13 @@
 
 import useCalendar from "@/hook/useCalendar";
 import { dateToFormatString } from "@/utils/dateFormat";
-import PlusIcon from "assets/svg/plus";
 import { TestDayList } from "@/constants/test";
 import React, { useEffect } from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
 import CustomCalendar from "@/components/calendar";
 import { BrandButton, CustomButton } from "@/components/button";
-import { BrandLink } from "@/components/link";
+import { AddScheduleLink } from "@/components/link";
 import TimelineIcon from "~/public/assets/svg/timeline";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
@@ -66,13 +65,7 @@ const StreamerCalendarPage = () => {
             <BrandButton classes="mr-2 w-16" onClick={setPresentMonth}>
               오늘
             </BrandButton>
-            <BrandLink
-              href={route.scheduleAdd}
-              classes="w-full max-w-64 md:w-auto"
-            >
-              <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
-              일정 추가
-            </BrandLink>
+            <AddScheduleLink classes="w-full max-w-64 md:w-auto" />
           </div>
         </div>
       </section>

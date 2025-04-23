@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type StreamerDocument = Streamer & Document;
 
-@Schema({ collection: 'streamer' })
+@Schema({ collection: 'streamer', timestamps: true })
 export class Streamer {
   @Prop({ required: true, unique: true, type: String })
   name: string;
@@ -11,11 +11,11 @@ export class Streamer {
   @Prop({ required: true, unique: true, type: String })
   chzzkLink: string;
 
-  @Prop({ required: false, type: String })
-  mcn?: string;
-
   @Prop({ required: false, type: () => [String] })
   tag?: string[];
+
+  @Prop({ required: true, type: Boolean, default: false })
+  check: boolean;
 }
 
 export const StreamerSchema = SchemaFactory.createForClass(Streamer);
