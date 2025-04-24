@@ -3,7 +3,7 @@ import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
-import { getRoute, route } from "@/constants/router";
+import { getModalRoute, getRoute, route } from "@/constants/router";
 
 interface CustomTimeLine {
   schedule: {
@@ -89,7 +89,7 @@ const CustomTimeline = ({ schedule }: CustomTimeLine) => {
                   </div>
                   <div className="w-full md:w-auto">
                     <BrandLink
-                      href={getRoute(route.streaming, item._id)}
+                      href={getModalRoute(getRoute(route.streaming, item._id))}
                       classes="w-full"
                     >
                       방송 보기
