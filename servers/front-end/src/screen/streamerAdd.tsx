@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import HelperText from "../helperText";
+import HelperText from "../components/helperText";
 import useReactHookForm from "@/hook/useReactHookForm";
-import { BrandButton } from "../button";
+import { BrandButton } from "../components/button";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
 import { Streamer } from "@/schemas/streamer.schema";
 import { createStreamer } from "@/api/streamer-api";
 import { useAsPath } from "@/context/asPathContext";
+import { useToast } from "@/context/toast";
 
 const StreamerAdd = () => {
   const router = useRouter();
   const { previousAsPath } = useAsPath();
+  const { showToast } = useToast();
 
   const initValue: Partial<Streamer> = {
     name: "",
@@ -60,7 +62,7 @@ const StreamerAdd = () => {
       await createStreamer(result);
       router.push(previousAsPath!);
     } catch (err) {
-      alert("추가 요청 실패");
+      showToast("error", "스트리머 추가 에러");
     }
   });
 

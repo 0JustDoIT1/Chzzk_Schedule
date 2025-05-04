@@ -11,7 +11,7 @@ export const FloatingButton = () => {
         scroll={false}
       >
         <PlusIcon className="w-[20px] h-[20px] text-white md:w-[24px] md:h-[24px] md:mr-1" />
-        <p className="text-sm mt-[1.5px] md:text-base">스트리머 추가요청</p>
+        <p className="text-sm mt-[1.5px] md:text-base">스트리머 추가</p>
       </Link>
     </div>
   );

@@ -5,6 +5,8 @@ import Header from "@/components/header";
 import { ReactNode } from "react";
 import { FloatingButton } from "@/components/floatingButton";
 import { AsPathProvider } from "@/context/asPathContext";
+import { ToastProvider } from "@/context/toast";
+import Toast from "@/components/toast";
 
 const gmarket = localFont({
   src: [
@@ -42,10 +44,13 @@ const RootLayout = ({
     <html lang="en">
       <body className={gmarket.className}>
         <AsPathProvider>
-          <Header />
-          {children}
-          {modal}
-          <FloatingButton />
+          <ToastProvider>
+            <Header />
+            {children}
+            {modal}
+            <Toast />
+            <FloatingButton />
+          </ToastProvider>
         </AsPathProvider>
       </body>
     </html>

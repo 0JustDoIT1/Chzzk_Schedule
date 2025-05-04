@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "@/components/modal";
-import ScheduleEdit from "@/components/screen/scheduleEdit";
+import ScheduleEdit from "@/screen/scheduleEdit";
 
 const ScheduleEditModal = () => {
   return (

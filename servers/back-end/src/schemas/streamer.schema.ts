@@ -13,9 +13,6 @@ export class Streamer {
 
   @Prop({ required: false, type: () => [String] })
   tag?: string[];
-
-  @Prop({ required: true, type: Boolean, default: false })
-  check: boolean;
 }
 
 export const StreamerSchema = SchemaFactory.createForClass(Streamer);

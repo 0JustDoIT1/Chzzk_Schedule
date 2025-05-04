@@ -1,6 +1,6 @@
 "use client";
 
-import ScheduleDetail from "@/components/screen/scheduleDetail";
+import ScheduleDetail from "@/screen/scheduleDetail";
 import Modal from "@/components/modal";
 
 const ScheduleDetailModal = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ScheduleInput from "../scheduleInput";
+import ScheduleInput from "../components/scheduleInput";
 
 const ScheduleAdd = () => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);

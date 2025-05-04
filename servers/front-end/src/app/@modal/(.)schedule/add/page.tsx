@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "@/components/modal";
-import ScheduleAdd from "@/components/screen/scheduleAdd";
+import ScheduleAdd from "@/screen/scheduleAdd";
 
 const ScheduleAddModal = () => {
   return (
