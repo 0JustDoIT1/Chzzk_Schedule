@@ -16,7 +16,7 @@ export interface ToastItem {
   message: string;
 }
 
-const duration = 2000;
+const duration = 3000;
 const animation = 500;
 
 const ToastItem = ({ id, type, message }: ToastItem) => {

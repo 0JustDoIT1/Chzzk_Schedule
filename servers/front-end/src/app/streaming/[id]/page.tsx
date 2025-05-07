@@ -1,6 +1,6 @@
 "use client";
 
-import Streaming from "@/screen/streaming";
+import Streaming from "@/screens/streaming";
 
 const StreamingPage = () => {
   return <Streaming />;

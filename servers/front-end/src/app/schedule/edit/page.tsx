@@ -1,6 +1,6 @@
 "use client";
 
-import ScheduleEdit from "@/screen/scheduleEdit";
+import ScheduleEdit from "@/screens/scheduleEdit";
 import React from "react";
 
 const ScheduleEditPage = () => {

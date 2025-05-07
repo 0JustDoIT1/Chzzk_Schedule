@@ -1,6 +1,6 @@
 "use client";
 
-import ScheduleDetail from "@/screen/scheduleDetail";
+import ScheduleDetail from "@/screens/scheduleDetail";
 
 const ScheduleDetailPage = () => {
   return <ScheduleDetail />;

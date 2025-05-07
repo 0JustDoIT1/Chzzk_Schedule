@@ -19,17 +19,24 @@ const ToastContext = createContext<ToastContext>({
   hideToast: () => {},
 });
 
+const duration = 3000;
+const animation = 500;
+
 export const ToastProvider = ({ children }: ToastProvider) => {
   const [toastList, setToastList] = useState<ToastItem[]>([]);
 
   const showToast = (type: ToastType, message: string) => {
     const id = Date.now().toString();
-    setToastList([...toastList, { id, type, message }]);
+    const newToast = { id, type, message };
+    setToastList((prevList) => [...prevList, newToast]);
+
+    setTimeout(() => {
+      setToastList((prevList) => prevList.filter((toast) => toast.id !== id));
+    }, duration - animation);
   };
 
   const hideToast = (id: string) => {
-    const filterToast = toastList.filter((item) => item.id !== id);
-    setToastList(filterToast);
+    setToastList((prevList) => prevList.filter((toast) => toast.id !== id));
   };
 
   return (

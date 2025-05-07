@@ -1,6 +1,6 @@
 "use client";
 
-import Streaming from "@/screen/streaming";
+import Streaming from "@/screens/streaming";
 import Modal from "@/components/modal";
 
 const StreamingModal = () => {

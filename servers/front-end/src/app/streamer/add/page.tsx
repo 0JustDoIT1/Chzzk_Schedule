@@ -1,6 +1,6 @@
 "use client";
 
-import StreamerAdd from "@/screen/streamerAdd";
+import StreamerAdd from "@/screens/streamerAdd";
 import React from "react";
 
 const StreamerAddPage = () => {

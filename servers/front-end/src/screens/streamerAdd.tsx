@@ -59,8 +59,9 @@ const StreamerAdd = () => {
         ...data,
         tag,
       };
-      await createStreamer(result);
-      router.push(previousAsPath!);
+      // await createStreamer(result);
+      // router.push(previousAsPath!);
+      showToast("error", "스트리머 추가 에러");
     } catch (err) {
       showToast("error", "스트리머 추가 에러");
     }
