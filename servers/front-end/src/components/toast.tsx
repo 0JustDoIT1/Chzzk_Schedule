@@ -1,12 +1,13 @@
 "use client";
 
 import { useToast } from "@/context/toast";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CheckCircleIcon from "~/public/assets/svg/check-circle";
 import CloseIcon from "~/public/assets/svg/close";
 import ErrorCircleIcon from "~/public/assets/svg/error-circle";
 import InfoCircleIcon from "~/public/assets/svg/info-circle";
 import WarningCircleIcon from "~/public/assets/svg/warning-circle";
+import Portal from "./portal";
 
 export type ToastType = "success" | "info" | "warning" | "error" | "default";
 
@@ -78,17 +79,19 @@ const ToastList = () => {
   if (toastList.length === 0) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-[99] flex flex-col gap-1 overflow-hidden md:top-8 md:right-8">
-      {toastList.map((toast) => (
-        <ToastItem
-          key={toast.id}
-          id={toast.id}
-          type={toast.type}
-          message={toast.message}
-          shown={toast.shown}
-        />
-      ))}
-    </div>
+    <Portal>
+      <div className="fixed top-4 right-4 z-[99] flex flex-col gap-1 overflow-hidden md:top-8 md:right-8">
+        {toastList.map((toast) => (
+          <ToastItem
+            key={toast.id}
+            id={toast.id}
+            type={toast.type}
+            message={toast.message}
+            shown={toast.shown}
+          />
+        ))}
+      </div>
+    </Portal>
   );
 };
 

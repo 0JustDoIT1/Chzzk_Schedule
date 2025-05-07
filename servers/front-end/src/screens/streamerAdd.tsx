@@ -5,13 +5,12 @@ import { BrandButton } from "../components/button";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
 import { Streamer } from "@/schemas/streamer.schema";
-import { createStreamer } from "@/api/streamer-api";
 import { useAsPath } from "@/context/asPathContext";
 import { useToast } from "@/context/toast";
+import ToastList from "@/components/toast";
 
 const StreamerAdd = () => {
   const router = useRouter();
-  const { previousAsPath } = useAsPath();
   const { showToast } = useToast();
 
   const initValue: Partial<Streamer> = {
@@ -204,6 +203,7 @@ const StreamerAdd = () => {
           </div>
         </form>
       </main>
+      <ToastList />
     </React.Fragment>
   );
 };

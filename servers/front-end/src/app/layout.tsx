@@ -6,7 +6,6 @@ import { ReactNode } from "react";
 import { FloatingButton } from "@/components/floatingButton";
 import { AsPathProvider } from "@/context/asPathContext";
 import { ToastProvider } from "@/context/toast";
-import Toast from "@/components/toast";
 
 const gmarket = localFont({
   src: [
@@ -48,7 +47,7 @@ const RootLayout = ({
             <Header />
             {children}
             {modal}
-            <Toast />
+            <div id="portal" />
             <FloatingButton />
           </ToastProvider>
         </AsPathProvider>
