@@ -14,29 +14,11 @@ export interface ToastItem {
   id: string;
   type: ToastType;
   message: string;
+  shown: boolean;
 }
 
-const duration = 3000;
-const animation = 500;
-
-const ToastItem = ({ id, type, message }: ToastItem) => {
-  const [visible, setVisible] = useState<boolean>(true);
+const ToastItem = ({ id, type, message, shown }: ToastItem) => {
   const { hideToast } = useToast();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, duration);
-
-    const hideTimer = setTimeout(() => {
-      hideToast(id);
-    }, duration + animation);
-
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(hideTimer);
-    };
-  }, [id, hideToast]);
 
   const toastColor = {
     success: "bg-green-200 text-green-800",
@@ -73,7 +55,7 @@ const ToastItem = ({ id, type, message }: ToastItem) => {
     <div
       className={`flex items-center justify-between w-full min-w-64 max-w-[360px] px-4 py-4 rounded-md shadow-lg ${
         toastColor[type]
-      } ${visible ? "animate-fadeIn" : "animate-fadeOut"}`}
+      } ${shown ? "animate-fadeIn" : "animate-fadeOut"}`}
     >
       <div className="flex items-center">
         <ToastIcon />
@@ -103,6 +85,7 @@ const ToastList = () => {
           id={toast.id}
           type={toast.type}
           message={toast.message}
+          shown={toast.shown}
         />
       ))}
     </div>

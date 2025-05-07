@@ -27,12 +27,19 @@ export const ToastProvider = ({ children }: ToastProvider) => {
 
   const showToast = (type: ToastType, message: string) => {
     const id = Date.now().toString();
-    const newToast = { id, type, message };
+    const newToast = { id, type, message, shown: true };
     setToastList((prevList) => [...prevList, newToast]);
 
     setTimeout(() => {
-      setToastList((prevList) => prevList.filter((toast) => toast.id !== id));
+      setToastList((prevList) =>
+        prevList.map((toast) =>
+          toast.id === id ? { ...toast, shown: false } : toast
+        )
+      );
     }, duration - animation);
+    setTimeout(() => {
+      setToastList((prevList) => prevList.filter((toast) => toast.id !== id));
+    }, duration);
   };
 
   const hideToast = (id: string) => {
