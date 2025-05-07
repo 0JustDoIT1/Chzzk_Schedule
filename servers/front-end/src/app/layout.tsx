@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/header";
 import { ReactNode } from "react";
-import { FloatingButton } from "@/components/floatingButton";
 import { AsPathProvider } from "@/context/asPathContext";
 import { ToastProvider } from "@/context/toast";
 
@@ -48,7 +47,6 @@ const RootLayout = ({
             {children}
             {modal}
             <div id="portal" />
-            <FloatingButton />
           </ToastProvider>
         </AsPathProvider>
       </body>
