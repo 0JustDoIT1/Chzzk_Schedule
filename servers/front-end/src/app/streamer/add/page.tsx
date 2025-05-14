@@ -1,10 +1,8 @@
-"use client";
-
-import StreamerAdd from "@/screens/streamerAdd";
+import StreamerAddView from "@/screens/streamer/streamerAdd";
 import React from "react";
 
 const StreamerAddPage = () => {
-  return <StreamerAdd />;
+  return <StreamerAddView />;
 };
 
 export default StreamerAddPage;

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import ScheduleInput from "../components/scheduleInput";
+"use client";
 
-const ScheduleAdd = () => {
+import React, { useState } from "react";
+import ScheduleInput from "../../components/scheduleInput";
+
+const ScheduleAddView = () => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
   const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,4 +44,4 @@ const ScheduleAdd = () => {
   );
 };
 
-export default ScheduleAdd;
+export default ScheduleAddView;

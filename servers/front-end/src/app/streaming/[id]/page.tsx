@@ -1,9 +1,7 @@
-"use client";
-
-import Streaming from "@/screens/streaming";
+import StreamingView from "@/screens/streaming";
 
 const StreamingPage = () => {
-  return <Streaming />;
+  return <StreamingView />;
 };
 
 export default StreamingPage;

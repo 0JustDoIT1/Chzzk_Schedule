@@ -1,9 +1,7 @@
-"use client";
-
-import ScheduleDetail from "@/screens/scheduleDetail";
+import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
 
 const ScheduleDetailPage = () => {
-  return <ScheduleDetail />;
+  return <ScheduleDetailView />;
 };
 
 export default ScheduleDetailPage;

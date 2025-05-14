@@ -1,10 +1,8 @@
-"use client";
-
-import ScheduleEdit from "@/screens/scheduleEdit";
+import ScheduleEditView from "@/screens/schedule/scheduleEdit";
 import React from "react";
 
 const ScheduleEditPage = () => {
-  return <ScheduleEdit />;
+  return <ScheduleEditView />;
 };
 
 export default ScheduleEditPage;

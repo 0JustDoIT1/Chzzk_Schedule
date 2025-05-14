@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import HelperText from "../components/helperText";
 import useReactHookForm from "@/hook/useReactHookForm";
-import { BrandButton } from "../components/button";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
 import { Streamer } from "@/schemas/streamer.schema";
-import { useAsPath } from "@/context/asPathContext";
 import { useToast } from "@/context/toast";
 import ToastList from "@/components/toast";
+import HelperText from "@/components/helperText";
+import { BrandButton } from "@/components/button";
 
-const StreamerAdd = () => {
+const StreamerAddView = () => {
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -208,4 +207,4 @@ const StreamerAdd = () => {
   );
 };
 
-export default StreamerAdd;
+export default StreamerAddView;

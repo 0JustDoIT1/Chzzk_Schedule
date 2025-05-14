@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useState } from "react";
-import ScheduleInput from "../components/scheduleInput";
+import ScheduleInput from "../../components/scheduleInput";
 import { useSearchParams } from "next/navigation";
 
-const ScheduleEdit = () => {
+const ScheduleEditView = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("schedule");
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
@@ -27,4 +29,4 @@ const ScheduleEdit = () => {
   );
 };
 
-export default ScheduleEdit;
+export default ScheduleEditView;

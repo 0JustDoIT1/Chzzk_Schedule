@@ -1,10 +1,8 @@
-"use client";
-
-import ScheduleAdd from "@/screens/scheduleAdd";
+import ScheduleAddView from "@/screens/schedule/scheduleAdd";
 import React from "react";
 
 const ScheduleAddPage = () => {
-  return <ScheduleAdd />;
+  return <ScheduleAddView />;
 };
 
 export default ScheduleAddPage;

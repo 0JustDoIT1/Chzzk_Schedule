@@ -1,13 +1,15 @@
+"use client";
+
 import { categoryJson } from "@/constants/streaming";
 import { TestScheduleData } from "@/constants/test";
 import { usePathname, useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandButton } from "../components/button";
-import { BrandLink } from "../components/link";
+import { BrandButton } from "../../components/button";
+import { BrandLink } from "../../components/link";
 import { route } from "@/constants/router";
 
-const ScheduleDetail = () => {
+const ScheduleDetailView = () => {
   const router = useRouter();
   const pathName = usePathname();
   const id = pathName.split("/")[pathName.split("/").length - 1];
@@ -91,4 +93,4 @@ const ScheduleDetail = () => {
   );
 };
 
-export default ScheduleDetail;
+export default ScheduleDetailView;

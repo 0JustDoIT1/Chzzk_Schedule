@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 
-const Streaming = () => {
+const StreamingView = () => {
   const params = useParams<{ id: string }>();
   const { id } = params;
 
@@ -18,4 +18,4 @@ const Streaming = () => {
   );
 };
 
-export default Streaming;
+export default StreamingView;

@@ -1,12 +1,12 @@
 "use client";
 
 import Modal from "@/components/modal";
-import StreamerAdd from "@/screens/streamerAdd";
+import StreamerAddView from "@/screens/streamer/streamerAdd";
 
 const StreamerAddModal = () => {
   return (
     <Modal>
-      <StreamerAdd />
+      <StreamerAddView />
     </Modal>
   );
 };
