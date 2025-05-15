@@ -1,8 +1,16 @@
+"use client";
+
 import { getModalRoute, route } from "@/constants/router";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import PlusIcon from "~/public/assets/svg/plus";
 
 export const FloatingButton = () => {
+  const searchParams = useSearchParams();
+  const modal = searchParams.get("modal");
+
+  if (modal) return null;
+
   return (
     <div className="fixed bottom-8 right-8 md:bottom-12 md:right-16">
       <Link

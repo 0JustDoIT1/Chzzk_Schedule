@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import useReactHookForm from "@/hook/useReactHookForm";
 import { useRouter } from "next/navigation";
