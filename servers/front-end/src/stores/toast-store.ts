@@ -5,10 +5,10 @@ export interface ToastState {
   toastList: ToastItem[];
 }
 
-export type ToastActions = {
+export interface ToastActions {
   showToast: (type: ToastType, message: string) => void;
   hideToast: (id: string) => void;
-};
+}
 
 export type ToastStore = ToastState & ToastActions;
 

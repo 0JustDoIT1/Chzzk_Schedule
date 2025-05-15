@@ -5,14 +5,13 @@ import useReactHookForm from "@/hook/useReactHookForm";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
 import { Streamer } from "@/schemas/streamer.schema";
-import ToastList from "@/components/toast";
 import HelperText from "@/components/helperText";
 import { BrandButton } from "@/components/button";
 import { useToastStore } from "@/providers/toast-provider";
 
 const StreamerAddView = () => {
   const router = useRouter();
-  const { showToast } = useToastStore((state) => state);
+  const showToast = useToastStore((state) => state.showToast);
 
   const initValue: Partial<Streamer> = {
     name: "",

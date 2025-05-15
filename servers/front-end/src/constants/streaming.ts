@@ -1,4 +1,4 @@
-import { Option } from "@/types/option";
+import { Option } from "@/types/optionType";
 
 export const category: Option[] = [
   { value: "personal", label: "개인" },

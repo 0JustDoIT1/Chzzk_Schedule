@@ -3,9 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/header";
 import { ReactNode } from "react";
-import { AsPathProvider } from "@/context/asPathContext";
 import { FloatingButton } from "@/components/floatingButton";
 import { ToastStoreProvider } from "@/providers/toast-provider";
+import { AsPathStoreProvider } from "@/providers/asPath-provider";
 
 const gmarket = localFont({
   src: [
@@ -42,7 +42,7 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className={gmarket.className}>
-        <AsPathProvider>
+        <AsPathStoreProvider>
           <ToastStoreProvider>
             <Header />
             {children}
@@ -50,7 +50,7 @@ const RootLayout = ({
             <div id="portal" />
             <FloatingButton />
           </ToastStoreProvider>
-        </AsPathProvider>
+        </AsPathStoreProvider>
       </body>
     </html>
   );

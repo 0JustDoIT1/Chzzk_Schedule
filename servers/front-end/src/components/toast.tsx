@@ -8,9 +8,11 @@ import InfoCircleIcon from "~/public/assets/svg/info-circle";
 import WarningCircleIcon from "~/public/assets/svg/warning-circle";
 import Portal from "./portal";
 import { useToastStore } from "@/providers/toast-provider";
-import { ToastItemProps } from "@/types/toastType";
+import type { ToastItem } from "@/types/toastType";
 
-const ToastItem = ({ id, type, message, shown, onClose }: ToastItemProps) => {
+const ToastItem = ({ id, type, message, shown }: ToastItem) => {
+  const hideToast = useToastStore((state) => state.hideToast);
+
   const toastColor = {
     success: "bg-green-200 text-green-800",
     info: "bg-blue-200 text-blue-800",
@@ -55,7 +57,7 @@ const ToastItem = ({ id, type, message, shown, onClose }: ToastItemProps) => {
       <button
         type="button"
         className="ml-4 text-textNormal rounded-lg inline-flex items-center justify-center"
-        onClick={() => onClose(id)}
+        onClick={() => hideToast(id)}
       >
         <CloseIcon className="w-4 h-4 mb-1" />
       </button>
@@ -64,7 +66,7 @@ const ToastItem = ({ id, type, message, shown, onClose }: ToastItemProps) => {
 };
 
 const ToastList = () => {
-  const { toastList, hideToast } = useToastStore((state) => state);
+  const toastList = useToastStore((state) => state.toastList);
 
   if (toastList.length === 0) return null;
 
@@ -78,7 +80,6 @@ const ToastList = () => {
             type={toast.type}
             message={toast.message}
             shown={toast.shown}
-            onClose={hideToast}
           />
         ))}
       </div>

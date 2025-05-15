@@ -1,12 +1,24 @@
 "use client";
 
 import MenuIcon from "assets/svg/menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeaderLink } from "./link";
 import { CustomButton } from "./button";
 import { route } from "@/constants/router";
+import { useAsPathStore } from "@/providers/asPath-provider";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
+  /** save asPath state(previous, current) */
+  const setAsPathData = useAsPathStore((state) => state.setAsPathData);
+
+  const pathName = usePathname();
+
+  useEffect(() => {
+    setAsPathData(pathName);
+  }, [pathName]);
+
+  /** handle header menu */
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleMenu = () => {

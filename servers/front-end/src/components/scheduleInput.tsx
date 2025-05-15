@@ -9,7 +9,7 @@ import CloseIcon from "~/public/assets/svg/close";
 import CheckIcon from "~/public/assets/svg/check";
 import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
-import { useAsPath } from "@/context/asPathContext";
+import { useAsPathStore } from "@/providers/asPath-provider";
 
 interface ScheduleInput {
   isOfficial: boolean;
@@ -18,7 +18,7 @@ interface ScheduleInput {
 
 const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
   const router = useRouter();
-  const { previousAsPath } = useAsPath();
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   const {
     register,

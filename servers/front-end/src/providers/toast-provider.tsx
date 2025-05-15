@@ -16,13 +16,13 @@ export interface ToastStoreProviderProps {
 }
 
 export const ToastStoreProvider = ({ children }: ToastStoreProviderProps) => {
-  const storeRef = useRef<ToastStoreApi | null>(null);
-  if (storeRef.current === null) {
-    storeRef.current = createToastStore();
+  const toastRef = useRef<ToastStoreApi | null>(null);
+  if (toastRef.current === null) {
+    toastRef.current = createToastStore();
   }
 
   return (
-    <ToastStoreContext.Provider value={storeRef.current}>
+    <ToastStoreContext.Provider value={toastRef.current}>
       {children}
       <ToastList />
     </ToastStoreContext.Provider>

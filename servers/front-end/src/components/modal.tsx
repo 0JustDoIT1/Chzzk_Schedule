@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 import CloseIcon from "~/public/assets/svg/close";
 import { CustomButton } from "./button";
-import { useAsPath } from "@/context/asPathContext";
+import { useAsPathStore } from "@/providers/asPath-provider";
 
 const Modal = ({
   children,
@@ -15,7 +15,7 @@ const Modal = ({
   const searchParams = useSearchParams();
   const isOpen = searchParams.get("modal");
 
-  const { previousAsPath } = useAsPath();
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   useEffect(() => {
     if (isOpen) {

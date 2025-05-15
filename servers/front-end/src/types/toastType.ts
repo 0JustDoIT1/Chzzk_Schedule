@@ -6,7 +6,3 @@ export interface ToastItem {
   message: string;
   shown: boolean;
 }
-
-export interface ToastItemProps extends ToastItem {
-  onClose: (id: string) => void;
-}
