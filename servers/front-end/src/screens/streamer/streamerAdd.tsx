@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import useReactHookForm from "@/hook/useReactHookForm";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
@@ -13,6 +13,7 @@ import { useAsPathStore } from "@/providers/asPath-provider";
 import { ErrorCode } from "@/constants/error-code";
 import { axiosErrorHandle } from "@/api/axios-error";
 import { IErrorResponse } from "@/types/error-response";
+import { preventEnterKey } from "@/utils/keyEvent";
 
 const StreamerAddView = () => {
   const router = useRouter();
@@ -36,6 +37,12 @@ const StreamerAddView = () => {
   } = useReactHookForm(initValue);
 
   const [tag, setTag] = useState<string[]>([]);
+
+  const onKeyDownAddTag = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.code === "Enter") {
+      onAddTag();
+    }
+  };
 
   const onAddTag = () => {
     const value = watch("tag");
@@ -93,6 +100,7 @@ const StreamerAddView = () => {
         <form
           className="container flex flex-col justify-between mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
           onSubmit={onSubmit}
+          onKeyDown={preventEnterKey}
         >
           <div>
             <div className="flex flex-col mb-4">
@@ -159,6 +167,7 @@ const StreamerAddView = () => {
                   className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
                   type="text"
                   placeholder="태그를 추가해 주세요."
+                  onKeyDown={onKeyDownAddTag}
                 />
                 <BrandButton classes="w-16" onClick={onAddTag}>
                   추가

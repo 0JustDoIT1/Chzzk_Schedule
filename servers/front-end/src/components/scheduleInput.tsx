@@ -10,6 +10,7 @@ import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
 import { useAsPathStore } from "@/providers/asPath-provider";
 import { BrandButton } from "./button";
+import { preventEnterKey } from "@/utils/keyEvent";
 
 interface ScheduleInput {
   isOfficial: boolean;
@@ -40,6 +41,7 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
     <form
       className="container mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
       onSubmit={onSubmit}
+      onKeyDown={preventEnterKey}
     >
       <div>
         {!isOfficial && (
