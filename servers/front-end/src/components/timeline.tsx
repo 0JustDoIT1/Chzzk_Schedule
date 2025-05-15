@@ -5,7 +5,7 @@ import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
 import { getModalRoute, getRoute, route } from "@/constants/router";
 
-interface CustomTimeLine {
+interface ICustomTimeLine {
   schedule: {
     time: number;
     list: {
@@ -17,7 +17,7 @@ interface CustomTimeLine {
   }[];
 }
 
-const CustomTimeline = ({ schedule }: CustomTimeLine) => {
+const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
   return (
     <div className="container mx-auto md:pl-12 lg:max-w-6xl">
       <ol className="relative md:border-l-2 md:border-brandMain">

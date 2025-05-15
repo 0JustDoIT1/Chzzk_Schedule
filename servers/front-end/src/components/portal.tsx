@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 import ReactDOM from "react-dom";
 
-interface IPortalProps {
+interface IPortal {
   children: ReactNode;
 }
 
-function Portal({ children }: IPortalProps) {
+function Portal({ children }: IPortal) {
   const element =
     typeof window !== "undefined" &&
     (document.getElementById("portal") as HTMLElement);

@@ -4,7 +4,7 @@ import React, { useState, KeyboardEvent } from "react";
 import useReactHookForm from "@/hook/useReactHookForm";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
-import { Streamer } from "@/schemas/streamer.schema";
+import { IStreamer } from "@/schemas/streamer.schema";
 import HelperText from "@/components/helperText";
 import { BrandButton } from "@/components/button";
 import { useToastStore } from "@/providers/toast-provider";
@@ -20,7 +20,7 @@ const StreamerAddView = () => {
   const showToast = useToastStore((state) => state.showToast);
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
-  const initValue: Partial<Streamer> = {
+  const initValue: Partial<IStreamer> = {
     name: "",
     chzzkLink: "",
     tag: [],
@@ -67,7 +67,7 @@ const StreamerAddView = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const result: Streamer = {
+      const result: IStreamer = {
         ...data,
         tag,
       };

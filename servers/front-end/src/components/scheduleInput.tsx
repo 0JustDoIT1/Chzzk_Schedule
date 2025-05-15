@@ -12,12 +12,12 @@ import { useAsPathStore } from "@/providers/asPath-provider";
 import { BrandButton } from "./button";
 import { preventEnterKey } from "@/utils/keyEvent";
 
-interface ScheduleInput {
+interface IScheduleInput {
   isOfficial: boolean;
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ScheduleInput = ({ isOfficial, setIsOfficial }: ScheduleInput) => {
+const ScheduleInput = ({ isOfficial, setIsOfficial }: IScheduleInput) => {
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 

@@ -1,23 +1,23 @@
 import { createStore } from "zustand";
 
-export interface AsPathState {
+export interface IAsPathState {
   previousAsPath: string | null;
   currentAsPath: string | null;
 }
 
-export interface AsPathActions {
+export interface IAsPathActions {
   setAsPathData: (path: string) => void;
 }
 
-export type AsPathStore = AsPathState & AsPathActions;
+export type AsPathStore = IAsPathState & IAsPathActions;
 
-export const defaultInitState: AsPathState = {
+export const defaultInitState: IAsPathState = {
   previousAsPath: null,
   currentAsPath: null,
 };
 
 export const createAsPathStore = (
-  initState: AsPathState = defaultInitState
+  initState: IAsPathState = defaultInitState
 ) => {
   return createStore<AsPathStore>()((set) => ({
     ...initState,

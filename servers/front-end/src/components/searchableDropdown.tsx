@@ -4,7 +4,7 @@ import { RefCallBack } from "react-hook-form";
 import ChevronDownIcon from "~/public/assets/svg/chevron-down";
 import ChevronUpIcon from "~/public/assets/svg/chevron-up";
 
-interface SearchableDropdown {
+interface ISearchableDropdown {
   list: any[];
   keyName: string;
   placeholder: string;
@@ -22,7 +22,7 @@ const SearchableDropdown = ({
   value,
   onChange,
   errors,
-}: SearchableDropdown) => {
+}: ISearchableDropdown) => {
   const {
     inputRef,
     itemRef,

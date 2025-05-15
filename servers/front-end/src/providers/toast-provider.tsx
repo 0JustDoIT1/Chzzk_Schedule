@@ -11,11 +11,11 @@ export const ToastStoreContext = createContext<ToastStoreApi | undefined>(
   undefined
 );
 
-export interface ToastStoreProviderProps {
+export interface IToastStoreProvider {
   children: ReactNode;
 }
 
-export const ToastStoreProvider = ({ children }: ToastStoreProviderProps) => {
+export const ToastStoreProvider = ({ children }: IToastStoreProvider) => {
   const toastRef = useRef<ToastStoreApi | null>(null);
   if (toastRef.current === null) {
     toastRef.current = createToastStore();

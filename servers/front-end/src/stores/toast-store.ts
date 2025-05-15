@@ -1,25 +1,25 @@
 import { IToastItem, ToastType } from "@/types/toastType";
 import { createStore } from "zustand";
 
-export interface ToastState {
+export interface IToastState {
   toastList: IToastItem[];
 }
 
-export interface ToastActions {
+export interface IToastActions {
   showToast: (type: ToastType, message: string) => void;
   hideToast: (id: string) => void;
 }
 
-export type ToastStore = ToastState & ToastActions;
+export type ToastStore = IToastState & IToastActions;
 
-export const defaultInitState: ToastState = {
+export const defaultInitState: IToastState = {
   toastList: [],
 };
 
 const duration = 3000;
 const animation = 500;
 
-export const createToastStore = (initState: ToastState = defaultInitState) => {
+export const createToastStore = (initState: IToastState = defaultInitState) => {
   return createStore<ToastStore>()((set) => ({
     ...initState,
     showToast: (type: ToastType, message: string) => {

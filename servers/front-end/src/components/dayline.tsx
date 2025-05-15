@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { sorting } from "@/utils/sort";
 import { getModalRoute, getRoute, route } from "@/constants/router";
 
-interface CustomDayLine {
+interface ICustomDayLine {
   schedule: {
     day: string;
     preList: {
@@ -28,7 +28,7 @@ interface CustomDayLine {
   date: dayjsType;
 }
 
-const CustomDayline = ({ schedule, date }: CustomDayLine) => {
+const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
   const dateString = dateToFormatString(date, "YYYY-MM-DD");
 
   useEffect(() => {

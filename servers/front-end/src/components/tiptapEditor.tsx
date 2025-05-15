@@ -8,12 +8,12 @@ import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect } from "react";
 
-interface TiptapEditor {
+interface ITiptapEditor {
   text: string;
   setText: (...event: any[]) => void;
 }
 
-const TiptapEditor = ({ text, setText }: TiptapEditor) => {
+const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
   useEffect(() => {
     if (!text) editor?.commands.clearContent();
   }, [text]);

@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 
-interface HelperText {
+interface IHelperText {
   className: string;
   children: ReactNode;
 }
 
-const HelperText = ({ className, children }: HelperText) => {
+const HelperText = ({ className, children }: IHelperText) => {
   return <p className={`mt-1 text-xs ${className}`}>{children}</p>;
 };
 

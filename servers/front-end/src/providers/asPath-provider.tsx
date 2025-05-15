@@ -10,11 +10,11 @@ export const AsPathStoreContext = createContext<AsPathStoreApi | undefined>(
   undefined
 );
 
-export interface AsPathStoreProviderProps {
+export interface IAsPathStoreProvider {
   children: ReactNode;
 }
 
-export const AsPathStoreProvider = ({ children }: AsPathStoreProviderProps) => {
+export const AsPathStoreProvider = ({ children }: IAsPathStoreProvider) => {
   const asPathRef = useRef<AsPathStoreApi | null>(null);
   if (asPathRef.current === null) {
     asPathRef.current = createAsPathStore();
