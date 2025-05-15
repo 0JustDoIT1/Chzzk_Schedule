@@ -1,4 +1,4 @@
-export interface Option {
+export interface IOption {
   value: string;
   label: string;
 }

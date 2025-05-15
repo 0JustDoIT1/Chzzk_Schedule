@@ -1,8 +1,8 @@
-import { ToastItem, ToastType } from "@/types/toastType";
+import { IToastItem, ToastType } from "@/types/toastType";
 import { createStore } from "zustand";
 
 export interface ToastState {
-  toastList: ToastItem[];
+  toastList: IToastItem[];
 }
 
 export interface ToastActions {

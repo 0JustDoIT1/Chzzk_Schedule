@@ -1,6 +1,5 @@
 import { category, chzzkCategory } from "@/constants/streaming";
 import TiptapEditor from "./tiptapEditor";
-import { BrandButton } from "./button";
 import { Controller } from "react-hook-form";
 import SearchableDropdown from "./searchableDropdown";
 import React from "react";
@@ -10,6 +9,7 @@ import CheckIcon from "~/public/assets/svg/check";
 import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
 import { useAsPathStore } from "@/providers/asPath-provider";
+import { BrandButton } from "./button";
 
 interface ScheduleInput {
   isOfficial: boolean;

@@ -6,7 +6,7 @@ import { TestDayList } from "@/constants/test";
 import React from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
-import { BrandButton, CustomButton } from "@/components/button";
+import { IBrandButton, CustomButton } from "@/components/button";
 import { AddScheduleLink } from "@/components/link";
 import CustomDayline from "@/components/dayline";
 import TimelineIcon from "~/public/assets/svg/timeline";

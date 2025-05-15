@@ -9,7 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-interface CustomCalendar {
+interface ICustomCalendar {
   today: dayjsType;
   week: string[];
   dayArray: { [x: number]: dayjsType[] }[];
@@ -23,7 +23,7 @@ const CustomCalendar = ({
   dayArray,
   isHasSchedule = false,
   schedule,
-}: CustomCalendar) => {
+}: ICustomCalendar) => {
   schedule = isHasSchedule ? schedule : null;
 
   const pathName = usePathname();

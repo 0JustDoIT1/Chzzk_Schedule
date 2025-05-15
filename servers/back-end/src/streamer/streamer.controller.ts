@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { StreamerService } from './streamer.service';
 import { CreateStreamerDto } from './dto/create-streamer.dto';
 
-@Controller('streamer')
+@Controller(ApiPath.STREAMER)
 export class StreamerController {
   constructor(private readonly streamerService: StreamerService) {}
 

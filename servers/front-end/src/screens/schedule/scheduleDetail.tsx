@@ -5,7 +5,7 @@ import { TestScheduleData } from "@/constants/test";
 import { usePathname, useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandButton } from "../../components/button";
+import { IBrandButton } from "../../components/button";
 import { BrandLink } from "../../components/link";
 import { route } from "@/constants/router";
 

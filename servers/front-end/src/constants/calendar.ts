@@ -1,11 +1,11 @@
-import { Option } from "@/types/optionType";
+import { IOption } from "@/types/optionType";
 
 export const scheduleViewType = {
   calendar: "calendar",
   timeline: "timeline",
 };
 
-export const scheduleViewOption: Option[] = [
+export const scheduleViewOption: IOption[] = [
   {
     value: scheduleViewType.calendar,
     label: "캘린더",

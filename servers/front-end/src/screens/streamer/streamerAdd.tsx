@@ -8,10 +8,16 @@ import { Streamer } from "@/schemas/streamer.schema";
 import HelperText from "@/components/helperText";
 import { BrandButton } from "@/components/button";
 import { useToastStore } from "@/providers/toast-provider";
+import { createStreamer } from "@/api/streamer-api";
+import { useAsPathStore } from "@/providers/asPath-provider";
+import { ErrorCode } from "@/constants/error-code";
+import { axiosErrorHandle } from "@/api/axios-error";
+import { IErrorResponse } from "@/types/error-response";
 
 const StreamerAddView = () => {
   const router = useRouter();
   const showToast = useToastStore((state) => state.showToast);
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   const initValue: Partial<Streamer> = {
     name: "",
@@ -54,15 +60,18 @@ const StreamerAddView = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const result = {
+      const result: Streamer = {
         ...data,
         tag,
       };
-      // await createStreamer(result);
-      // router.push(previousAsPath!);
-      showToast("error", "스트리머 추가 에러");
-    } catch (err) {
-      showToast("error", "스트리머 추가 에러");
+      await createStreamer(result);
+      router.push(previousAsPath!);
+      showToast("success", `${result.name}을(를) 추가했습니다.`);
+    } catch (error) {
+      const axiosError = axiosErrorHandle(error) as IErrorResponse;
+
+      if (axiosError!.errorCode === ErrorCode.USER_ALREADY_EXIST)
+        showToast("error", axiosError?.message);
     }
   });
 

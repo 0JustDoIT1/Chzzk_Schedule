@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-interface BrandButton {
+interface IBrandButton {
   children: ReactNode;
   type?: "button" | "submit" | "reset";
   color?: string;
@@ -13,7 +13,7 @@ export const CustomButton = ({
   classes,
   type = "button",
   onClick,
-}: BrandButton) => {
+}: IBrandButton) => {
   return (
     <button type={type} className={classes} onClick={onClick}>
       {children}
@@ -27,7 +27,7 @@ export const BrandButton = ({
   classes,
   type = "button",
   onClick,
-}: BrandButton) => {
+}: IBrandButton) => {
   let colorName = "";
 
   switch (color) {
