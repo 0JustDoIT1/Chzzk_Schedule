@@ -18,7 +18,14 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  // Api global prefix setting
   app.setGlobalPrefix('v1');
+
+  // CORS Setting
+  app.enableCors({
+    origin: [process.env.ORIGIN], // 프론트엔드 주소만 허용
+    credentials: true, // 쿠키, 인증 헤더 사용 가능 여부
+  });
 
   // Swagger Setting
   const config = new DocumentBuilder()

@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:3001", // Replace with your API endpoint
+export const clientAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL, // Replace with your API endpoint
 });
 
-export default axiosInstance;
+export const serverAxios = axios.create({
+  baseURL: process.env.API_URL, // Replace with your API endpoint
+});

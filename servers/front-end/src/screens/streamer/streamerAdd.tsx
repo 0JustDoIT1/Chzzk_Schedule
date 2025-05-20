@@ -69,6 +69,7 @@ const StreamerAddView = () => {
         ...data,
         tag,
       };
+      if (!tag.length) delete result.tag;
       await createStreamer(result);
       router.push(previousAsPath!);
       showToast("success", `${result.name}을(를) 추가했습니다.`);
