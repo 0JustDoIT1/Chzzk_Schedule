@@ -6,7 +6,6 @@ import { TestDayList } from "@/constants/test";
 import React from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
-import { IBrandButton, CustomButton } from "@/components/button";
 import { AddScheduleLink } from "@/components/link";
 import CustomDayline from "@/components/dayline";
 import TimelineIcon from "~/public/assets/svg/timeline";
@@ -14,6 +13,7 @@ import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { route } from "@/constants/router";
+import { BrandButton, CustomButton } from "@/components/button";
 
 const ChzzkTimelineView = () => {
   const pathName = usePathname();

@@ -14,6 +14,7 @@ import { ErrorCode } from "@/constants/error-code";
 import { axiosErrorHandle } from "@/api/axios-error";
 import { IErrorResponse } from "@/types/error-response";
 import { preventEnterKey } from "@/utils/keyEvent";
+import axios from "axios";
 
 const StreamerAddView = () => {
   const router = useRouter();
