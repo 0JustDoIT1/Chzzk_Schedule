@@ -5,10 +5,11 @@ import ScheduleInput from "../../components/scheduleInput";
 import { IStreamer } from "@/schemas/streamer.schema";
 
 interface IScheduleAddView {
-  streamerList: IStreamer;
+  streamerList: IStreamer[];
 }
 
 const ScheduleAddView = ({ streamerList }: IScheduleAddView) => {
+  console.log("111", streamerList);
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
   const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {

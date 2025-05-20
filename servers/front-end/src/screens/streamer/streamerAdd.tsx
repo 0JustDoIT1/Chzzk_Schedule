@@ -11,7 +11,7 @@ import { useToastStore } from "@/providers/toast-provider";
 import { createStreamer } from "@/api/streamer-api";
 import { useAsPathStore } from "@/providers/asPath-provider";
 import { preventEnterKey } from "@/utils/keyEvent";
-import { showErrorToast } from "@/utils/errorHandler";
+import { isResError } from "@/utils/errorHandler";
 
 const StreamerAddView = () => {
   const router = useRouter();
@@ -69,14 +69,13 @@ const StreamerAddView = () => {
       tag,
     };
     if (!tag.length) delete result.tag;
-    await createStreamer(result);
+
+    const streamer = await createStreamer(result);
+    if (isResError(streamer))
+      return showToast("error", `이미 추가된 스트리머입니다.`);
+
     router.push(previousAsPath!);
     showToast("success", `${result.name}을(를) 추가했습니다.`);
-    // try {
-
-    // } catch (error) {
-    //   showErrorToast(error, showToast);
-    // }
   });
 
   return (

@@ -27,6 +27,8 @@ const ScheduleInput = ({
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
+  console.log("222", streamerList);
+
   const {
     register,
     control,

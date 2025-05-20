@@ -1,20 +1,15 @@
 import type { IErrorResponse } from "@/types/error-response";
-import { TToastType } from "@/types/toastType";
 import axios from "axios";
 
-const axiosErrorHandle = (error: any): IErrorResponse | undefined => {
+export const axiosError = (error: any): IErrorResponse | undefined => {
   if (axios.isAxiosError(error)) {
     return error.response?.data;
   }
 };
 
-export const showErrorToast = (
-  error: any,
-  showToast: (type: TToastType, message: string) => void
-) => {
-  const axiosError = axiosErrorHandle(error) as IErrorResponse;
-  showToast("error", axiosError?.message);
-
-  // if (axiosError!.errorCode === ErrorCode.USER_ALREADY_EXIST)
-  //         showToast("error", axiosError?.message);
+export const isResError = (
+  res: IErrorResponse | any
+): res is IErrorResponse => {
+  if (!res) return true;
+  return (res as IErrorResponse).errorCode !== undefined;
 };

@@ -39,6 +39,8 @@ const SearchableDropdown = ({
     displayValue,
   } = useSearchableDropdown(list, keyName, value, onChange);
 
+  console.log("333", list);
+
   return (
     <React.Fragment>
       <div className="relative cursor-default">
