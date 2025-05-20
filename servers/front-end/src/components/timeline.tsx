@@ -1,4 +1,4 @@
-import { dateToFormatString, dayjsType, getToday } from "@/utils/dateFormat";
+import { dateToFormatString, TDayjsType, getToday } from "@/utils/dateFormat";
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
@@ -12,7 +12,7 @@ interface ICustomTimeLine {
       _id: string;
       title: string;
       member: string[];
-      startAt: Date | dayjsType;
+      startAt: Date | TDayjsType;
     }[];
   }[];
 }

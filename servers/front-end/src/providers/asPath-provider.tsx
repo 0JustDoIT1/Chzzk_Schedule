@@ -1,12 +1,12 @@
 "use client";
 
-import { AsPathStore, createAsPathStore } from "@/stores/asPath-store";
+import { TAsPathStore, createAsPathStore } from "@/stores/asPath-store";
 import { createContext, ReactNode, useContext, useRef } from "react";
 import { useStore } from "zustand";
 
-export type AsPathStoreApi = ReturnType<typeof createAsPathStore>;
+export type TAsPathStoreApi = ReturnType<typeof createAsPathStore>;
 
-export const AsPathStoreContext = createContext<AsPathStoreApi | undefined>(
+export const AsPathStoreContext = createContext<TAsPathStoreApi | undefined>(
   undefined
 );
 
@@ -15,7 +15,7 @@ export interface IAsPathStoreProvider {
 }
 
 export const AsPathStoreProvider = ({ children }: IAsPathStoreProvider) => {
-  const asPathRef = useRef<AsPathStoreApi | null>(null);
+  const asPathRef = useRef<TAsPathStoreApi | null>(null);
   if (asPathRef.current === null) {
     asPathRef.current = createAsPathStore();
   }
@@ -27,7 +27,7 @@ export const AsPathStoreProvider = ({ children }: IAsPathStoreProvider) => {
   );
 };
 
-export const useAsPathStore = <T,>(selector: (store: AsPathStore) => T): T => {
+export const useAsPathStore = <T,>(selector: (store: TAsPathStore) => T): T => {
   const asPathStoreContext = useContext(AsPathStoreContext);
 
   if (!asPathStoreContext) {

@@ -1,4 +1,4 @@
-import { IToastItem, ToastType } from "@/types/toastType";
+import { IToastItem, TToastType } from "@/types/toastType";
 import { createStore } from "zustand";
 
 export interface IToastState {
@@ -6,11 +6,11 @@ export interface IToastState {
 }
 
 export interface IToastActions {
-  showToast: (type: ToastType, message: string) => void;
+  showToast: (type: TToastType, message: string) => void;
   hideToast: (id: string) => void;
 }
 
-export type ToastStore = IToastState & IToastActions;
+export type TToastStore = IToastState & IToastActions;
 
 export const defaultInitState: IToastState = {
   toastList: [],
@@ -20,9 +20,9 @@ const duration = 3000;
 const animation = 500;
 
 export const createToastStore = (initState: IToastState = defaultInitState) => {
-  return createStore<ToastStore>()((set) => ({
+  return createStore<TToastStore>()((set) => ({
     ...initState,
-    showToast: (type: ToastType, message: string) => {
+    showToast: (type: TToastType, message: string) => {
       const id = Date.now().toString();
       const newToast = { id, type, message, shown: true };
 

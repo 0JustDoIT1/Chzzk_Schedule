@@ -9,7 +9,7 @@ export interface IAsPathActions {
   setAsPathData: (path: string) => void;
 }
 
-export type AsPathStore = IAsPathState & IAsPathActions;
+export type TAsPathStore = IAsPathState & IAsPathActions;
 
 export const defaultInitState: IAsPathState = {
   previousAsPath: null,
@@ -19,7 +19,7 @@ export const defaultInitState: IAsPathState = {
 export const createAsPathStore = (
   initState: IAsPathState = defaultInitState
 ) => {
-  return createStore<AsPathStore>()((set) => ({
+  return createStore<TAsPathStore>()((set) => ({
     ...initState,
     setAsPathData: (path: string) =>
       set((state) => ({

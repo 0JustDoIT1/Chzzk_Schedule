@@ -10,11 +10,8 @@ import { BrandButton } from "@/components/button";
 import { useToastStore } from "@/providers/toast-provider";
 import { createStreamer } from "@/api/streamer-api";
 import { useAsPathStore } from "@/providers/asPath-provider";
-import { ErrorCode } from "@/constants/error-code";
-import { axiosErrorHandle } from "@/api/axios-error";
-import { IErrorResponse } from "@/types/error-response";
 import { preventEnterKey } from "@/utils/keyEvent";
-import axios from "axios";
+import { showErrorToast } from "@/utils/errorHandler";
 
 const StreamerAddView = () => {
   const router = useRouter();
@@ -76,10 +73,7 @@ const StreamerAddView = () => {
       router.push(previousAsPath!);
       showToast("success", `${result.name}을(를) 추가했습니다.`);
     } catch (error) {
-      const axiosError = axiosErrorHandle(error) as IErrorResponse;
-
-      if (axiosError!.errorCode === ErrorCode.USER_ALREADY_EXIST)
-        showToast("error", axiosError?.message);
+      showErrorToast(error, showToast);
     }
   });
 

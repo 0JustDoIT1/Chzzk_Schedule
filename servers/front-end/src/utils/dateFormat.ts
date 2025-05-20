@@ -9,7 +9,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Seoul");
 
-export type dayjsType = dayjs.Dayjs;
+export type TDayjsType = dayjs.Dayjs;
 
 export const getToday = () => {
   return dayjs();

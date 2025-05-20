@@ -1,6 +1,6 @@
 import {
   addDate,
-  dayjsType,
+  TDayjsType,
   getDayByString,
   getStartDate,
   getToday,
@@ -13,10 +13,10 @@ const useCalendar = () => {
   const searchParams = useSearchParams();
   const date = searchParams.get("date");
 
-  const [today, setToday] = useState<dayjsType>(
+  const [today, setToday] = useState<TDayjsType>(
     date ? getDayByString(date) : getToday()
   );
-  const [dayArray, setDayArray] = useState<{ [x: number]: dayjsType[] }[]>([]);
+  const [dayArray, setDayArray] = useState<{ [x: number]: TDayjsType[] }[]>([]);
 
   const week = ["일", "월", "화", "수", "목", "금", "토"];
 

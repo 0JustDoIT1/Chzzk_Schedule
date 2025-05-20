@@ -1,7 +1,7 @@
 import { getModalRoute, getRoute, route } from "@/constants/router";
 import {
   dateToFormatString,
-  dayjsType,
+  TDayjsType,
   getDateDiff,
   getToday,
 } from "@/utils/dateFormat";
@@ -10,9 +10,9 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 interface ICustomCalendar {
-  today: dayjsType;
+  today: TDayjsType;
   week: string[];
-  dayArray: { [x: number]: dayjsType[] }[];
+  dayArray: { [x: number]: TDayjsType[] }[];
   isHasSchedule?: boolean;
   schedule?: any;
 }

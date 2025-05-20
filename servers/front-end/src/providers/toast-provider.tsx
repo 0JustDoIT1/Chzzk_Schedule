@@ -1,13 +1,13 @@
 "use client";
 
 import ToastList from "@/components/toast";
-import { createToastStore, ToastStore } from "@/stores/toast-store";
+import { createToastStore, TToastStore } from "@/stores/toast-store";
 import { createContext, ReactNode, useContext, useRef } from "react";
 import { useStore } from "zustand";
 
-export type ToastStoreApi = ReturnType<typeof createToastStore>;
+export type TToastStoreApi = ReturnType<typeof createToastStore>;
 
-export const ToastStoreContext = createContext<ToastStoreApi | undefined>(
+export const ToastStoreContext = createContext<TToastStoreApi | undefined>(
   undefined
 );
 
@@ -16,7 +16,7 @@ export interface IToastStoreProvider {
 }
 
 export const ToastStoreProvider = ({ children }: IToastStoreProvider) => {
-  const toastRef = useRef<ToastStoreApi | null>(null);
+  const toastRef = useRef<TToastStoreApi | null>(null);
   if (toastRef.current === null) {
     toastRef.current = createToastStore();
   }
@@ -29,7 +29,7 @@ export const ToastStoreProvider = ({ children }: IToastStoreProvider) => {
   );
 };
 
-export const useToastStore = <T,>(selector: (store: ToastStore) => T): T => {
+export const useToastStore = <T,>(selector: (store: TToastStore) => T): T => {
   const toastStoreContext = useContext(ToastStoreContext);
 
   if (!toastStoreContext) {

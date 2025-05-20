@@ -1,8 +1,8 @@
-export type ToastType = "success" | "info" | "warning" | "error" | "default";
+export type TToastType = "success" | "info" | "warning" | "error" | "default";
 
 export interface IToastItem {
   id: string;
-  type: ToastType;
+  type: TToastType;
   message: string;
   shown: boolean;
 }
