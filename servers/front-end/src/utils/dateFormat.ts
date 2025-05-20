@@ -25,18 +25,18 @@ export const dateToFormatString = (date: dayjs.ConfigType, format: string) => {
   return dayjs(date).format(format);
 };
 
-// Firebase의 utc string 시간에는 변환이 불가능(+,- 값을 저장하지 않고 자동 생성)
-// 따라서, 임의로 서울 시간과 현재 지역 시간의 offset 편차를 계산하여 더함
-export const dateToSeoulTime = (date: dayjs.ConfigType, format: string) => {
-  const CurrentOffSet: number = dayjs().utcOffset();
-  const SeoulOffset: number = 540;
+// // Firebase의 utc string 시간에는 변환이 불가능(+,- 값을 저장하지 않고 자동 생성)
+// // 따라서, 임의로 서울 시간과 현재 지역 시간의 offset 편차를 계산하여 더함
+// export const dateToSeoulTime = (date: dayjs.ConfigType, format: string) => {
+//   const CurrentOffSet: number = dayjs().utcOffset();
+//   const SeoulOffset: number = 540;
 
-  const DiffSeoulToCurrent = SeoulOffset - CurrentOffSet;
+//   const DiffSeoulToCurrent = SeoulOffset - CurrentOffSet;
 
-  return dayjs(date).add(DiffSeoulToCurrent, "minute").format(format);
-};
+//   return dayjs(date).add(DiffSeoulToCurrent, "minute").format(format);
+// };
 
-// calendar에서 DateType을 Date로 변환
+// DateType을 Date로 변환 (calendar, input string -> date)
 export const dateTypeToDate = (date: dayjs.ConfigType) => {
   return dayjs(date).toDate();
 };

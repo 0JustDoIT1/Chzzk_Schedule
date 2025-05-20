@@ -6,7 +6,7 @@ import { CreateStreamerDto } from './dto/create-streamer.dto';
 export class StreamerController {
   constructor(private readonly streamerService: StreamerService) {}
 
-  @Post()
+  @Post(ApiPath.STREAMER_ADD)
   async create(@Body() streamerData: CreateStreamerDto) {
     return await this.streamerService.create(streamerData);
   }

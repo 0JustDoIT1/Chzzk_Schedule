@@ -12,7 +12,7 @@ export class Schedule {
   @Prop({ required: false, type: String })
   streamer?: string;
 
-  @Prop({ required: true, type: Category })
+  @Prop({ required: true, enum: Category })
   category: Category;
 
   @Prop({ required: true, type: String })

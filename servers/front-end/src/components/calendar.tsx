@@ -90,7 +90,7 @@ const CustomCalendar = ({
                     className={`pl-1 py-1 text-left text-xs ${
                       monthCheck ? "font-normal" : "font-light"
                     } ${
-                      monthCheck && column === 0
+                      monthCheck && !column
                         ? "text-red-600"
                         : monthCheck && column === 6
                         ? "text-blue-600"
@@ -116,16 +116,16 @@ const CustomCalendar = ({
                           const dateCheck =
                             item.day === dateToFormatString(day, "YYYY-MM-DD");
                           const todayViewLength = 4 - item.preList.length;
-                          const todayViewCheck = todayViewLength > 0;
+                          const todayViewCheck = todayViewLength;
 
                           const etc =
                             item.list.length + item.preList.length - 4;
-                          const etcCheck = dateCheck && etc > 0;
+                          const etcCheck = dateCheck && etc;
 
                           return (
                             <React.Fragment key={item.day}>
                               {dateCheck &&
-                                column === 0 &&
+                                !column &&
                                 item.preList.map((stream: any) => {
                                   const dateDiff = getDateDiff(
                                     stream.endAt,

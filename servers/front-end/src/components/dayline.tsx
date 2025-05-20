@@ -71,7 +71,7 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
               id={dateToFormatString(list.day, "YYYY-MM-DD")}
               className="mb-16 ml-12 mr-8 md:mr-0"
             >
-              {dayList.length > 0 && (
+              {dayList.length && (
                 <div className={timeCircle}>
                   <p className={circleText}>
                     {dateToFormatString(list.day, "DD")}

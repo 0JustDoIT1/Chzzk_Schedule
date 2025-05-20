@@ -14,4 +14,7 @@ export const showErrorToast = (
 ) => {
   const axiosError = axiosErrorHandle(error) as IErrorResponse;
   showToast("error", axiosError?.message);
+
+  // if (axiosError!.errorCode === ErrorCode.USER_ALREADY_EXIST)
+  //         showToast("error", axiosError?.message);
 };

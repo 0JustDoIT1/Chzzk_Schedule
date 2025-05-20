@@ -1,12 +1,22 @@
-import { setDateAndTime } from "@/utils/dateFormat";
+import { dateTypeToDate, setDateAndTime } from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
+import { ISchedule, IScheduleInput } from "@/schemas/schedule.schema";
+import { createSchedule } from "@/api/schedule-api";
+import { useAsPathStore } from "@/providers/asPath-provider";
+import { useToastStore } from "@/providers/toast-provider";
+import { showErrorToast } from "@/utils/errorHandler";
+import { useRouter } from "next/navigation";
 
 const useScheduleInput = (
   isOfficial: boolean,
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  const initValue: any = {
+  const router = useRouter();
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
+  const showToast = useToastStore((state) => state.showToast);
+
+  const initValue: Partial<IScheduleInput> = {
     streamer: "",
     category: "",
     title: "",
@@ -92,18 +102,41 @@ const useScheduleInput = (
   const onReset = () => {
     reset();
     clearErrors();
-    setMember(initValue.member);
+    setMember(initValue.member!);
     setIsOfficial(false);
   };
 
-  const onSubmit = handleSubmit((data) => {
-    const result = {
-      ...data,
-      isOfficial,
-      member,
-    };
-    // if (isOfficial) delete result.streamer;
-    console.log("데이터", result);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const inputData: IScheduleInput = {
+        ...data,
+        isOfficial,
+        member,
+      };
+
+      const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
+      const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
+
+      const result: ISchedule = {
+        isOfficial: inputData.isOfficial,
+        streamer: inputData.streamer,
+        category: inputData.category,
+        title: inputData.title,
+        member: inputData.member,
+        startAt: dateTypeToDate(startAt),
+        endAt: dateTypeToDate(endAt),
+        contents: inputData.contents,
+      };
+      if (result.isOfficial) delete result.streamer;
+      if (!result.member || !result.member?.length) delete result.member;
+      if (!result.contents) delete result.contents;
+
+      await createSchedule(result);
+      // router.push(previousAsPath!);
+      showToast("success", `일정을 추가했습니다.`);
+    } catch (error) {
+      showErrorToast(error, showToast);
+    }
   });
 
   return {

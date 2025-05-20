@@ -15,8 +15,8 @@ import { showErrorToast } from "@/utils/errorHandler";
 
 const StreamerAddView = () => {
   const router = useRouter();
-  const showToast = useToastStore((state) => state.showToast);
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
+  const showToast = useToastStore((state) => state.showToast);
 
   const initValue: Partial<IStreamer> = {
     name: "",

@@ -68,13 +68,13 @@ const SearchableDropdown = ({
           onClick={toggleDropdown}
           onKeyDown={onKeyPress}
         />
-        {isOpen && filterList.length > 0 ? (
+        {isOpen && filterList.length ? (
           <ChevronUpIcon className="absolute top-1.5 right-0 w-6 h-6 text-textNormal pointer-events-none" />
         ) : (
           <ChevronDownIcon className="absolute top-1.5 right-0 w-6 h-6 text-textNormal pointer-events-none" />
         )}
 
-        {isOpen && filterList.length > 0 && (
+        {isOpen && filterList.length && (
           <ul
             ref={itemRef}
             className="absolute start-0 z-10 w-full max-h-64 overflow-y-auto box-border rounded-md bg-white text-sm ring-1 shadow-lg ring-textLight "

@@ -4,8 +4,6 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { StreamerModule } from './streamer/streamer.module';
-import { ScheduleController } from './schedule/schedule.controller';
-import { ScheduleService } from './schedule/schedule.service';
 import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
@@ -20,7 +18,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     StreamerModule,
     ScheduleModule,
   ],
-  controllers: [AppController, ScheduleController],
-  providers: [AppService, ScheduleService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
