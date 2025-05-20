@@ -24,7 +24,6 @@ const StreamerCalendarView = () => {
     useCalendar();
 
   const linkClassName = (path: string) => {
-    console.log("###", path, pathName);
     let className = "";
     pathName === path
       ? (className +=

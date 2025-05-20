@@ -7,3 +7,7 @@ export const enum ApiPath {
   SCHEDULE = ApiPath.prefix + "/schedule",
   SCHEDULE_ADD = ApiPath.SCHEDULE + "/add",
 }
+
+export const serverApiPath = (path: string) => {
+  return path.replace("/api", "");
+};

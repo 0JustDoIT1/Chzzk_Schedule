@@ -13,6 +13,25 @@ export class StreamerService {
     private userValidate: UserValidate,
   ) {}
 
+  async getAllStreamer() {
+    try {
+      return await this.streamerModel.find().select(['_id', 'name']);
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
+
+  async getStreamerById(id: string) {
+    try {
+      const streamer = await this.streamerModel.findOne({ _id: id });
+      this.userValidate.validateUserExit(streamer);
+
+      return streamer;
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
+
   async create(streamerData: CreateStreamerDto) {
     try {
       return await this.streamerModel.create(streamerData);

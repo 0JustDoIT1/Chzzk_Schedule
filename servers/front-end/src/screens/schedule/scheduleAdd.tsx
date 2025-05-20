@@ -2,8 +2,13 @@
 
 import React, { useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
+import { IStreamer } from "@/schemas/streamer.schema";
 
-const ScheduleAddView = () => {
+interface IScheduleAddView {
+  streamerList: IStreamer;
+}
+
+const ScheduleAddView = ({ streamerList }: IScheduleAddView) => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
   const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +43,11 @@ const ScheduleAddView = () => {
         </div>
       </section>
       <main className="w-full p-4">
-        <ScheduleInput isOfficial={isOfficial} setIsOfficial={setIsOfficial} />
+        <ScheduleInput
+          streamerList={streamerList}
+          isOfficial={isOfficial}
+          setIsOfficial={setIsOfficial}
+        />
       </main>
     </React.Fragment>
   );

@@ -3,12 +3,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Schedule, ScheduleSchema } from 'src/schemas/schedule.schema';
 import { ScheduleController } from './schedule.controller';
 import { ScheduleService } from './schedule.service';
+import { StreamerModule } from 'src/streamer/streamer.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Schedule.name, schema: ScheduleSchema },
     ]),
+    StreamerModule,
   ],
   controllers: [ScheduleController],
   providers: [ScheduleService],

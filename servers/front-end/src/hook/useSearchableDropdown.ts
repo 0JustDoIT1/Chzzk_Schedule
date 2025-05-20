@@ -66,16 +66,16 @@ const useSearchableDropdown = (
   // Keyboard press event
   const onKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {
     const length = filterList.length;
-    if (isOpen && length && e.code === "ArrowDown") {
+    if (isOpen && length > 0 && e.code === "ArrowDown") {
       setSelectIndex((selectIndex + 1) % length);
     }
-    if (isOpen && length && e.code === "ArrowUp") {
-      if (!selectIndex) setSelectIndex(length - 1);
+    if (isOpen && length > 0 && e.code === "ArrowUp") {
+      if (selectIndex === 0) setSelectIndex(length - 1);
       else setSelectIndex(selectIndex - 1);
     }
 
     if (e.code === "Enter") {
-      if (isOpen && length) {
+      if (isOpen && length > 0) {
         const item = filterList[selectIndex];
         if (item) selectItem(item);
       } else {

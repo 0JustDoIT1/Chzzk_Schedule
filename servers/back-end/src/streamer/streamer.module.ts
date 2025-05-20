@@ -13,5 +13,6 @@ import { UserValidate } from './user.validate';
   ],
   controllers: [StreamerController],
   providers: [StreamerService, UserValidate],
+  exports: [StreamerService],
 })
 export class StreamerModule {}

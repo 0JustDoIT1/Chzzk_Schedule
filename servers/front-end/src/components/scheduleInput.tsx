@@ -11,13 +11,19 @@ import { useRouter } from "next/navigation";
 import { useAsPathStore } from "@/providers/asPath-provider";
 import { BrandButton } from "./button";
 import { preventEnterKey } from "@/utils/keyEvent";
+import { IStreamer } from "@/schemas/streamer.schema";
 
 interface IScheduleInput {
+  streamerList: IStreamer[];
   isOfficial: boolean;
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ScheduleInput = ({ isOfficial, setIsOfficial }: IScheduleInput) => {
+const ScheduleInput = ({
+  streamerList,
+  isOfficial,
+  setIsOfficial,
+}: IScheduleInput) => {
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
@@ -57,38 +63,13 @@ const ScheduleInput = ({ isOfficial, setIsOfficial }: IScheduleInput) => {
               }}
               render={({ field: { ref, value, onChange } }) => (
                 <SearchableDropdown
-                  list={[
-                    { _id: 1, streamer: "hi" },
-                    { _id: 2, streamer: "testㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ" },
-                    { _id: 3, streamer: "hi2" },
-                    { _id: 4, streamer: "test2" },
-                    { _id: 5, streamer: "hi3" },
-                    { _id: 6, streamer: "test3" },
-                    { _id: 7, streamer: "hi4" },
-                    { _id: 8, streamer: "test4" },
-                    { _id: 9, streamer: "hi5" },
-                    { _id: 10, streamer: "test5" },
-                    { _id: 11, streamer: "hi6" },
-                    { _id: 12, streamer: "test6" },
-                    { _id: 13, streamer: "hi7" },
-                    { _id: 14, streamer: "test7" },
-                    { _id: 15, streamer: "hi8" },
-                    { _id: 16, streamer: "test8" },
-                    { _id: 17, streamer: "hi9" },
-                    { _id: 18, streamer: "test9" },
-                    { _id: 19, streamer: "hi10" },
-                    { _id: 20, streamer: "test10" },
-                    { _id: 21, streamer: "hi11" },
-                    { _id: 22, streamer: "test11" },
-                    { _id: 23, streamer: "hi12" },
-                    { _id: 24, streamer: "test12" },
-                  ]}
-                  keyName="streamer"
+                  list={streamerList}
+                  keyName="name"
                   placeholder="스트리머를 선택해 주세요."
                   ref={ref}
                   value={value}
                   onChange={onChange}
-                  errors={errors["streamer"] ? true : false}
+                  errors={errors["name"] ? true : false}
                 />
               )}
             />

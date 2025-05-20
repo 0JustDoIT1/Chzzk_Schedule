@@ -131,7 +131,8 @@ const useScheduleInput = (
       if (!result.member || !result.member?.length) delete result.member;
       if (!result.contents) delete result.contents;
 
-      await createSchedule(result);
+      console.log("!!!", result);
+      // await createSchedule(result);
       // router.push(previousAsPath!);
       showToast("success", `일정을 추가했습니다.`);
     } catch (error) {
