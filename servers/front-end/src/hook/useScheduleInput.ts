@@ -107,37 +107,38 @@ const useScheduleInput = (
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      const inputData: IScheduleInput = {
-        ...data,
-        isOfficial,
-        member,
-      };
+    const inputData: IScheduleInput = {
+      ...data,
+      isOfficial,
+      member,
+    };
 
-      const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
-      const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
+    const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
+    const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
 
-      const result: ISchedule = {
-        isOfficial: inputData.isOfficial,
-        streamer: inputData.streamer,
-        category: inputData.category,
-        title: inputData.title,
-        member: inputData.member,
-        startAt: dateTypeToDate(startAt),
-        endAt: dateTypeToDate(endAt),
-        contents: inputData.contents,
-      };
-      if (result.isOfficial) delete result.streamer;
-      if (!result.member || !result.member?.length) delete result.member;
-      if (!result.contents) delete result.contents;
+    const result: ISchedule = {
+      isOfficial: inputData.isOfficial,
+      streamer: inputData.streamer,
+      category: inputData.category,
+      title: inputData.title,
+      member: inputData.member,
+      startAt: dateTypeToDate(startAt),
+      endAt: dateTypeToDate(endAt),
+      contents: inputData.contents,
+    };
+    if (result.isOfficial) delete result.streamer;
+    if (!result.member || !result.member?.length) delete result.member;
+    if (!result.contents) delete result.contents;
 
-      console.log("!!!", result);
-      // await createSchedule(result);
-      // router.push(previousAsPath!);
-      showToast("success", `일정을 추가했습니다.`);
-    } catch (error) {
-      showErrorToast(error, showToast);
-    }
+    console.log("!!!", result);
+    // await createSchedule(result);
+    // router.push(previousAsPath!);
+    showToast("success", `일정을 추가했습니다.`);
+    // try {
+
+    // } catch (error) {
+    //   showErrorToast(error, showToast);
+    // }
   });
 
   return {

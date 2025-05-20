@@ -64,18 +64,19 @@ const StreamerAddView = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      const result: IStreamer = {
-        ...data,
-        tag,
-      };
-      if (!tag.length) delete result.tag;
-      await createStreamer(result);
-      router.push(previousAsPath!);
-      showToast("success", `${result.name}을(를) 추가했습니다.`);
-    } catch (error) {
-      showErrorToast(error, showToast);
-    }
+    const result: IStreamer = {
+      ...data,
+      tag,
+    };
+    if (!tag.length) delete result.tag;
+    await createStreamer(result);
+    router.push(previousAsPath!);
+    showToast("success", `${result.name}을(를) 추가했습니다.`);
+    // try {
+
+    // } catch (error) {
+    //   showErrorToast(error, showToast);
+    // }
   });
 
   return (
