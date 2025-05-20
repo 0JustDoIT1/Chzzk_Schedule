@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Category } from 'src/lib/constants/schedule-category';
 
-export class CreateStreamerDto {
+export class CreateScheduleDto {
   @ApiProperty({ description: '치지직 공식 방송 여부' })
   @IsNotEmpty()
   @IsBoolean()
