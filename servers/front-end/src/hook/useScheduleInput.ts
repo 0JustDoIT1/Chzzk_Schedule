@@ -125,7 +125,7 @@ const useScheduleInput = (
       contents: inputData.contents,
     };
     if (result.isOfficial) delete result.streamer;
-    if (!result.member || !result.member?.length) delete result.member;
+    if (!result.member || result.member?.length === 0) delete result.member;
     if (!result.contents) delete result.contents;
 
     console.log("!!!", result);

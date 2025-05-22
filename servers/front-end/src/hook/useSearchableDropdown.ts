@@ -28,6 +28,8 @@ const useSearchableDropdown = (
     setFilterList(filter);
   }, [query]);
 
+  console.log("###", filterList);
+
   // When the list is closed, verify the result
   useEffect(() => {
     if (!isOpen && !value) {

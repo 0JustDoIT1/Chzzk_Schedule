@@ -39,7 +39,7 @@ const SearchableDropdown = ({
     displayValue,
   } = useSearchableDropdown(list, keyName, value, onChange);
 
-  console.log("333", list);
+  console.log("333", list, filterList);
 
   return (
     <React.Fragment>
@@ -70,13 +70,13 @@ const SearchableDropdown = ({
           onClick={toggleDropdown}
           onKeyDown={onKeyPress}
         />
-        {isOpen && filterList.length ? (
+        {isOpen && filterList.length > 0 ? (
           <ChevronUpIcon className="absolute top-1.5 right-0 w-6 h-6 text-textNormal pointer-events-none" />
         ) : (
           <ChevronDownIcon className="absolute top-1.5 right-0 w-6 h-6 text-textNormal pointer-events-none" />
         )}
 
-        {isOpen && filterList.length && (
+        {isOpen && filterList.length > 0 && (
           <ul
             ref={itemRef}
             className="absolute start-0 z-10 w-full max-h-64 overflow-y-auto box-border rounded-md bg-white text-sm ring-1 shadow-lg ring-textLight "

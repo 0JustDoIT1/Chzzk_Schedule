@@ -68,7 +68,7 @@ const StreamerAddView = () => {
       ...data,
       tag,
     };
-    if (!tag.length) delete result.tag;
+    if (tag.length === 0) delete result.tag;
 
     const streamer = await createStreamer(result);
     if (isResError(streamer))

@@ -68,7 +68,7 @@ const ToastItem = ({ id, type, message, shown }: IToastItem) => {
 const ToastList = () => {
   const toastList = useToastStore((state) => state.toastList);
 
-  if (!toastList.length) return null;
+  if (toastList.length === 0) return null;
 
   return (
     <Portal>
