@@ -1,13 +1,14 @@
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import type { StringIndexable } from "@/types/indexableType";
 
-const useSearchableDropdown = (
-  list: any[],
+const useSearchableDropdown = <T extends StringIndexable>(
+  list: T[],
   keyName: string,
   value: string,
   onChange: (...event: any[]) => void
 ) => {
   const [query, setQuery] = useState<string>("");
-  const [filterList, setFilterList] = useState<any[]>([]);
+  const [filterList, setFilterList] = useState<T[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectIndex, setSelectIndex] = useState<number>(0);
 

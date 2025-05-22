@@ -1,11 +1,12 @@
 import useSearchableDropdown from "@/hook/useSearchableDropdown";
+import type { StringIndexable } from "@/types/indexableType";
 import React from "react";
 import { RefCallBack } from "react-hook-form";
 import ChevronDownIcon from "~/public/assets/svg/chevron-down";
 import ChevronUpIcon from "~/public/assets/svg/chevron-up";
 
-interface ISearchableDropdown {
-  list: any[];
+interface ISearchableDropdown<T> {
+  list: T[];
   keyName: string;
   placeholder: string;
   ref?: RefCallBack;
@@ -14,7 +15,7 @@ interface ISearchableDropdown {
   errors: boolean;
 }
 
-const SearchableDropdown = ({
+const SearchableDropdown = <T extends StringIndexable>({
   list,
   keyName,
   placeholder,
@@ -22,7 +23,7 @@ const SearchableDropdown = ({
   value,
   onChange,
   errors,
-}: ISearchableDropdown) => {
+}: ISearchableDropdown<T>) => {
   const {
     inputRef,
     itemRef,
