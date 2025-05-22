@@ -1,11 +1,7 @@
 import { ISchedule } from "@/schemas/schedule.schema";
-import { clientAxios } from "./axios-server";
 import { ApiPath } from "@/constants/api-path";
+import { postFetch } from "@/fetch/post-fetch";
 
 export const createSchedule = async (data: ISchedule): Promise<ISchedule> => {
-  const res = await clientAxios
-    .post(ApiPath.SCHEDULE_ADD, data)
-    .then((res) => res.data);
-
-  return res;
+  return await postFetch(false, ApiPath.SCHEDULE_ADD, data);
 };

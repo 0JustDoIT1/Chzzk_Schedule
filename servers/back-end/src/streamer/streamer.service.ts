@@ -25,7 +25,7 @@ export class StreamerService {
 
   async create(streamerData: CreateStreamerDto) {
     const streamer = await this.streamerModel.findOne({
-      name: streamerData.name,
+      $or: [{ name: streamerData.name }, { chzzkLink: streamerData.chzzkLink }],
     });
     this.userValidate.validateUserExit(streamer, true);
 

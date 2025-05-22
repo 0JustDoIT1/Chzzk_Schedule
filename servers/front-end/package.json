@@ -15,7 +15,6 @@
     "@tiptap/pm": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
-    "axios": "^1.8.4",
     "dayjs": "^1.11.13",
     "next": "15.1.4",
     "react": "^19.0.0",

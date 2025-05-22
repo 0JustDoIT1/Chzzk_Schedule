@@ -8,10 +8,10 @@ import { IStreamer } from "@/schemas/streamer.schema";
 import HelperText from "@/components/helperText";
 import { BrandButton } from "@/components/button";
 import { useToastStore } from "@/providers/toast-provider";
-import { createStreamer } from "@/api/streamer-api";
 import { useAsPathStore } from "@/providers/asPath-provider";
 import { preventEnterKey } from "@/utils/keyEvent";
-import { isResError } from "@/utils/errorHandler";
+import { isResError } from "@/fetch/error-check";
+import { createStreamer } from "@/api/streamer-api";
 
 const StreamerAddView = () => {
   const router = useRouter();
