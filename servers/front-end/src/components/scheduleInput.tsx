@@ -27,8 +27,6 @@ const ScheduleInput = ({
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
-  console.log("222", streamerList);
-
   const {
     register,
     control,
@@ -57,28 +55,41 @@ const ScheduleInput = ({
             <label htmlFor="streamer" className="text-sm text-textMain mb-2">
               <span className="text-brandMain">&#42;</span> 스트리머
             </label>
-            <Controller
-              control={control}
-              name="streamer"
-              rules={{
-                required: { value: true, message: "스트리머를 선택해 주세요." },
-              }}
-              render={({ field: { ref, value, onChange } }) => (
-                <SearchableDropdown
-                  list={streamerList}
-                  keyName="name"
-                  placeholder="스트리머를 선택해 주세요."
-                  ref={ref}
-                  value={value}
-                  onChange={onChange}
-                  errors={errors["name"] ? true : false}
+            {streamerList.length === 0 ? (
+              <div className="relative cursor-default">
+                <p className="w-full rounded-md bg-white p-2 text-sm text-textNormal box-border ring-1 shadow-xs outline-none ring-error">
+                  추가된 스트리머가 없습니다. 스트리머를 먼저 등록해 주세요.
+                </p>
+              </div>
+            ) : (
+              <React.Fragment>
+                <Controller
+                  control={control}
+                  name="streamer"
+                  rules={{
+                    required: {
+                      value: true,
+                      message: "스트리머를 선택해 주세요.",
+                    },
+                  }}
+                  render={({ field: { ref, value, onChange } }) => (
+                    <SearchableDropdown
+                      list={streamerList}
+                      keyName="name"
+                      placeholder="스트리머를 선택해 주세요."
+                      ref={ref}
+                      value={value}
+                      onChange={onChange}
+                      errors={errors["name"] ? true : false}
+                    />
+                  )}
                 />
-              )}
-            />
-            {errors.streamer && (
-              <HelperText className="text-error">
-                {errors.streamer?.message as string}
-              </HelperText>
+                {errors.streamer && (
+                  <HelperText className="text-error">
+                    {errors.streamer?.message as string}
+                  </HelperText>
+                )}
+              </React.Fragment>
             )}
           </div>
         )}
