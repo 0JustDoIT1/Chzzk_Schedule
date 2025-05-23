@@ -75,7 +75,12 @@ export class ScheduleService {
     const date2 = dateTypeToDate(addDate(date, 1, 'day'));
 
     const scheduleList = await this.scheduleModel.find({
-      startAt: { $gte: date1, $lt: date2 },
+      $or: [
+        {
+          startAt: { $gte: date1, $lt: date2 },
+        },
+        { startAt: { $lt: date1 }, endAt: { $gt: date1 } },
+      ],
     });
 
     return this.editDateScheduleList(scheduleList);
@@ -83,10 +88,8 @@ export class ScheduleService {
 
   editDateScheduleList(list: Schedule[]): IDateSchedule {
     const result = {};
-    console.log('!!!', list);
 
     list.forEach((item) => {
-      console.log('!!!', item);
       const time = dateToFormatString(item.startAt, 'HH');
       result[time] = result[time] ? [...result[time], item] : [item];
     });
