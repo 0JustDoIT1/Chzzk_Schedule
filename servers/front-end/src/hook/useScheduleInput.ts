@@ -5,6 +5,8 @@ import { ISchedule, IScheduleInput } from "@/schemas/schedule.schema";
 import { useAsPathStore } from "@/providers/asPath-provider";
 import { useToastStore } from "@/providers/toast-provider";
 import { useRouter } from "next/navigation";
+import { createSchedule } from "@/api/schedule-api";
+import { isResError } from "@/fetch/error-check";
 
 const useScheduleInput = (
   isOfficial: boolean,
@@ -41,12 +43,14 @@ const useScheduleInput = (
 
   const [member, setMember] = useState<string[]>([]);
 
+  const _resetInputData = () => {
+    reset();
+    clearErrors();
+    setMember(initValue.member!);
+  };
+
   useEffect(() => {
-    if (isOfficial) {
-      setValue("streamer", "");
-      clearErrors(["streamer"]);
-    }
-    setValue("member", []);
+    _resetInputData();
   }, [isOfficial]);
 
   useEffect(() => {
@@ -54,7 +58,8 @@ const useScheduleInput = (
       watch("category") &&
       (watch("category") === "personal" || watch("category") === "watch")
     ) {
-      setValue("member", []);
+      setValue("member", "");
+      setMember([]);
     }
   }, [watch("category")]);
 
@@ -98,9 +103,7 @@ const useScheduleInput = (
   };
 
   const onReset = () => {
-    reset();
-    clearErrors();
-    setMember(initValue.member!);
+    _resetInputData();
     setIsOfficial(false);
   };
 
@@ -124,19 +127,17 @@ const useScheduleInput = (
       endAt: dateTypeToDate(endAt),
       contents: inputData.contents,
     };
+
     if (result.isOfficial) delete result.streamer;
     if (!result.member || result.member?.length === 0) delete result.member;
     if (!result.contents) delete result.contents;
 
-    console.log("!!!", result);
-    // await createSchedule(result);
-    // router.push(previousAsPath!);
-    showToast("success", `일정을 추가했습니다.`);
-    // try {
+    const schedule = await createSchedule(result);
+    if (isResError(schedule))
+      return showToast("error", `같은 시간대에 스케줄이 존재합니다.`);
 
-    // } catch (error) {
-    //   showErrorToast(error, showToast);
-    // }
+    router.push(previousAsPath!);
+    showToast("success", `일정을 추가했습니다.`);
   });
 
   return {

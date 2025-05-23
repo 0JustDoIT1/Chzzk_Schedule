@@ -36,7 +36,7 @@ const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
     ],
     content: text,
     onUpdate({ editor }) {
-      const value = editor.getText() ? editor.getHTML() : "";
+      const value = editor.isEmpty ? "" : editor.getHTML();
       setText(value);
     },
     immediatelyRender: true,

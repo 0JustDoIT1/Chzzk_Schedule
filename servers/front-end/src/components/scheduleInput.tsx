@@ -41,8 +41,6 @@ const ScheduleInput = ({
     onFocusTiptapLabel,
   } = useScheduleInput(isOfficial, setIsOfficial);
 
-  console.log("###", errors);
-
   return (
     <form
       className="container mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"

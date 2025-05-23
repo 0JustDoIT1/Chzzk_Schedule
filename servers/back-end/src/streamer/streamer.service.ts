@@ -12,21 +12,35 @@ export class StreamerService {
     private userValidate: UserValidate,
   ) {}
 
-  async getAllStreamer() {
+  // Get all streamer list
+  async getAllStreamer(): Promise<Streamer[]> {
     return await this.streamerModel.find();
   }
 
-  async getStreamerById(id: string) {
+  // Get one streamer by Object Id
+  async getStreamerById(id: string): Promise<Streamer | null> {
     const streamer = await this.streamerModel.findOne({ _id: id });
+    // Validate streamer
     this.userValidate.validateUserExit(streamer, false);
 
     return streamer;
   }
 
-  async create(streamerData: CreateStreamerDto) {
+  // Get one streamer by name
+  async getStreamerByName(name: string): Promise<Streamer | null> {
+    const streamer = await this.streamerModel.findOne({ name: name });
+    // Validate streamer
+    this.userValidate.validateUserExit(streamer, false);
+
+    return streamer;
+  }
+
+  // Create Streamer
+  async create(streamerData: CreateStreamerDto): Promise<Streamer> {
     const streamer = await this.streamerModel.findOne({
       $or: [{ name: streamerData.name }, { chzzkLink: streamerData.chzzkLink }],
     });
+    // Validate streamer
     this.userValidate.validateUserExit(streamer, true);
 
     return await this.streamerModel.create(streamerData);

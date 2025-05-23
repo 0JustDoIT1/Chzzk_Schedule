@@ -4,6 +4,7 @@ import { Schedule, ScheduleSchema } from 'src/schemas/schedule.schema';
 import { ScheduleController } from './schedule.controller';
 import { ScheduleService } from './schedule.service';
 import { StreamerModule } from 'src/streamer/streamer.module';
+import { ScheduleValidate } from './schedule.validate';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { StreamerModule } from 'src/streamer/streamer.module';
     StreamerModule,
   ],
   controllers: [ScheduleController],
-  providers: [ScheduleService],
+  providers: [ScheduleService, ScheduleValidate],
 })
 export class ScheduleModule {}

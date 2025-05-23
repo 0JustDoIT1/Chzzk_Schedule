@@ -40,8 +40,6 @@ const SearchableDropdown = <T extends StringIndexable>({
     displayValue,
   } = useSearchableDropdown(list, keyName, value, onChange);
 
-  console.log("333", list, filterList);
-
   return (
     <div className="relative cursor-default">
       <input

@@ -17,6 +17,13 @@ export class StreamerController {
     return await this.streamerService.getStreamerById(id);
   }
 
+  @Get(ApiPath.STREAMER_NAME)
+  async getStreamerByName(
+    @Param('name') name: string,
+  ): Promise<Streamer | null> {
+    return await this.streamerService.getStreamerByName(name);
+  }
+
   @Post(ApiPath.STREAMER_ADD)
   async create(@Body() streamerData: CreateStreamerDto): Promise<Streamer> {
     return await this.streamerService.create(streamerData);

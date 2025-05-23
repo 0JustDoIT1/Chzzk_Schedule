@@ -46,7 +46,7 @@ const ToastItem = ({ id, type, message, shown }: IToastItem) => {
 
   return (
     <div
-      className={`flex items-center justify-between w-full min-w-64 max-w-[360px] px-4 py-4 rounded-md shadow-lg ${
+      className={`flex items-center justify-between w-full min-w-64 max-w-[400px] px-4 py-4 rounded-md shadow-lg ${
         toastColor[type]
       } ${shown ? "animate-fadeIn" : "animate-fadeOut"}`}
     >
