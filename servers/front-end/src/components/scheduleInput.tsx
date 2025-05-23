@@ -1,4 +1,4 @@
-import { category, chzzkCategory } from "@/constants/streaming";
+import { baseCategoryOpt, chzzkCategoryOpt } from "@/constants/streaming";
 import TiptapEditor from "./tiptapEditor";
 import { Controller } from "react-hook-form";
 import SearchableDropdown from "./searchableDropdown";
@@ -114,12 +114,12 @@ const ScheduleInput = ({
               방송 종류를 선택해 주세요.
             </option>
             {isOfficial
-              ? chzzkCategory.map((item) => (
+              ? chzzkCategoryOpt.map((item) => (
                   <option key={item.value} value={item.value}>
                     {item.label}
                   </option>
                 ))
-              : category.map((item) => (
+              : baseCategoryOpt.map((item) => (
                   <option key={item.value} value={item.value}>
                     {item.label}
                   </option>

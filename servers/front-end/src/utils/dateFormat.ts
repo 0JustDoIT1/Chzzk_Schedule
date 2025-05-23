@@ -11,11 +11,13 @@ dayjs.tz.setDefault("Asia/Seoul");
 
 export type TDayjsType = dayjs.Dayjs;
 
+// 오늘 날짜 구하기
 export const getToday = () => {
   return dayjs();
 };
 
-export const getDayByString = (date: string) => {
+// string 날짜 dayjs형태로 전환
+export const getDateByString = (date: string) => {
   return dayjs(date);
 };
 
@@ -24,17 +26,6 @@ export const dateToFormatString = (date: dayjs.ConfigType, format: string) => {
   if (!date) return "";
   return dayjs(date).format(format);
 };
-
-// // Firebase의 utc string 시간에는 변환이 불가능(+,- 값을 저장하지 않고 자동 생성)
-// // 따라서, 임의로 서울 시간과 현재 지역 시간의 offset 편차를 계산하여 더함
-// export const dateToSeoulTime = (date: dayjs.ConfigType, format: string) => {
-//   const CurrentOffSet: number = dayjs().utcOffset();
-//   const SeoulOffset: number = 540;
-
-//   const DiffSeoulToCurrent = SeoulOffset - CurrentOffSet;
-
-//   return dayjs(date).add(DiffSeoulToCurrent, "minute").format(format);
-// };
 
 // DateType을 Date로 변환 (calendar, input string -> date)
 export const dateTypeToDate = (date: dayjs.ConfigType) => {

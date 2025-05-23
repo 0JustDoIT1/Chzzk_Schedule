@@ -2,11 +2,15 @@
 
 import { AddScheduleLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
-import { TestTodayList } from "@/constants/test";
+import { IDateSchedule } from "@/schemas/schedule.schema";
 import { dateToFormatString, getToday } from "@/utils/dateFormat";
 import React, { useEffect } from "react";
 
-const MainView = () => {
+interface IMainView {
+  scheduleList: IDateSchedule;
+}
+
+const MainView = ({ scheduleList }: IMainView) => {
   useEffect(() => {
     window.scroll({ top: 0, behavior: "smooth" });
   }, []);
@@ -39,7 +43,7 @@ const MainView = () => {
         </div>
       </section>
       <main className="w-full py-12">
-        <CustomTimeline schedule={TestTodayList} />
+        <CustomTimeline schedule={scheduleList} />
       </main>
     </React.Fragment>
   );

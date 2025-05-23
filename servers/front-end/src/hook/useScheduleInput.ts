@@ -1,7 +1,12 @@
 import { dateTypeToDate, setDateAndTime } from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
-import { ISchedule, IScheduleInput } from "@/schemas/schedule.schema";
+import {
+  BaseCategory,
+  ChzzkCategory,
+  ISchedule,
+  IScheduleInput,
+} from "@/schemas/schedule.schema";
 import { useAsPathStore } from "@/providers/asPath-provider";
 import { useToastStore } from "@/providers/toast-provider";
 import { useRouter } from "next/navigation";
@@ -18,7 +23,7 @@ const useScheduleInput = (
 
   const initValue: Partial<IScheduleInput> = {
     streamer: "",
-    category: "",
+    category: undefined,
     title: "",
     member: [],
     fullDay: false,
@@ -43,16 +48,19 @@ const useScheduleInput = (
 
   const [member, setMember] = useState<string[]>([]);
 
-  const _resetInputData = () => {
+  // Reset input value
+  const _resetInputValue = () => {
     reset();
     clearErrors();
     setMember(initValue.member!);
   };
 
+  // Reset input value when change isOfficial
   useEffect(() => {
-    _resetInputData();
+    _resetInputValue();
   }, [isOfficial]);
 
+  // Set value(member) when change category
   useEffect(() => {
     if (
       watch("category") &&
@@ -63,6 +71,7 @@ const useScheduleInput = (
     }
   }, [watch("category")]);
 
+  // Check fullDay event
   useEffect(() => {
     if (watch("fullDay")) {
       const date = watch("startAtDate");
@@ -73,6 +82,31 @@ const useScheduleInput = (
   }, [watch("fullDay"), watch("startAtDate")]);
 
   useEffect(() => {
+    const startAtDate = watch("startAtDate");
+    const endAtDate = watch("endAtDate");
+    const startAtTime = watch("startAtTime");
+    const endAtTime = watch("endAtTime");
+
+    if (startAtDate === endAtDate) {
+      if (startAtTime > endAtTime) {
+        setValue("startAtTime", endAtTime);
+        setValue("endAtTime", startAtTime);
+      }
+    } else {
+      if (startAtDate > endAtDate) {
+        setValue("startAtDate", endAtDate);
+        setValue("endAtDate", startAtDate);
+      }
+    }
+  }, [
+    watch("startAtDate"),
+    watch("startAtTime"),
+    watch("endAtDate"),
+    watch("endAtTime"),
+  ]);
+
+  // When streamer input has error, focus input
+  useEffect(() => {
     if (errors.streamer) {
       setTimeout(() => {
         setFocus("streamer");
@@ -80,6 +114,7 @@ const useScheduleInput = (
     }
   }, [errors.streamer, setFocus]);
 
+  // Add member button event
   const onAddMember = () => {
     const name = watch("member");
     if (name) {
@@ -91,10 +126,12 @@ const useScheduleInput = (
     }
   };
 
+  // Remove member button event
   const onRemoveMember = (name: string) => {
     setMember(member.filter((item: string) => item !== name));
   };
 
+  // Focus tiptap label
   const onFocusTiptapLabel = () => {
     const tiptapEditor = document.getElementsByClassName(
       "ProseMirror"
@@ -102,11 +139,13 @@ const useScheduleInput = (
     tiptapEditor.focus();
   };
 
+  // Reset button event
   const onReset = () => {
-    _resetInputData();
+    _resetInputValue();
     setIsOfficial(false);
   };
 
+  // Submit event
   const onSubmit = handleSubmit(async (data) => {
     const inputData: IScheduleInput = {
       ...data,

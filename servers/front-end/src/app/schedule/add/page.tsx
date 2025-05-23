@@ -1,9 +1,9 @@
-import { getAllStreamer } from "@/api/streamer-api";
+import { getAllStreamerList } from "@/api/streamer-api";
 import ScheduleAddView from "@/screens/schedule/scheduleAdd";
 import React from "react";
 
 const ScheduleAddPage = async () => {
-  const streamerList = await getAllStreamer();
+  const streamerList = await getAllStreamerList();
 
   return <ScheduleAddView streamerList={streamerList} />;
 };

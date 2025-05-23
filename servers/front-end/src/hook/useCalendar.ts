@@ -1,7 +1,7 @@
 import {
   addDate,
   TDayjsType,
-  getDayByString,
+  getDateByString,
   getStartDate,
   getToday,
   subtractDate,
@@ -14,7 +14,7 @@ const useCalendar = () => {
   const date = searchParams.get("date");
 
   const [today, setToday] = useState<TDayjsType>(
-    date ? getDayByString(date) : getToday()
+    date ? getDateByString(date) : getToday()
   );
   const [dayArray, setDayArray] = useState<{ [x: number]: TDayjsType[] }[]>([]);
 
