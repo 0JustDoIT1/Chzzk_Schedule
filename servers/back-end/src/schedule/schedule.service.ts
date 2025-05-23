@@ -6,7 +6,14 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { StreamerService } from 'src/streamer/streamer.service';
 import { ScheduleValidate } from './schedule.validate';
 import { Streamer } from 'src/schemas/streamer.schema';
-import { Category } from 'src/lib/constants/schedule-category';
+import { AllCategory } from 'src/lib/constants/schedule-category';
+import {
+  addDate,
+  dateToFormatString,
+  dateTypeToDate,
+  getDateByString,
+} from 'src/lib/utils/dateFormat';
+import { IDateSchedule } from 'src/lib/types/schedule.type';
 
 @Injectable()
 export class ScheduleService {
@@ -46,19 +53,44 @@ export class ScheduleService {
     return await this.scheduleModel.create(scheduleData);
   }
 
-  // Get schedule by Object Id
-  async getScheduleById(id: string): Promise<Schedule | null> {
-    const schedule = await this.scheduleModel.findOne({ _id: id });
-    // Validate schedule
-    this.scheduleValidate.validateScheduleExit(schedule, false);
+  // // Get schedule by Object Id
+  // async getScheduleById(id: string): Promise<Schedule | null> {
+  //   const schedule = await this.scheduleModel.findOne({ _id: id });
+  //   // Validate schedule
+  //   this.scheduleValidate.validateScheduleExit(schedule, false);
 
-    return schedule;
+  //   return schedule;
+  // }
+
+  // // Get schedule list by streamer Object Id
+  // async getAllScheduleByStreamerId(id: string): Promise<Schedule[] | null> {
+  //   return await this.scheduleModel.find({
+  //     _id: id,
+  //   });
+  // }
+
+  // Get schedule list by Date
+  async getScheduleListByDate(date: string): Promise<IDateSchedule> {
+    const date1 = dateTypeToDate(date);
+    const date2 = dateTypeToDate(addDate(date, 1, 'day'));
+
+    const scheduleList = await this.scheduleModel.find({
+      startAt: { $gte: date1, $lt: date2 },
+    });
+
+    return this.editDateScheduleList(scheduleList);
   }
 
-  // Get schedule list by streamer Object Id
-  async getAllScheduleByStreamerId(id: string): Promise<Schedule[] | null> {
-    return await this.scheduleModel.find({
-      _id: id,
+  editDateScheduleList(list: Schedule[]): IDateSchedule {
+    const result = {};
+    console.log('!!!', list);
+
+    list.forEach((item) => {
+      console.log('!!!', item);
+      const time = dateToFormatString(item.startAt, 'HH');
+      result[time] = result[time] ? [...result[time], item] : [item];
     });
+
+    return result;
   }
 }

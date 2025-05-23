@@ -4,7 +4,6 @@ import {
   UserNotFoundException,
 } from 'src/lib/exceptions/streamer.exception';
 import { Schedule } from 'src/schemas/schedule.schema';
-import { Streamer } from 'src/schemas/streamer.schema';
 
 @Injectable()
 export class ScheduleValidate {
@@ -24,6 +23,4 @@ export class ScheduleValidate {
 
     return schedule;
   };
-
-  public validateScheduleByStreamer = (streamer: Streamer) => {};
 }

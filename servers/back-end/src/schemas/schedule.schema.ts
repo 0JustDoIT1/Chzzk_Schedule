@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Category } from 'src/lib/constants/schedule-category';
+import { AllCategory } from 'src/lib/constants/schedule-category';
 
 export type ScheduleDocument = Schedule & Document;
 
@@ -12,8 +12,8 @@ export class Schedule {
   @Prop({ required: false, type: String })
   streamer?: string;
 
-  @Prop({ required: true, enum: Category })
-  category: Category;
+  @Prop({ required: true, enum: AllCategory })
+  category: AllCategory;
 
   @Prop({ required: true, type: String })
   title: string;

@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Category } from 'src/lib/constants/schedule-category';
+import { AllCategory } from 'src/lib/constants/schedule-category';
 
 export class CreateScheduleDto {
   @ApiProperty({ description: '치지직 공식 방송 여부' })
@@ -23,11 +23,11 @@ export class CreateScheduleDto {
 
   @ApiProperty({
     description: '방송 유형',
-    enum: Category,
+    enum: AllCategory,
   })
   @IsNotEmpty()
-  @IsEnum(Category)
-  readonly category: Category;
+  @IsEnum(AllCategory)
+  readonly category: AllCategory;
 
   @ApiProperty({ description: '방송 제목' })
   @IsNotEmpty()

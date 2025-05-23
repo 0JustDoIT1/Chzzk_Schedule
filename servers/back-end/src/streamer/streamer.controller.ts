@@ -8,16 +8,16 @@ export class StreamerController {
   constructor(private readonly streamerService: StreamerService) {}
 
   @Get()
-  async getAllStreamer(): Promise<Streamer[]> {
-    return await this.streamerService.getAllStreamer();
+  async getAllStreamerList(): Promise<Streamer[]> {
+    return await this.streamerService.getAllStreamerList();
   }
 
-  @Get(ApiPath.STREAMER_ID)
+  @Get(ApiPath.STREAMER_BY_ID)
   async getStreamerById(@Param('id') id: string): Promise<Streamer | null> {
     return await this.streamerService.getStreamerById(id);
   }
 
-  @Get(ApiPath.STREAMER_NAME)
+  @Get(ApiPath.STREAMER_BY_NAME)
   async getStreamerByName(
     @Param('name') name: string,
   ): Promise<Streamer | null> {

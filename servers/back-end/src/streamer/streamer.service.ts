@@ -13,7 +13,7 @@ export class StreamerService {
   ) {}
 
   // Get all streamer list
-  async getAllStreamer(): Promise<Streamer[]> {
+  async getAllStreamerList(): Promise<Streamer[]> {
     return await this.streamerModel.find();
   }
 
