@@ -11,6 +11,7 @@ const MainPage = async () => {
   const date = dateTypeToDate(today);
   const scheduleList = await getScheduleListByDate(date);
 
+  // provider 및 세팅 필요
   console.log("!!!", scheduleList);
 
   return <MainView scheduleList={scheduleList} />;

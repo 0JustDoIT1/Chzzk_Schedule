@@ -2,19 +2,21 @@
 
 import React, { useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
-import { IStreamer } from "@/schemas/streamer.schema";
+import { useQuery } from "@tanstack/react-query";
+import { getAllStreamerList } from "@/api/streamer-api";
 
-interface IScheduleAddView {
-  streamerList: IStreamer[];
-}
-
-const ScheduleAddView = ({ streamerList }: IScheduleAddView) => {
+const ScheduleAddView = () => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
   const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setIsOfficial(checked);
   };
+
+  const { data, isSuccess, isLoading, isError } = useQuery({
+    queryKey: ["getAllStreamerList"],
+    queryFn: getAllStreamerList,
+  });
 
   return (
     <React.Fragment>
@@ -43,11 +45,13 @@ const ScheduleAddView = ({ streamerList }: IScheduleAddView) => {
         </div>
       </section>
       <main className="w-full p-4">
-        <ScheduleInput
-          streamerList={streamerList}
-          isOfficial={isOfficial}
-          setIsOfficial={setIsOfficial}
-        />
+        {isSuccess && (
+          <ScheduleInput
+            streamerList={data}
+            isOfficial={isOfficial}
+            setIsOfficial={setIsOfficial}
+          />
+        )}
       </main>
     </React.Fragment>
   );
