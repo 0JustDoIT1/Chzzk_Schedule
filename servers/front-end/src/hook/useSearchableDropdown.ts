@@ -50,7 +50,7 @@ const useSearchableDropdown = <T extends StringIndexable>(
   };
 
   // Select list item -> result
-  const selectItem = (item: any) => {
+  const selectItem = (item: T) => {
     setQuery("");
     onChange(item[keyName]);
     setIsOpen(false);

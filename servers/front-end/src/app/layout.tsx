@@ -4,9 +4,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { ReactNode } from "react";
 import { FloatingButton } from "@/components/floatingButton";
-import { ToastStoreProvider } from "@/providers/toast-provider";
-import { AsPathStoreProvider } from "@/providers/asPath-provider";
-import ReactQueryProviders from "@/providers/react-query";
+import RootProvider from "@/providers";
 
 const gmarket = localFont({
   src: [
@@ -43,17 +41,13 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className={gmarket.className}>
-        <ReactQueryProviders>
-          <AsPathStoreProvider>
-            <ToastStoreProvider>
-              <Header />
-              {children}
-              {modal}
-              <div id="portal" />
-              <FloatingButton />
-            </ToastStoreProvider>
-          </AsPathStoreProvider>
-        </ReactQueryProviders>
+        <RootProvider>
+          <Header />
+          {children}
+          {modal}
+          <div id="portal" />
+          <FloatingButton />
+        </RootProvider>
       </body>
     </html>
   );
