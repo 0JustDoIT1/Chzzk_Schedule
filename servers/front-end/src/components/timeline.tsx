@@ -102,7 +102,7 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
                     <div className="w-full md:w-auto">
                       <BrandLink
                         href={getModalRoute(
-                          getRoute(route.streaming, schedule._id)
+                          getRoute(route.schedule, schedule._id)
                         )}
                         classes="w-full"
                       >

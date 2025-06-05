@@ -51,6 +51,15 @@ input::placeholder {
   padding: 10px;
 }
 
+.ProseMirror-focused {
+  border: none !important;
+  outline: none !important;
+}
+
+#tiptap-box:focus-within {
+  outline: 2px solid #00c951 !important;
+}
+
 /* Basic editor styles */
 .tiptap {
   :first-child {

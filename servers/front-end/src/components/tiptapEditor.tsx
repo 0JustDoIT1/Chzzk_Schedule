@@ -39,18 +39,7 @@ const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
       const value = editor.isEmpty ? "" : editor.getHTML();
       setText(value);
     },
-    immediatelyRender: true,
   });
-
-  const onFocusTiptap = () => {
-    const tiptapBox = document.getElementById("tiptap-box") as HTMLElement;
-    tiptapBox.classList.add("outline-brandMain");
-  };
-
-  const onBlurTiptap = () => {
-    const tiptapBox = document.getElementById("tiptap-box") as HTMLElement;
-    tiptapBox.classList.remove("outline-brandMain");
-  };
 
   return (
     <div
@@ -58,11 +47,7 @@ const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
       className="w-full rounded-md bg-white text-sm text-textMain box-border ring-1 shadow-xs ring-textLight outline-none"
     >
       {editor && <TiptapToolbar editor={editor} />}
-      <EditorContent
-        onFocus={onFocusTiptap}
-        onBlur={onBlurTiptap}
-        editor={editor}
-      />
+      <EditorContent editor={editor} />
     </div>
   );
 };
