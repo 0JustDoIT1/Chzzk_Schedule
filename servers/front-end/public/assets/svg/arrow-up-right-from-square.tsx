@@ -1,4 +1,6 @@
-const ArrowUpRightFromSquareIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const ArrowUpRightFromSquareIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

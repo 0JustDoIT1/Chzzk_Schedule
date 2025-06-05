@@ -1,4 +1,6 @@
-const CloseIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const CloseIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

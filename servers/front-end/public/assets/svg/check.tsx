@@ -1,4 +1,6 @@
-const CheckIcon = ({ className }: any) => {
+import { ISvgIcon } from "@/types/svgIcon";
+
+const CheckIcon = ({ className }: ISvgIcon) => {
   return (
     <svg
       className={className}

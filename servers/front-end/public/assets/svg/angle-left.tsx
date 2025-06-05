@@ -1,4 +1,6 @@
-const AngleLeftIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const AngleLeftIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

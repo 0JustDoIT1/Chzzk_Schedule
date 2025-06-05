@@ -1,4 +1,6 @@
-const ChevronUpIcon = ({ className, onClick }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const ChevronUpIcon = ({ className, onClick }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

@@ -1,4 +1,6 @@
-const MenuIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const MenuIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

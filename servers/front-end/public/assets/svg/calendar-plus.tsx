@@ -1,4 +1,6 @@
-const CalendarPlusIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const CalendarPlusIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

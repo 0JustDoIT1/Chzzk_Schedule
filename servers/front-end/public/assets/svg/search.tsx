@@ -1,4 +1,6 @@
-const SearchIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const SearchIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

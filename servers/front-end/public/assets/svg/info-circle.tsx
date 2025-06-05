@@ -1,4 +1,6 @@
-const InfoCircleIcon = ({ className }: any) => {
+import { ISvgIcon } from "@/types/svgIcon";
+
+const InfoCircleIcon = ({ className }: ISvgIcon) => {
   return (
     <svg viewBox="0 0 24 24" className={className}>
       <path

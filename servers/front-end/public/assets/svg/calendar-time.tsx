@@ -1,4 +1,6 @@
-const CalendarTimeIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const CalendarTimeIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     viewBox="0 0 24 24"

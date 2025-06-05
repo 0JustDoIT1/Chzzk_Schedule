@@ -1,4 +1,6 @@
-const PlusIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const PlusIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     aria-hidden="true"

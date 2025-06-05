@@ -1,4 +1,6 @@
-const FormatH1Icon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const FormatH1Icon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,6 @@
-const TimelineIcon = ({ className }: any) => (
+import { ISvgIcon } from "@/types/svgIcon";
+
+const TimelineIcon = ({ className }: ISvgIcon) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
