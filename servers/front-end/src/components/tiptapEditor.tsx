@@ -39,6 +39,7 @@ const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
       const value = editor.isEmpty ? "" : editor.getHTML();
       setText(value);
     },
+    immediatelyRender: false,
   });
 
   return (

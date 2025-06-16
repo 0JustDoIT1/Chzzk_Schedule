@@ -78,8 +78,6 @@ const StreamerAddView = () => {
       };
       if (tag.length === 0) delete result.tag;
 
-      console.log("###", result);
-
       const streamer = await createStreamer(result);
 
       showToast("success", `${streamer.name}을(를) 추가했습니다.`);
