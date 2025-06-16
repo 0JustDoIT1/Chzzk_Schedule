@@ -10,7 +10,7 @@ const ScheduleEditView = () => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
   return (
-    <React.Fragment>
+    <>
       <section className="w-full border-b border-b-textLight p-4">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
@@ -25,7 +25,7 @@ const ScheduleEditView = () => {
           // initData={TestScheduleData}
         />
       </main>
-    </React.Fragment>
+    </>
   );
 };
 

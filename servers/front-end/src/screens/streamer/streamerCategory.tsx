@@ -85,7 +85,7 @@ const StreamerCategoryView = () => {
       <section className="w-full py-12">
         <div className="container mx-auto px-4 md:px-8 lg:max-w-6xl">
           {streamerList && (
-            <React.Fragment>
+            <>
               <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
                 {initialList.map((initial) => (
                   <button
@@ -122,7 +122,7 @@ const StreamerCategoryView = () => {
                   </div>
                 ))}
               </div>
-            </React.Fragment>
+            </>
           )}
         </div>
       </section>

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import ReactQueryProviders from "./react-query";
+import ReactQueryProviders from "./react-query-provider";
 import { AsPathStoreProvider } from "./asPath-provider";
 import { ToastStoreProvider } from "./toast-provider";
 

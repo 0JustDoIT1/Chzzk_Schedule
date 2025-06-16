@@ -34,7 +34,7 @@ const StreamerTimelineView = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <section className="w-full border-b border-b-textLight py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
@@ -91,7 +91,7 @@ const StreamerTimelineView = () => {
           <CustomDayline schedule={TestDayList} date={today} />
         </div>
       </main>
-    </React.Fragment>
+    </>
   );
 };
 

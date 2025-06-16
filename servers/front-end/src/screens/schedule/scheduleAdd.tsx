@@ -4,6 +4,8 @@ import React, { useMemo, useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
 import { useQuery } from "@tanstack/react-query";
 import { getAllStreamerList } from "@/api/streamer-api";
+import IsLoading from "@/components/isLoading";
+import IsError from "@/components/isError";
 
 const ScheduleAddView = () => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
@@ -24,8 +26,11 @@ const ScheduleAddView = () => {
     return isOfficial ? data : data.filter((streamer) => !streamer.isOfficial);
   }, [data, isOfficial]);
 
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError />;
+
   return (
-    <React.Fragment>
+    <>
       <section className="w-full border-b border-b-textLight p-4">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
@@ -59,7 +64,7 @@ const ScheduleAddView = () => {
           />
         )}
       </main>
-    </React.Fragment>
+    </>
   );
 };
 

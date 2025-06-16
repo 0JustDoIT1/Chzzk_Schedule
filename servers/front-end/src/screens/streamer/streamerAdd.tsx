@@ -12,11 +12,32 @@ import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { createStreamer } from "@/api/streamer-api";
 import { IApiError } from "@/lib/types/error-response";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const StreamerAddView = () => {
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
   const showToast = useToastStore((state) => state.showToast);
+
+  const queryClient = useQueryClient();
+
+  const createStreamerMutation = useMutation({
+    mutationFn: (data: IStreamer) => createStreamer(data),
+    onSuccess: (streamer) => {
+      showToast("success", `${streamer.name}을(를) 추가했습니다.`);
+      queryClient.invalidateQueries({ queryKey: ["getAllStreamerList"] });
+      router.push(previousAsPath!);
+    },
+    onError: (error: IApiError) => {
+      if (error.status === 409) {
+        showToast("error", "이미 등록된 스트리머입니다.");
+      } else if (error.status === 400) {
+        showToast("error", "입력값이 올바르지 않습니다.");
+      } else {
+        showToast("error", "알 수 없는 오류가 발생했습니다.");
+      }
+    },
+  });
 
   const initValue: Partial<IStreamer> = {
     name: "",
@@ -69,34 +90,19 @@ const StreamerAddView = () => {
     setTag(initValue.tag!);
   };
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const result: IStreamer = {
-        ...data,
-        tag,
-        isOfficial,
-      };
-      if (tag.length === 0) delete result.tag;
+  const onSubmit = handleSubmit((data) => {
+    const result: IStreamer = {
+      ...data,
+      tag,
+      isOfficial,
+    };
+    if (tag.length === 0) delete result.tag;
 
-      const streamer = await createStreamer(result);
-
-      showToast("success", `${streamer.name}을(를) 추가했습니다.`);
-      router.push(previousAsPath!);
-    } catch (error) {
-      const apiError = error as IApiError;
-
-      if (apiError.status === 409) {
-        showToast("error", "이미 등록된 스트리머입니다.");
-      } else if (apiError.status === 400) {
-        showToast("error", "입력값이 올바르지 않습니다.");
-      } else {
-        showToast("error", "알 수 없는 오류가 발생했습니다.");
-      }
-    }
+    createStreamerMutation.mutate(result);
   });
 
   return (
-    <React.Fragment>
+    <>
       <section className="w-full border-b border-b-textLight p-4">
         {/* <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
@@ -258,7 +264,7 @@ const StreamerAddView = () => {
           </div>
         </form>
       </main>
-    </React.Fragment>
+    </>
   );
 };
 

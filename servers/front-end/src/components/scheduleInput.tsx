@@ -60,7 +60,7 @@ const ScheduleInput = ({
                 </p>
               </div>
             ) : (
-              <React.Fragment>
+              <>
                 <Controller
                   control={control}
                   name="streamer"
@@ -87,7 +87,7 @@ const ScheduleInput = ({
                     {errors.streamer?.message as string}
                   </HelperText>
                 )}
-              </React.Fragment>
+              </>
             )}
           </div>
         )}

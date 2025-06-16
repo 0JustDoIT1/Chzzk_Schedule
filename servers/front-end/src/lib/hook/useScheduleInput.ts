@@ -12,6 +12,7 @@ import { useToastStore } from "@/lib/providers/toast-provider";
 import { useRouter } from "next/navigation";
 import { createSchedule } from "@/api/schedule-api";
 import { IApiError } from "../types/error-response";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const useScheduleInput = (
   isOfficial: boolean,
@@ -145,51 +146,56 @@ const useScheduleInput = (
     setIsOfficial(false);
   };
 
-  // Submit event
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const inputData: IScheduleInput = {
-        ...data,
-        isOfficial,
-        member,
-      };
+  const queryClient = useQueryClient();
 
-      const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
-      const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
-
-      const result: ISchedule = {
-        isOfficial: inputData.isOfficial,
-        streamer: inputData.streamer,
-        category: inputData.category,
-        title: inputData.title,
-        member: inputData.member,
-        startAt: dateTypeToDate(startAt),
-        endAt: dateTypeToDate(endAt),
-        contents: inputData.contents,
-      };
-
-      if (result.isOfficial) delete result.streamer;
-      if (!result.member || result.member?.length === 0) delete result.member;
-      if (!result.contents) delete result.contents;
-
-      await createSchedule(result);
-
+  const createScheduleMutation = useMutation({
+    mutationFn: (data: ISchedule) => createSchedule(data),
+    onSuccess: (schedule) => {
       showToast("success", `일정을 추가했습니다.`);
+      queryClient.invalidateQueries({ queryKey: ["getScheduleListByDate"] });
       router.push(previousAsPath!);
-    } catch (error) {
-      const apiError = error as IApiError;
-
-      if (apiError.status === 409) {
+    },
+    onError: (error: IApiError) => {
+      if (error.status === 409) {
         // 중복 시간대 스케줄
         showToast("error", "같은 시간대에 스케줄이 존재합니다.");
-      } else if (apiError.status === 400) {
+      } else if (error.status === 400) {
         // 클라이언트 요청 문제
         showToast("error", "입력값을 다시 확인해주세요.");
       } else {
         // 알 수 없는 에러
         showToast("error", "알 수 없는 오류가 발생했습니다.");
       }
-    }
+    },
+  });
+
+  // Submit event
+  const onSubmit = handleSubmit((data) => {
+    const inputData: IScheduleInput = {
+      ...data,
+      isOfficial,
+      member,
+    };
+
+    const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
+    const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
+
+    const result: ISchedule = {
+      isOfficial: inputData.isOfficial,
+      streamer: inputData.streamer,
+      category: inputData.category,
+      title: inputData.title,
+      member: inputData.member,
+      startAt: dateTypeToDate(startAt),
+      endAt: dateTypeToDate(endAt),
+      contents: inputData.contents,
+    };
+
+    if (result.isOfficial) delete result.streamer;
+    if (!result.member || result.member?.length === 0) delete result.member;
+    if (!result.contents) delete result.contents;
+
+    createScheduleMutation.mutate(result);
   });
 
   return {

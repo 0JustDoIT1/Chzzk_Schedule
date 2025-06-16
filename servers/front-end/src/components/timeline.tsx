@@ -1,5 +1,4 @@
 import { dateToFormatString, getToday } from "@/lib/utils/dateFormat";
-import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
@@ -110,7 +109,6 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
                         classes="w-full"
                       >
                         자세히 보기
-                        {/* <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" /> */}
                       </BrandLink>
                     </div>
                   </div>

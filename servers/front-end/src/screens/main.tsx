@@ -5,18 +5,32 @@ import CustomTimeline from "@/components/timeline";
 import { IDateSchedule } from "@/schemas/schedule.schema";
 import { dateToFormatString, getToday } from "@/lib/utils/dateFormat";
 import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getScheduleListByDate } from "@/api/schedule-api";
+import IsLoading from "@/components/isLoading";
+import IsError from "@/components/isError";
 
 interface IMainView {
   scheduleList: IDateSchedule;
+  date: Date;
 }
 
-const MainView = ({ scheduleList }: IMainView) => {
+const MainView = ({ scheduleList, date }: IMainView) => {
   useEffect(() => {
     window.scroll({ top: 0, behavior: "smooth" });
   }, []);
 
+  const { data, isSuccess, isLoading, isError } = useQuery({
+    queryKey: ["getScheduleListByDate", date],
+    queryFn: () => getScheduleListByDate(date),
+    initialData: scheduleList,
+  });
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError />;
+
   return (
-    <React.Fragment>
+    <>
       {/* <div className="text-center p-4">
         <div className="text-6xl font-bold text-white my-4">0's Life</div>
         <div className="text-2xl text-white my-4">인터넷 방송 스케줄러</div>
@@ -43,9 +57,9 @@ const MainView = ({ scheduleList }: IMainView) => {
         </div>
       </section>
       <main className="w-full py-12">
-        <CustomTimeline schedule={scheduleList} />
+        {isSuccess && <CustomTimeline schedule={data} />}
       </main>
-    </React.Fragment>
+    </>
   );
 };
 

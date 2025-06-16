@@ -184,7 +184,7 @@ const CustomCalendar = ({
                                   {etc}개 더보기
                                 </Link>
                               )}
-                            </React.Fragment>
+                            </>
                           );
                         })}
                     </div>
