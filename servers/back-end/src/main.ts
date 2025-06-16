@@ -3,9 +3,14 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './lib/utils/http-exception.filter';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // 요청 바디 크기 제한 늘리기 (10MB)
+  app.useBodyParser('json', { limit: '10mb' });
+  app.useBodyParser('urlencoded', { limit: '10mb', extended: true });
 
   // Middleware Setting
   app.useGlobalPipes(
@@ -23,7 +28,7 @@ async function bootstrap() {
 
   // CORS Setting
   app.enableCors({
-    origin: [process.env.ORIGIN], // 프론트엔드 주소만 허용
+    origin: process.env.ORIGIN ? [process.env.ORIGIN] : [], // 프론트엔드 주소만 허용
     credentials: true, // 쿠키, 인증 헤더 사용 가능 여부
   });
 
