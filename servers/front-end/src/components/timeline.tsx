@@ -1,11 +1,14 @@
-import { dateToFormatString, getToday } from "@/utils/dateFormat";
+import { dateToFormatString, getToday } from "@/lib/utils/dateFormat";
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
-import { getModalRoute, getRoute, route } from "@/constants/router";
+import { getModalRoute, getRoute, route } from "@/lib/constants/router";
 import { IDateSchedule } from "@/schemas/schedule.schema";
-import { BaseCategoryLabel, ChzzkCategoryLabel } from "@/constants/streaming";
+import {
+  BaseCategoryLabel,
+  ChzzkCategoryLabel,
+} from "@/lib/constants/streaming";
 
 interface ICustomTimeLine {
   schedule: IDateSchedule;

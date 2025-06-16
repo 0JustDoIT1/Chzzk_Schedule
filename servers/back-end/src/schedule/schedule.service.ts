@@ -38,7 +38,7 @@ export class ScheduleService {
           startAt: scheduleData.startAt,
         });
         // Validate schedule
-        this.scheduleValidate.validateScheduleExit(schedule, true);
+        this.scheduleValidate.throwIfScheduleExists(schedule);
       }
     }
 
@@ -47,7 +47,7 @@ export class ScheduleService {
       title: scheduleData.title,
     });
     // Validate schedule
-    this.scheduleValidate.validateScheduleExit(schedule, true);
+    this.scheduleValidate.throwIfScheduleExists(schedule);
 
     // Create schedule
     return await this.scheduleModel.create(scheduleData);

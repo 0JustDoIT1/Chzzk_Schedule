@@ -21,7 +21,7 @@ export class StreamerService {
   async getStreamerById(id: string): Promise<Streamer | null> {
     const streamer = await this.streamerModel.findOne({ _id: id });
     // Validate streamer
-    this.userValidate.validateUserExit(streamer, false);
+    this.userValidate.throwIfUserNotFound(streamer);
 
     return streamer;
   }
@@ -30,18 +30,18 @@ export class StreamerService {
   async getStreamerByName(name: string): Promise<Streamer | null> {
     const streamer = await this.streamerModel.findOne({ name: name });
     // Validate streamer
-    this.userValidate.validateUserExit(streamer, false);
+    this.userValidate.throwIfUserNotFound(streamer);
 
     return streamer;
   }
 
   // Create Streamer
   async create(streamerData: CreateStreamerDto): Promise<Streamer> {
-    const streamer = await this.streamerModel.findOne({
+    const existStreamer = await this.streamerModel.findOne({
       $or: [{ name: streamerData.name }, { chzzkLink: streamerData.chzzkLink }],
     });
     // Validate streamer
-    this.userValidate.validateUserExit(streamer, true);
+    this.userValidate.throwIfUserExists(existStreamer);
 
     return await this.streamerModel.create(streamerData);
   }

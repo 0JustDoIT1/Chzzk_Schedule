@@ -1,6 +1,6 @@
 "use client";
 
-import { TAsPathStore, createAsPathStore } from "@/stores/asPath-store";
+import { TAsPathStore, createAsPathStore } from "@/lib/stores/asPath-store";
 import { createContext, ReactNode, useContext, useRef } from "react";
 import { useStore } from "zustand";
 

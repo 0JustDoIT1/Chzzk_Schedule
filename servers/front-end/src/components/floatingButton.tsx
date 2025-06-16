@@ -1,6 +1,6 @@
 "use client";
 
-import { getModalRoute, route } from "@/constants/router";
+import { getModalRoute, route } from "@/lib/constants/router";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import PlusIcon from "~/public/assets/svg/plus";

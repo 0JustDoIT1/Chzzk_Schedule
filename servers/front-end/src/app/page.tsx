@@ -4,7 +4,7 @@ import {
   dateToFormatString,
   dateTypeToDate,
   getToday,
-} from "@/utils/dateFormat";
+} from "@/lib/utils/dateFormat";
 
 const MainPage = async () => {
   const today = dateToFormatString(getToday(), "YYYY-MM-DD");

@@ -1,4 +1,4 @@
-import { getModalRoute, route } from "@/constants/router";
+import { getModalRoute, route } from "@/lib/constants/router";
 import Link from "next/link";
 import { ReactNode } from "react";
 import PlusIcon from "~/public/assets/svg/plus";

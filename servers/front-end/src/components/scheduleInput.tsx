@@ -1,16 +1,16 @@
-import { baseCategoryOpt, chzzkCategoryOpt } from "@/constants/streaming";
+import { baseCategoryOpt, chzzkCategoryOpt } from "@/lib/constants/streaming";
 import TiptapEditor from "./tiptapEditor";
 import { Controller } from "react-hook-form";
 import SearchableDropdown from "./searchableDropdown";
 import React from "react";
-import useScheduleInput from "@/hook/useScheduleInput";
+import useScheduleInput from "@/lib/hook/useScheduleInput";
 import CloseIcon from "~/public/assets/svg/close";
 import CheckIcon from "~/public/assets/svg/check";
 import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
-import { useAsPathStore } from "@/providers/asPath-provider";
+import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { BrandButton } from "./button";
-import { preventEnterKey } from "@/utils/keyEvent";
+import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { IStreamer } from "@/schemas/streamer.schema";
 
 interface IScheduleInput {

@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, KeyboardEvent } from "react";
-import useReactHookForm from "@/hook/useReactHookForm";
+import useReactHookForm from "@/lib/hook/useReactHookForm";
 import { useRouter } from "next/navigation";
 import CloseIcon from "~/public/assets/svg/close";
 import { IStreamer } from "@/schemas/streamer.schema";
 import HelperText from "@/components/helperText";
 import { BrandButton } from "@/components/button";
-import { useToastStore } from "@/providers/toast-provider";
-import { useAsPathStore } from "@/providers/asPath-provider";
-import { preventEnterKey } from "@/utils/keyEvent";
-import { isResError } from "@/fetch/error-check";
+import { useToastStore } from "@/lib/providers/toast-provider";
+import { useAsPathStore } from "@/lib/providers/asPath-provider";
+import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { createStreamer } from "@/api/streamer-api";
+import { IApiError } from "@/lib/types/error-response";
 
 const StreamerAddView = () => {
   const router = useRouter();
@@ -34,12 +34,18 @@ const StreamerAddView = () => {
     handleSubmit,
   } = useReactHookForm(initValue);
 
+  const [isOfficial, setIsOfficial] = useState<boolean>(false);
   const [tag, setTag] = useState<string[]>([]);
 
   const onKeyDownAddTag = (e: KeyboardEvent<HTMLElement>) => {
     if (e.code === "Enter") {
       onAddTag();
     }
+  };
+
+  const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setIsOfficial(checked);
   };
 
   const onAddTag = () => {
@@ -64,23 +70,46 @@ const StreamerAddView = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    const result: IStreamer = {
-      ...data,
-      tag,
-    };
-    if (tag.length === 0) delete result.tag;
+    try {
+      const result: IStreamer = {
+        ...data,
+        tag,
+        isOfficial,
+      };
+      if (tag.length === 0) delete result.tag;
 
-    const streamer = await createStreamer(result);
-    if (isResError(streamer))
-      return showToast("error", `이미 추가된 스트리머입니다.`);
+      console.log("###", result);
 
-    router.push(previousAsPath!);
-    showToast("success", `${result.name}을(를) 추가했습니다.`);
+      const streamer = await createStreamer(result);
+
+      showToast("success", `${streamer.name}을(를) 추가했습니다.`);
+      router.push(previousAsPath!);
+    } catch (error) {
+      const apiError = error as IApiError;
+
+      if (apiError.status === 409) {
+        showToast("error", "이미 등록된 스트리머입니다.");
+      } else if (apiError.status === 400) {
+        showToast("error", "입력값이 올바르지 않습니다.");
+      } else {
+        showToast("error", "알 수 없는 오류가 발생했습니다.");
+      }
+    }
   });
 
   return (
     <React.Fragment>
       <section className="w-full border-b border-b-textLight p-4">
+        {/* <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
+          <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
+            <p className="text-2xl">스트리머 추가</p>
+            <p className="text-sm text-textNormal">
+              원하는 스트리머를 추가 요청해 주세요.
+              <br />
+              요청을 확인한 후, 문제가 없으면 추가됩니다.
+            </p>
+          </div>
+        </div> */}
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
             <p className="text-2xl">스트리머 추가</p>
@@ -89,6 +118,20 @@ const StreamerAddView = () => {
               <br />
               요청을 확인한 후, 문제가 없으면 추가됩니다.
             </p>
+          </div>
+          <div className="flex flex-col items-center justify-center w-full md:w-1/3 md:items-end">
+            <label className="inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={isOfficial}
+                onChange={onChangeToggle}
+              />
+              <div className="relative w-11 h-6 bg-textSuperLight peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-textLight after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandMain peer-focus:ring-2 peer-focus:ring-double peer-focus:ring-brandLight"></div>
+              <span className="mx-3 text-sm text-textMain mt-[2px]">
+                치지직 공식
+              </span>
+            </label>
           </div>
         </div>
       </section>

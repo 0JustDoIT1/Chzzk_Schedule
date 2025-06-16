@@ -1,5 +1,5 @@
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
-import type { StringIndexable } from "@/types/indexableType";
+import type { StringIndexable } from "@/lib/types/indexableType";
 
 const useSearchableDropdown = <T extends StringIndexable>(
   list: T[],

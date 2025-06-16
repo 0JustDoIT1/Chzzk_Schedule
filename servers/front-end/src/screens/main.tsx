@@ -3,7 +3,7 @@
 import { AddScheduleLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
 import { IDateSchedule } from "@/schemas/schedule.schema";
-import { dateToFormatString, getToday } from "@/utils/dateFormat";
+import { dateToFormatString, getToday } from "@/lib/utils/dateFormat";
 import React, { useEffect } from "react";
 
 interface IMainView {

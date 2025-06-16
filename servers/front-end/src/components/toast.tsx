@@ -7,8 +7,8 @@ import ErrorCircleIcon from "~/public/assets/svg/error-circle";
 import InfoCircleIcon from "~/public/assets/svg/info-circle";
 import WarningCircleIcon from "~/public/assets/svg/warning-circle";
 import Portal from "./portal";
-import { useToastStore } from "@/providers/toast-provider";
-import type { IToastItem } from "@/types/toastType";
+import { useToastStore } from "@/lib/providers/toast-provider";
+import type { IToastItem } from "@/lib/types/toastType";
 
 const ToastItem = ({ id, type, message, shown }: IToastItem) => {
   const hideToast = useToastStore((state) => state.hideToast);

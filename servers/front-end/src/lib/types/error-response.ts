@@ -5,3 +5,8 @@ export interface IErrorResponse {
   path: string;
   timestamp: string;
 }
+
+export interface IApiError extends Error {
+  status?: number;
+  errorCode?: string;
+}

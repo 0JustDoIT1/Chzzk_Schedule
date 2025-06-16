@@ -1,7 +1,7 @@
 "use client";
 
-import { getRoute, route } from "@/constants/router";
-import { TestStreamerList } from "@/constants/test";
+import { getRoute, route } from "@/lib/constants/router";
+import { TestStreamerList } from "@/lib/constants/test";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 

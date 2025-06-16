@@ -1,4 +1,4 @@
-import { ISvgIcon } from "@/types/svgIcon";
+import { ISvgIcon } from "@/lib/types/svgIcon";
 
 const FormatH2Icon = ({ className }: ISvgIcon) => (
   <svg

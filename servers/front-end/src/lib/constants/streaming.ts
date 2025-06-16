@@ -1,5 +1,5 @@
 import { BaseCategory, ChzzkCategory } from "@/schemas/schedule.schema";
-import { IOption } from "@/types/optionType";
+import { IOption } from "@/lib/types/optionType";
 
 export const BaseCategoryLabel: { [key: string]: string } = {
   [BaseCategory.PERSONAL]: "개인",

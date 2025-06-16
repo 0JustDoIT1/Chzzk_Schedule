@@ -5,6 +5,9 @@ export type StreamerDocument = Streamer & Document;
 
 @Schema({ collection: 'streamer', timestamps: true })
 export class Streamer {
+  @Prop({ required: true, type: Boolean })
+  isOfficial: boolean;
+
   @Prop({ required: true, unique: true, type: String })
   name: string;
 

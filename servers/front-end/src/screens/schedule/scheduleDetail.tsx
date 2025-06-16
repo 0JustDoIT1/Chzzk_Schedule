@@ -1,12 +1,12 @@
 "use client";
 
-import { categoryJson } from "@/constants/streaming";
-import { TestScheduleData } from "@/constants/test";
+import { categoryJson } from "@/lib/constants/streaming";
+import { TestScheduleData } from "@/lib/constants/test";
 import { usePathname, useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "../../components/link";
-import { route } from "@/constants/router";
+import { route } from "@/lib/constants/router";
 import { BrandButton } from "@/components/button";
 
 const ScheduleDetailView = () => {

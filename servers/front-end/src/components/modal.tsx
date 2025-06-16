@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 import CloseIcon from "~/public/assets/svg/close";
 import { CustomButton } from "./button";
-import { useAsPathStore } from "@/providers/asPath-provider";
+import { useAsPathStore } from "@/lib/providers/asPath-provider";
 
 const Modal = ({
   children,

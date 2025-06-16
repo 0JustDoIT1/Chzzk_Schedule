@@ -1,4 +1,4 @@
-import { IToastItem, TToastType } from "@/types/toastType";
+import { IToastItem, TToastType } from "@/lib/types/toastType";
 import { createStore } from "zustand";
 
 export interface IToastState {

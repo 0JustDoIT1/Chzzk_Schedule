@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { ReactNode } from "react";
 import { FloatingButton } from "@/components/floatingButton";
-import RootProvider from "@/providers";
+import RootProvider from "@/lib/providers";
 
 const gmarket = localFont({
   src: [

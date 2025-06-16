@@ -1,5 +1,5 @@
-import useSearchableDropdown from "@/hook/useSearchableDropdown";
-import type { StringIndexable } from "@/types/indexableType";
+import useSearchableDropdown from "@/lib/hook/useSearchableDropdown";
+import type { StringIndexable } from "@/lib/types/indexableType";
 import React from "react";
 import { RefCallBack } from "react-hook-form";
 import ChevronDownIcon from "~/public/assets/svg/chevron-down";

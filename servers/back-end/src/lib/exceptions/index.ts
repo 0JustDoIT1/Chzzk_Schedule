@@ -5,11 +5,13 @@ export class BaseException extends Error {
   readonly statusCode: number;
 
   constructor(errorCode: ErrorCode, statusCode: number, message?: string) {
-    message = message ? message : ErrorMessage[errorCode];
+    message = message ?? ErrorMessage[errorCode];
 
     super(message);
 
     this.errorCode = errorCode;
     this.statusCode = statusCode;
+
+    Error.captureStackTrace(this, new.target);
   }
 }

@@ -1,7 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateStreamerDto {
+  @ApiProperty({ description: '치지직 공식 채널 여부' })
+  @IsNotEmpty()
+  @IsBoolean()
+  readonly isOfficial: boolean;
+
   @ApiProperty({ description: '스트리머 닉네임' })
   @IsNotEmpty()
   @IsString()

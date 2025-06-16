@@ -1,4 +1,4 @@
-import { IOption } from "@/types/optionType";
+import { IOption } from "@/lib/types/optionType";
 
 export const scheduleViewType = {
   calendar: "calendar",

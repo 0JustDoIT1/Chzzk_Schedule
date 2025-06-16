@@ -1,26 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import {
-  UserAlreadyExistException,
-  UserNotFoundException,
-} from 'src/lib/exceptions/streamer.exception';
+  ScheduleAlreadyExistException,
+  ScheduleNotFoundException,
+} from 'src/lib/exceptions/schedule.exception';
 import { Schedule } from 'src/schemas/schedule.schema';
 
 @Injectable()
 export class ScheduleValidate {
-  public validateScheduleExit = (
-    schedule: Schedule | null,
-    create: boolean,
-  ) => {
-    // get : 해당 스케줄이 없을 경우 exception
-    if (!create && !schedule) {
-      throw UserNotFoundException(`존재하지 않는 스케줄입니다.`);
+  throwIfScheduleExists = (schedule: Schedule | null) => {
+    // create : 해당 스트리머가 이미 존재할 경우 exception
+    if (schedule) {
+      throw ScheduleAlreadyExistException(`이미 추가된 일정입니다.`);
     }
+  };
 
-    // create : 해당 스케줄이 이미 존재할 경우 exception
-    if (create && schedule) {
-      throw UserAlreadyExistException(`이미 추가된 스케줄입니다.`);
+  throwIfScheduleNotFound = (schedule: Schedule | null) => {
+    // get : 해당 스트리머가 없을 경우 exception
+    if (!schedule) {
+      throw ScheduleNotFoundException(`존재하지 않는 일정입니다.`);
     }
-
-    return schedule;
   };
 }

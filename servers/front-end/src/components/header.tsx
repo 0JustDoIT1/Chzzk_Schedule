@@ -4,8 +4,8 @@ import MenuIcon from "assets/svg/menu";
 import { useEffect, useState } from "react";
 import { HeaderLink } from "./link";
 import { CustomButton } from "./button";
-import { route } from "@/constants/router";
-import { useAsPathStore } from "@/providers/asPath-provider";
+import { route } from "@/lib/constants/router";
+import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { usePathname } from "next/navigation";
 
 const Header = () => {
