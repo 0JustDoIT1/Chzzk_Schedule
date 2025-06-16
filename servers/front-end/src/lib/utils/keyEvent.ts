@@ -1,7 +1,7 @@
 import { KeyboardEvent } from "react";
 
 export const preventEnterKey = (e: KeyboardEvent<HTMLElement>) => {
-  if (e.code === "Enter") {
+  if (e.key === "Enter") {
     e.preventDefault();
   }
 };

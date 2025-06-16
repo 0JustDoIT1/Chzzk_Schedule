@@ -50,61 +50,52 @@ const useScheduleInput = (
   const [member, setMember] = useState<string[]>([]);
 
   // Reset input value
-  const _resetInputValue = () => {
+  const resetInputValue = () => {
     reset();
     clearErrors();
-    setMember(initValue.member!);
+    setMember([]);
   };
 
   // Reset input value when change isOfficial
   useEffect(() => {
-    _resetInputValue();
+    resetInputValue();
   }, [isOfficial]);
 
+  const watchedFields = watch([
+    "category",
+    "fullDay",
+    "startAtDate",
+    "startAtTime",
+    "endAtDate",
+    "endAtTime",
+  ]);
+
   // Set value(member) when change category
+  // Check fullDay event
+  // Check time up & down
   useEffect(() => {
-    if (
-      watch("category") &&
-      (watch("category") === "personal" || watch("category") === "watch")
-    ) {
-      setValue("member", "");
+    const [category, fullDay, startAtDate, startAtTime, endAtDate, endAtTime] =
+      watchedFields;
+
+    if (category === "personal" || category === "watch") {
+      setValue("memberInput", "");
       setMember([]);
     }
-  }, [watch("category")]);
 
-  // Check fullDay event
-  useEffect(() => {
-    if (watch("fullDay")) {
-      const date = watch("startAtDate");
-      setValue("endAtDate", date, { shouldValidate: true });
+    if (fullDay) {
+      setValue("endAtDate", startAtDate, { shouldValidate: true });
       setValue("startAtTime", "00:00", { shouldValidate: true });
       setValue("endAtTime", "23:59", { shouldValidate: true });
     }
-  }, [watch("fullDay"), watch("startAtDate")]);
 
-  useEffect(() => {
-    const startAtDate = watch("startAtDate");
-    const endAtDate = watch("endAtDate");
-    const startAtTime = watch("startAtTime");
-    const endAtTime = watch("endAtTime");
-
-    if (startAtDate === endAtDate) {
-      if (startAtTime > endAtTime) {
-        setValue("startAtTime", endAtTime);
-        setValue("endAtTime", startAtTime);
-      }
-    } else {
-      if (startAtDate > endAtDate) {
-        setValue("startAtDate", endAtDate);
-        setValue("endAtDate", startAtDate);
-      }
+    if (startAtDate === endAtDate && startAtTime > endAtTime) {
+      setValue("startAtTime", endAtTime);
+      setValue("endAtTime", startAtTime);
+    } else if (startAtDate > endAtDate) {
+      setValue("startAtDate", endAtDate);
+      setValue("endAtDate", startAtDate);
     }
-  }, [
-    watch("startAtDate"),
-    watch("startAtTime"),
-    watch("endAtDate"),
-    watch("endAtTime"),
-  ]);
+  }, [watchedFields]);
 
   // When streamer input has error, focus input
   useEffect(() => {
@@ -117,19 +108,19 @@ const useScheduleInput = (
 
   // Add member button event
   const onAddMember = () => {
-    const name = watch("member");
-    if (name) {
-      if (member.includes(name)) setValue("member", "");
-      else {
-        setMember([...member, name]);
-        setValue("member", "");
-      }
+    const name = watch("memberInput");
+    if (!name) return;
+
+    if (!member.includes(name)) {
+      setMember((prev) => [...prev, name]);
     }
+
+    setValue("memberInput", "");
   };
 
   // Remove member button event
   const onRemoveMember = (name: string) => {
-    setMember(member.filter((item: string) => item !== name));
+    setMember((prev) => prev.filter((item) => item !== name));
   };
 
   // Focus tiptap label
@@ -142,7 +133,7 @@ const useScheduleInput = (
 
   // Reset button event
   const onReset = () => {
-    _resetInputValue();
+    resetInputValue();
     setIsOfficial(false);
   };
 

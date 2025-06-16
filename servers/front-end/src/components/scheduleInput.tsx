@@ -134,18 +134,23 @@ const ScheduleInput = ({
 
         {isOfficial && watch("category") && watch("category") !== "watch" && (
           <div className="flex flex-col mb-4">
-            <label htmlFor="member" className="text-sm text-textMain mb-2">
+            <label htmlFor="memberInput" className="text-sm text-textMain mb-2">
               멤버 &#40;진행 및 게스트&#41;
             </label>
             <div className="flex justify-between items-center">
               <input
-                {...register("member", {
-                  value: initValue.member,
-                })}
-                id="member"
+                {...register("memberInput")}
+                id="memberInput"
                 className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
                 type="text"
+                defaultValue=""
                 placeholder="합방 멤버를 추가해 주세요."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    onAddMember();
+                  }
+                }}
               />
               <BrandButton classes="w-16" onClick={onAddMember}>
                 추가
@@ -176,18 +181,26 @@ const ScheduleInput = ({
           watch("category") &&
           watch("category") !== "personal" && (
             <div className="flex flex-col mb-4">
-              <label htmlFor="member" className="text-sm text-textMain mb-2">
+              <label
+                htmlFor="memberInput"
+                className="text-sm text-textMain mb-2"
+              >
                 합방 멤버
               </label>
               <div className="flex justify-between items-center">
                 <input
-                  {...register("member", {
-                    value: initValue.member,
-                  })}
-                  id="member"
+                  {...register("memberInput")}
+                  id="memberInput"
                   className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
                   type="text"
+                  defaultValue=""
                   placeholder="합방 멤버를 추가해 주세요."
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      onAddMember();
+                    }
+                  }}
                 />
                 <BrandButton classes="w-16" onClick={onAddMember}>
                   추가
