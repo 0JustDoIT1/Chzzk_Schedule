@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
 import { useQuery } from "@tanstack/react-query";
 import { getAllStreamerList } from "@/api/streamer-api";
@@ -17,6 +17,12 @@ const ScheduleAddView = () => {
     queryKey: ["getAllStreamerList"],
     queryFn: getAllStreamerList,
   });
+
+  // 데이터가 있을 때만 필터링 처리
+  const filteredList = useMemo(() => {
+    if (!data) return [];
+    return isOfficial ? data : data.filter((streamer) => !streamer.isOfficial);
+  }, [data, isOfficial]);
 
   return (
     <React.Fragment>
@@ -47,7 +53,7 @@ const ScheduleAddView = () => {
       <main className="w-full p-4">
         {isSuccess && (
           <ScheduleInput
-            streamerList={data}
+            streamerList={filteredList}
             isOfficial={isOfficial}
             setIsOfficial={setIsOfficial}
           />
