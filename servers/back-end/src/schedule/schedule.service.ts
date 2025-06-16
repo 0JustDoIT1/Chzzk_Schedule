@@ -53,14 +53,14 @@ export class ScheduleService {
     return await this.scheduleModel.create(scheduleData);
   }
 
-  // // Get schedule by Object Id
-  // async getScheduleById(id: string): Promise<Schedule | null> {
-  //   const schedule = await this.scheduleModel.findOne({ _id: id });
-  //   // Validate schedule
-  //   this.scheduleValidate.validateScheduleExit(schedule, false);
+  // Get schedule by Object Id
+  async getScheduleById(id: string): Promise<Schedule | null> {
+    const schedule = await this.scheduleModel.findOne({ _id: id });
+    // Validate schedule
+    this.scheduleValidate.throwIfScheduleNotFound(schedule);
 
-  //   return schedule;
-  // }
+    return schedule;
+  }
 
   // // Get schedule list by streamer Object Id
   // async getAllScheduleByStreamerId(id: string): Promise<Schedule[] | null> {

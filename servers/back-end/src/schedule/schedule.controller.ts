@@ -18,6 +18,12 @@ export class ScheduleController {
     return await this.scheduleService.create(scheduleData);
   }
 
+  @ApiOperation({ summary: '_id에 해당하는 스케줄 반환 API' })
+  @Get(ApiPath.SCHEDULE_BY_ID)
+  async getScheduleById(@Param('id') id: string): Promise<Schedule | null> {
+    return await this.scheduleService.getScheduleById(id);
+  }
+
   @ApiOperation({ summary: 'date에 맞는 스케줄 리스트 반환 API' })
   @Get(ApiPath.SCHEDULE_BY_DATE)
   async getScheduleListByDate(

@@ -17,7 +17,7 @@ export class StreamerController {
   }
 
   @ApiOperation({ summary: '전체 스트리머 리스트 반환 API' })
-  @Get()
+  @Get(ApiPath.STREAMER_ALL)
   async getAllStreamerList(): Promise<Streamer[]> {
     return await this.streamerService.getAllStreamerList();
   }

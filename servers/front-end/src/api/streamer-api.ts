@@ -15,5 +15,5 @@ export const createStreamer = (
 
 // Get all streamer list API
 export const getAllStreamerList = (): Promise<IStreamer[]> => {
-  return getFetch(isServer(), ApiPath.STREAMER);
+  return getFetch(isServer(), ApiPath.STREAMER_ALL);
 };

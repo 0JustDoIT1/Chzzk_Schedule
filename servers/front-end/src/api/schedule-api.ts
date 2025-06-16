@@ -13,12 +13,17 @@ export const createSchedule = async (
   return await postFetch(isServer(), ApiPath.SCHEDULE_ADD, data, token);
 };
 
+// Get schedule by Id
+export const getScheduleById = async (id: string): Promise<ISchedule> => {
+  return await getFetch(isServer(), `${ApiPath.SCHEDULE_BY_ID}/${id}`);
+};
+
 // Get schedule list by date
 export const getScheduleListByDate = async (
   date: Date
 ): Promise<IDateSchedule> => {
   return await getFetch(
     isServer(),
-    `${ApiPath.SCHEDULE}/${date.toDateString()}`
+    `${ApiPath.SCHEDULE_BY_DATE}/${date.toDateString()}`
   );
 };

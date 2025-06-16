@@ -1,5 +1,5 @@
 import { dateTypeToDate, setDateAndTime } from "@/lib/utils/dateFormat";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
 import {
   BaseCategory,
@@ -22,18 +22,21 @@ const useScheduleInput = (
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
   const showToast = useToastStore((state) => state.showToast);
 
-  const initValue: Partial<IScheduleInput> = {
-    streamer: "",
-    category: undefined,
-    title: "",
-    member: [],
-    fullDay: false,
-    startAtDate: setDateAndTime().date,
-    startAtTime: setDateAndTime().time,
-    endAtDate: setDateAndTime().date,
-    endAtTime: setDateAndTime().time,
-    contents: "",
-  };
+  const initValue: Partial<IScheduleInput> = useMemo(
+    () => ({
+      streamer: "",
+      category: undefined,
+      title: "",
+      member: [],
+      fullDay: false,
+      startAtDate: setDateAndTime().date,
+      startAtTime: setDateAndTime().time,
+      endAtDate: setDateAndTime().date,
+      endAtTime: setDateAndTime().time,
+      contents: "",
+    }),
+    []
+  );
 
   const {
     register,
@@ -61,22 +64,17 @@ const useScheduleInput = (
     resetInputValue();
   }, [isOfficial]);
 
-  const watchedFields = watch([
-    "category",
-    "fullDay",
-    "startAtDate",
-    "startAtTime",
-    "endAtDate",
-    "endAtTime",
-  ]);
+  const category = watch("category");
+  const fullDay = watch("fullDay");
+  const startAtDate = watch("startAtDate");
+  const startAtTime = watch("startAtTime");
+  const endAtDate = watch("endAtDate");
+  const endAtTime = watch("endAtTime");
 
   // Set value(member) when change category
   // Check fullDay event
   // Check time up & down
   useEffect(() => {
-    const [category, fullDay, startAtDate, startAtTime, endAtDate, endAtTime] =
-      watchedFields;
-
     if (category === "personal" || category === "watch") {
       setValue("memberInput", "");
       setMember([]);
@@ -95,7 +93,7 @@ const useScheduleInput = (
       setValue("startAtDate", endAtDate);
       setValue("endAtDate", startAtDate);
     }
-  }, [watchedFields]);
+  }, [category, fullDay, startAtDate, startAtTime, endAtDate, endAtTime]);
 
   // When streamer input has error, focus input
   useEffect(() => {

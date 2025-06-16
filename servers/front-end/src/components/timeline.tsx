@@ -14,7 +14,7 @@ interface ICustomTimeLine {
 }
 
 const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
-  const scheduleKeyArr = Object.keys(schedule).sort((a, b) => -1);
+  const scheduleKeyArr = Object.keys(schedule);
 
   if (scheduleKeyArr.length === 0)
     return (
