@@ -1,13 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getAllStreamerList } from "@/api/streamer-api";
+import IsLoading from "@/components/isLoading";
+import IsError from "@/components/isError";
 
 const ScheduleEditView = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("schedule");
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
+
+  const { data, isSuccess, isLoading, isError } = useQuery({
+    queryKey: ["getAllStreamerList"],
+    queryFn: getAllStreamerList,
+  });
+
+  // 데이터가 있을 때만 필터링 처리
+  const filteredList = useMemo(() => {
+    if (!data) return [];
+    return isOfficial ? data : data.filter((streamer) => !streamer.isOfficial);
+  }, [data, isOfficial]);
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError />;
 
   return (
     <>
@@ -19,11 +37,14 @@ const ScheduleEditView = () => {
         </div>
       </section>
       <main className="w-full p-4">
-        <ScheduleInput
-          isOfficial={isOfficial}
-          setIsOfficial={setIsOfficial}
-          // initData={TestScheduleData}
-        />
+        {isSuccess && (
+          <ScheduleInput
+            streamerList={filteredList}
+            isOfficial={isOfficial}
+            setIsOfficial={setIsOfficial}
+            // initData={TestScheduleData}
+          />
+        )}
       </main>
     </>
   );
