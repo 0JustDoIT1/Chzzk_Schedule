@@ -7,6 +7,14 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/screens/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    "text-yellow-800",
+    "text-purple-800",
+    "text-teal-800",
+    "text-pink-800",
+    "text-green-600",
+    "text-green-400",
+  ],
   theme: {
     extend: {
       colors: {

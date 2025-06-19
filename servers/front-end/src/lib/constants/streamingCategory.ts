@@ -51,3 +51,12 @@ export const categoryJson = () => {
 
   return result;
 };
+
+export const categoryColorMap: { [key: string]: string } = {
+  personal: "text-yellow-800",
+  together: "text-purple-800",
+  content: "text-teal-800",
+  match: "text-pink-800",
+  official: "text-green-600",
+  watch: "text-green-400",
+};

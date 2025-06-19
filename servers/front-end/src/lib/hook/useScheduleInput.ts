@@ -2,8 +2,7 @@ import { dateTypeToDate, setDateAndTime } from "@/lib/utils/dateFormat";
 import { useEffect, useMemo, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
 import {
-  BaseCategory,
-  ChzzkCategory,
+  getStreamerNameByCategory,
   ISchedule,
   IScheduleInput,
 } from "@/schemas/schedule.schema";
@@ -24,7 +23,7 @@ const useScheduleInput = (
 
   const initValue: Partial<IScheduleInput> = useMemo(
     () => ({
-      streamer: "",
+      streamerName: "",
       category: undefined,
       title: "",
       member: [],
@@ -95,14 +94,14 @@ const useScheduleInput = (
     }
   }, [category, fullDay, startAtDate, startAtTime, endAtDate, endAtTime]);
 
-  // When streamer input has error, focus input
+  // When streamerName input has error, focus input
   useEffect(() => {
-    if (errors.streamer) {
+    if (errors.streamerName) {
       setTimeout(() => {
-        setFocus("streamer");
+        setFocus("streamerName");
       });
     }
-  }, [errors.streamer, setFocus]);
+  }, [errors.streamerName, setFocus]);
 
   // Add member button event
   const onAddMember = () => {
@@ -138,7 +137,7 @@ const useScheduleInput = (
   const queryClient = useQueryClient();
 
   const createScheduleMutation = useMutation({
-    mutationFn: (data: ISchedule) => createSchedule(data),
+    mutationFn: (data: Partial<ISchedule>) => createSchedule(data),
     onSuccess: (schedule) => {
       showToast("success", `일정을 추가했습니다.`);
       queryClient.invalidateQueries({ queryKey: ["getScheduleListByDate"] });
@@ -168,10 +167,14 @@ const useScheduleInput = (
 
     const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
     const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
+    const streamerName = getStreamerNameByCategory(
+      inputData.category,
+      inputData.streamerName
+    );
 
-    const result: ISchedule = {
+    const createData: Partial<ISchedule> = {
       isOfficial: inputData.isOfficial,
-      streamer: inputData.streamer,
+      streamerName: streamerName,
       category: inputData.category,
       title: inputData.title,
       member: inputData.member,
@@ -180,11 +183,11 @@ const useScheduleInput = (
       contents: inputData.contents,
     };
 
-    if (result.isOfficial) delete result.streamer;
-    if (!result.member || result.member?.length === 0) delete result.member;
-    if (!result.contents) delete result.contents;
+    if (!createData.member || createData.member?.length === 0)
+      delete createData.member;
+    if (!createData.contents) delete createData.contents;
 
-    createScheduleMutation.mutate(result);
+    createScheduleMutation.mutate(createData);
   });
 
   return {

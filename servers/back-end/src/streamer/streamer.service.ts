@@ -13,13 +13,13 @@ export class StreamerService {
   ) {}
 
   // Get all streamer list
-  async getAllStreamerList(): Promise<Streamer[]> {
-    return await this.streamerModel.find();
+  async getAllStreamerList(): Promise<StreamerDocument[]> {
+    return await this.streamerModel.find().exec();
   }
 
   // Get one streamer by Object Id
-  async getStreamerById(id: string): Promise<Streamer | null> {
-    const streamer = await this.streamerModel.findOne({ _id: id });
+  async getStreamerById(id: string): Promise<StreamerDocument> {
+    const streamer = await this.streamerModel.findOne({ _id: id }).exec();
     // Validate streamer
     this.userValidate.throwIfUserNotFound(streamer);
 
@@ -27,8 +27,8 @@ export class StreamerService {
   }
 
   // Get one streamer by name
-  async getStreamerByName(name: string): Promise<Streamer | null> {
-    const streamer = await this.streamerModel.findOne({ name: name });
+  async getStreamerByName(name: string): Promise<StreamerDocument> {
+    const streamer = await this.streamerModel.findOne({ name: name }).exec();
     // Validate streamer
     this.userValidate.throwIfUserNotFound(streamer);
 
@@ -36,10 +36,15 @@ export class StreamerService {
   }
 
   // Create Streamer
-  async create(streamerData: CreateStreamerDto): Promise<Streamer> {
-    const existStreamer = await this.streamerModel.findOne({
-      $or: [{ name: streamerData.name }, { chzzkLink: streamerData.chzzkLink }],
-    });
+  async create(streamerData: CreateStreamerDto): Promise<StreamerDocument> {
+    const existStreamer = await this.streamerModel
+      .findOne({
+        $or: [
+          { name: streamerData.name },
+          { chzzkLink: streamerData.chzzkLink },
+        ],
+      })
+      .exec();
     // Validate streamer
     this.userValidate.throwIfUserExists(existStreamer);
 

@@ -16,10 +16,10 @@ export class CreateScheduleDto {
   @IsBoolean()
   readonly isOfficial: boolean;
 
-  @ApiProperty({ description: '스트리머 닉네임', required: false })
-  @IsOptional()
+  @ApiProperty({ description: '스트리머 닉네임' })
+  @IsNotEmpty()
   @IsString()
-  readonly streamer: string;
+  readonly streamerName: string;
 
   @ApiProperty({
     description: '방송 유형',

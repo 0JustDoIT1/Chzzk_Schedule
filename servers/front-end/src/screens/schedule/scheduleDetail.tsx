@@ -1,7 +1,9 @@
 "use client";
 
-import { categoryJson } from "@/lib/constants/streaming";
-import { TestScheduleData } from "@/lib/constants/test";
+import {
+  categoryColorMap,
+  categoryJson,
+} from "@/lib/constants/streamingCategory";
 import { usePathname, useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
@@ -12,6 +14,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getScheduleById } from "@/api/schedule-api";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
+import { TScheduleSchema } from "@/schemas/schedule.schema";
+import { dateToFormatString } from "@/lib/utils/dateFormat";
+import UsersIcon from "~/public/assets/svg/users";
+import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
+import Link from "next/link";
 
 const ScheduleDetailView = () => {
   const router = useRouter();
@@ -25,16 +32,21 @@ const ScheduleDetailView = () => {
     queryFn: () => getScheduleById(id),
   });
 
-  const displayDate = (data: any) => {
-    let result = data.startAtDate;
-    if (data.startAtDate === data.endAtDate) {
-      if (data.startAtTime === data.endAtTime) {
-        result += ` ${data.startAtTime}`;
+  const displayDate = (data: TScheduleSchema) => {
+    const startAtDate = dateToFormatString(data.startAt, "YYYY-MM-DD");
+    const startAtTime = dateToFormatString(data.startAt, "HH:mm");
+    const endAtDate = dateToFormatString(data.startAt, "YYYY-MM-DD");
+    const endAtTime = dateToFormatString(data.startAt, "HH:mm");
+
+    let result = startAtDate;
+    if (startAtDate === endAtDate) {
+      if (startAtTime === endAtTime) {
+        result += ` ${startAtTime}`;
       } else {
-        result += ` ${data.startAtTime} - ${data.endAtTime}`;
+        result += ` ${startAtTime} - ${endAtTime}`;
       }
     } else {
-      result += ` ${data.startAtTime} ~ ${data.endAtDate} ${data.endAtTime}`;
+      result += ` ${startAtTime} ~ ${endAtDate} ${endAtTime}`;
     }
 
     return result;
@@ -47,22 +59,37 @@ const ScheduleDetailView = () => {
     <section className="w-full">
       {isSuccess && (
         <div className="w-full mx-auto flex flex-col md:container md:p-8 lg:max-w-6xl">
-          <div className="flex flex-col mb-4">
-            <p className="text-xl">
-              <span className="mr-2">&#91;{category[data.category]}&#93;</span>
+          <Link target="_blank" href={data.chzzkLink} className="flex mb-2">
+            <p className="text-xl mr-2">
+              <span
+                className={`mr-2 font-semibold ${
+                  categoryColorMap[data.category]
+                }`}
+              >
+                &#91;{category[data.category]}&#93;
+              </span>
               {data.title}
             </p>
-          </div>
-          <div className="flex flex-col gap-2 mb-8 text-textNormal text-sm">
+            <ArrowUpRightFromSquareIcon className="w-6 h-6 mr-2" />
+          </Link>
+          <div className="flex flex-col gap-2 mb-2 text-textNormal text-sm">
             <div className="flex items-center">
               <CalendarTimeIcon className="w-6 h-6 mr-2" />
               <p className="mt-[2px]">{displayDate(data)}</p>
             </div>
+          </div>
+          <div className="flex flex-col gap-2 mb-1 text-textNormal text-sm">
+            <div className="flex items-center">
+              <UserIcon className="w-6 h-6 mr-2" />
+              <p className="mt-[2px]">{data.streamerName}</p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 mb-8 text-textNormal text-sm">
             {data.member && (
               <div className="flex flex-wrap items-center">
-                <UserIcon className="w-6 h-6 mr-2" />
+                <UsersIcon className="w-6 h-6 mr-2" />
                 {data.member.map((name, index) => {
-                  const memberLength = data.member.length;
+                  const memberLength = data.member?.length;
                   const displayName =
                     memberLength === index + 1 ? name : `${name},`;
                   return (
@@ -74,15 +101,17 @@ const ScheduleDetailView = () => {
               </div>
             )}
           </div>
-          <div className="relative mb-4">
-            <div
-              className="border border-textLight rounded-lg p-4"
-              dangerouslySetInnerHTML={{ __html: data.contents }}
-            />
-            <div className="absolute -top-2 left-4 bg-white px-2">
-              <p className="text-sm text-textNormal">일정 내용</p>
+          {data.contents && (
+            <div className="relative mb-4">
+              <div
+                className="border border-textLight rounded-lg p-4"
+                dangerouslySetInnerHTML={{ __html: data.contents }}
+              />
+              <div className="absolute -top-2 left-4 bg-white px-2">
+                <p className="text-sm text-textNormal">일정 내용</p>
+              </div>
             </div>
-          </div>
+          )}
           <div className="flex flex-wrap items-center justify-end gap-2">
             <BrandLink
               href={`${route.scheduleEdit}?schedule=${data._id}`}

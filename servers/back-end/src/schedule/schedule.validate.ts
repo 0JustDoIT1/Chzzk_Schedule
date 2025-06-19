@@ -3,21 +3,23 @@ import {
   ScheduleAlreadyExistException,
   ScheduleNotFoundException,
 } from 'src/lib/exceptions/schedule.exception';
-import { Schedule } from 'src/schemas/schedule.schema';
+import { ScheduleDocument } from 'src/schemas/schedule.schema';
 
 @Injectable()
 export class ScheduleValidate {
-  throwIfScheduleExists = (schedule: Schedule | null) => {
-    // create : 해당 스트리머가 이미 존재할 경우 exception
+  // 스케줄이 존재하면 예외 던짐 (타입 가드 필요 없음)
+  throwIfScheduleExists(schedule: ScheduleDocument | null) {
     if (schedule) {
       throw ScheduleAlreadyExistException(`이미 추가된 일정입니다.`);
     }
-  };
+  }
 
-  throwIfScheduleNotFound = (schedule: Schedule | null) => {
-    // get : 해당 스트리머가 없을 경우 exception
+  // 스케줄이 없으면 예외 던지고, 이후에는 ScheduleDocument로 확정
+  throwIfScheduleNotFound(
+    schedule: ScheduleDocument | null,
+  ): asserts schedule is ScheduleDocument {
     if (!schedule) {
       throw ScheduleNotFoundException(`존재하지 않는 일정입니다.`);
     }
-  };
+  }
 }

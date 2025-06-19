@@ -6,14 +6,17 @@ import { getModalRoute, getRoute, route } from "@/lib/constants/router";
 import { IDateSchedule } from "@/schemas/schedule.schema";
 import {
   BaseCategoryLabel,
+  categoryColorMap,
+  categoryJson,
   ChzzkCategoryLabel,
-} from "@/lib/constants/streaming";
+} from "@/lib/constants/streamingCategory";
 
 interface ICustomTimeLine {
   schedule: IDateSchedule;
 }
 
 const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
+  const category = categoryJson();
   const scheduleKeyArr = Object.keys(schedule);
 
   if (scheduleKeyArr.length === 0)
@@ -53,12 +56,6 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
             <li key={key} className="mb-16 mx-8 md:ml-12 md:mr-8">
               <div className={timeCircle}>{timeText}</div>
               {hourSchedule.map((schedule) => {
-                const category = schedule.isOfficial
-                  ? ChzzkCategoryLabel[schedule.category]
-                  : BaseCategoryLabel[schedule.category];
-
-                const host = schedule.isOfficial ? "치지직" : schedule.streamer;
-
                 return (
                   <div
                     key={schedule._id}
@@ -66,7 +63,14 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
                   >
                     <div>
                       <h3 className="flex items-center mb-1 text-lg font-normal text-textMain">
-                        <span>&#91;{category}&#93;</span>&nbsp;{schedule.title}
+                        <span
+                          className={`mr-2 font-semibold ${
+                            categoryColorMap[schedule.category]
+                          }`}
+                        >
+                          &#91;{category[schedule.category]}&#93;
+                        </span>
+                        &nbsp;{schedule.title}
                       </h3>
                       <div className="flex items-center mb-2 text-sm font-normal leading-none text-textNormal">
                         <p className="mr-1 mb-1">
@@ -83,7 +87,7 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
                         <p className="mr-1 mb-1">
                           <UserIcon className="w-4 h-4 text-textIcon" />
                         </p>
-                        <p className="text-sm">{host}</p>
+                        <p className="text-sm">{schedule.streamerName}</p>
                         {/* {schedule.member && (
                         <div className="flex items-center flex-wrap">
                           {schedule.member.map((name, index) => {

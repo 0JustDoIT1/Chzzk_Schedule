@@ -21,9 +21,28 @@ export enum AllCategory {
   WATCH = "watch",
 }
 
+export const getStreamerNameByCategory = (
+  category: AllCategory,
+  streamerName?: string
+) => {
+  switch (category) {
+    case AllCategory.OFFICIAL:
+      return "치지직 공식";
+    case AllCategory.WATCH:
+      return "치지직 같이보기";
+    default:
+      if (!streamerName) {
+        throw new Error("개인/콘텐츠 일정에는 스트리머가 필수입니다.");
+      }
+      return streamerName;
+  }
+};
+
 export interface ISchedule {
   isOfficial: boolean;
-  streamer?: string;
+  streamerName: string;
+  streamerId: string;
+  chzzkLink: string;
   category: AllCategory;
   title: string;
   member?: string[];
@@ -34,7 +53,7 @@ export interface ISchedule {
 
 export interface IScheduleInput {
   isOfficial: boolean;
-  streamer?: string;
+  streamerName: string;
   category: AllCategory;
   title: string;
   member?: string[];

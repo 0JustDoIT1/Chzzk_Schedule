@@ -1,4 +1,8 @@
-import { IDateSchedule, ISchedule } from "@/schemas/schedule.schema";
+import {
+  IDateSchedule,
+  ISchedule,
+  TScheduleSchema,
+} from "@/schemas/schedule.schema";
 import { ApiPath } from "@/lib/constants/api-path";
 import { postFetch } from "@/lib/fetch/post-fetch";
 import { getFetch } from "@/lib/fetch/get-fetch";
@@ -7,14 +11,14 @@ const isServer = () => typeof window === "undefined";
 
 // Create schedule
 export const createSchedule = async (
-  data: ISchedule,
+  data: Partial<ISchedule>,
   token?: string
 ): Promise<ISchedule> => {
   return await postFetch(isServer(), ApiPath.SCHEDULE_ADD, data, token);
 };
 
 // Get schedule by Id
-export const getScheduleById = async (id: string): Promise<ISchedule> => {
+export const getScheduleById = async (id: string): Promise<TScheduleSchema> => {
   return await getFetch(isServer(), `${ApiPath.SCHEDULE_BY_ID}/${id}`);
 };
 

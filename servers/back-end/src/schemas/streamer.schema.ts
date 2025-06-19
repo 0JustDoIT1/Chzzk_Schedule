@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export type StreamerDocument = Streamer & Document;
+export type StreamerDocument = HydratedDocument<Streamer>;
 
 @Schema({ collection: 'streamer', timestamps: true })
 export class Streamer {

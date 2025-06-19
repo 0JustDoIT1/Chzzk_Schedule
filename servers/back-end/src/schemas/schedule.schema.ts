@@ -1,16 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { AllCategory } from 'src/lib/constants/schedule-category';
 
-export type ScheduleDocument = Schedule & Document;
+export type ScheduleDocument = HydratedDocument<Schedule>;
 
 @Schema({ collection: 'schedule', timestamps: true })
 export class Schedule {
   @Prop({ required: true, type: Boolean })
   isOfficial: boolean;
 
-  @Prop({ required: false, type: String })
-  streamer?: string;
+  @Prop({ required: true, type: String })
+  streamerName: string;
+
+  @Prop({ required: true, type: Types.ObjectId, ref: 'Streamer' })
+  streamerId: Types.ObjectId;
+
+  @Prop({ required: true, type: String })
+  chzzkLink: string;
 
   @Prop({ required: true, enum: AllCategory })
   category: AllCategory;

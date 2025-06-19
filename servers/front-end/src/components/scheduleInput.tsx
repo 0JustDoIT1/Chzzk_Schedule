@@ -1,4 +1,7 @@
-import { baseCategoryOpt, chzzkCategoryOpt } from "@/lib/constants/streaming";
+import {
+  baseCategoryOpt,
+  chzzkCategoryOpt,
+} from "@/lib/constants/streamingCategory";
 import TiptapEditor from "./tiptapEditor";
 import { Controller } from "react-hook-form";
 import SearchableDropdown from "./searchableDropdown";
@@ -50,7 +53,10 @@ const ScheduleInput = ({
       <div>
         {!isOfficial && (
           <div className="flex flex-col mb-4">
-            <label htmlFor="streamer" className="text-sm text-textMain mb-2">
+            <label
+              htmlFor="streamerName"
+              className="text-sm text-textMain mb-2"
+            >
               <span className="text-brandMain">&#42;</span> 스트리머
             </label>
             {streamerList.length === 0 ? (
@@ -63,7 +69,7 @@ const ScheduleInput = ({
               <>
                 <Controller
                   control={control}
-                  name="streamer"
+                  name="streamerName"
                   rules={{
                     required: {
                       value: true,
@@ -82,9 +88,9 @@ const ScheduleInput = ({
                     />
                   )}
                 />
-                {errors.streamer && (
+                {errors.streamerName && (
                   <HelperText className="text-error">
-                    {errors.streamer?.message as string}
+                    {errors.streamerName?.message as string}
                   </HelperText>
                 )}
               </>

@@ -1,5 +1,5 @@
-import { Schedule } from 'src/schemas/schedule.schema';
+import { ScheduleDocument } from 'src/schemas/schedule.schema';
 
 export interface IDateSchedule {
-  [key: string]: Schedule[];
+  [key: string]: ScheduleDocument[];
 }
