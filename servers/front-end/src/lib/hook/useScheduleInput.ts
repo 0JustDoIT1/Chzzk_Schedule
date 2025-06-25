@@ -6,7 +6,6 @@ import {
   ISchedule,
   IScheduleInput,
 } from "@/schemas/schedule.schema";
-import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { useToastStore } from "@/lib/providers/toast-provider";
 import { useRouter } from "next/navigation";
 import { createSchedule } from "@/api/schedule-api";
@@ -18,7 +17,6 @@ const useScheduleInput = (
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const router = useRouter();
-  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
   const showToast = useToastStore((state) => state.showToast);
 
   const initValue: Partial<IScheduleInput> = useMemo(
@@ -141,7 +139,7 @@ const useScheduleInput = (
     onSuccess: (schedule) => {
       showToast("success", `일정을 추가했습니다.`);
       queryClient.invalidateQueries({ queryKey: ["getScheduleListByDate"] });
-      router.push(previousAsPath!);
+      router.back();
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {

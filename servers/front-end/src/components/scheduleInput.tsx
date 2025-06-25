@@ -11,7 +11,6 @@ import CloseIcon from "~/public/assets/svg/close";
 import CheckIcon from "~/public/assets/svg/check";
 import HelperText from "./helperText";
 import { useRouter } from "next/navigation";
-import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { BrandButton } from "./button";
 import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { IStreamer } from "@/schemas/streamer.schema";
@@ -28,7 +27,6 @@ const ScheduleInput = ({
   setIsOfficial,
 }: IScheduleInput) => {
   const router = useRouter();
-  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   const {
     register,
@@ -404,7 +402,7 @@ const ScheduleInput = ({
           <BrandButton
             type="button"
             className="w-auto min-w-20"
-            onClick={() => router.push(previousAsPath!)}
+            onClick={() => router.back()}
           >
             취소
           </BrandButton>

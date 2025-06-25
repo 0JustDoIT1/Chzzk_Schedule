@@ -16,7 +16,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const StreamerAddView = () => {
   const router = useRouter();
-  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
   const showToast = useToastStore((state) => state.showToast);
 
   const queryClient = useQueryClient();
@@ -26,7 +25,7 @@ const StreamerAddView = () => {
     onSuccess: (streamer) => {
       showToast("success", `${streamer.name}을(를) 추가했습니다.`);
       queryClient.invalidateQueries({ queryKey: ["getAllStreamerList"] });
-      router.push(previousAsPath!);
+      router.back();
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {
