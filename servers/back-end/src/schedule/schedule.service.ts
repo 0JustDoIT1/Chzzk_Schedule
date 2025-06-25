@@ -9,6 +9,8 @@ import {
   addDate,
   dateToFormatString,
   dateTypeToDate,
+  getToday,
+  isSameDate,
 } from 'src/lib/utils/dateFormat';
 import { IDateSchedule } from 'src/lib/types/schedule.type';
 
@@ -91,6 +93,7 @@ export class ScheduleService {
           isOfficial: 1,
           title: 1,
           startAt: 1,
+          endAt: 1,
           streamerName: 1,
           category: 1,
         },
@@ -104,7 +107,9 @@ export class ScheduleService {
     const result = {};
 
     list.forEach((item) => {
-      const time = dateToFormatString(item.startAt, 'HH');
+      const dateCheck = isSameDate(item.startAt, getToday());
+
+      const time = dateCheck ? dateToFormatString(item.startAt, 'HH') : '미정';
       result[time] = result[time] ? [...result[time], item] : [item];
     });
 

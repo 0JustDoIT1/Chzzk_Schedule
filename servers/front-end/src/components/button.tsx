@@ -1,21 +1,22 @@
+import clsx from "clsx";
 import { ReactNode } from "react";
 
 interface IBrandButton {
   children: ReactNode;
   type?: "button" | "submit" | "reset";
   color?: string;
-  classes?: string;
+  className?: string;
   onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }
 
 export const CustomButton = ({
   children,
-  classes,
+  className,
   type = "button",
   onClick,
 }: IBrandButton) => {
   return (
-    <button type={type} className={classes} onClick={onClick}>
+    <button type={type} className={clsx("", className)} onClick={onClick}>
       {children}
     </button>
   );
@@ -24,7 +25,7 @@ export const CustomButton = ({
 export const BrandButton = ({
   children,
   color,
-  classes,
+  className,
   type = "button",
   onClick,
 }: IBrandButton) => {
@@ -40,10 +41,17 @@ export const BrandButton = ({
       break;
   }
 
-  const className = `inline-flex justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm shadow-sm ring-1 ring-textLight ring-inset ${colorName} ${classes}`;
+  const addClass = `${colorName} ${className}`;
 
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button
+      type={type}
+      className={clsx(
+        "inline-flex justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm shadow-sm ring-1 ring-textLight ring-inset",
+        addClass
+      )}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

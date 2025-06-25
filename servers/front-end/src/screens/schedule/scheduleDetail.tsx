@@ -1,8 +1,8 @@
 "use client";
 
 import {
+  AllCategoryLabel,
   categoryColorMap,
-  categoryJson,
 } from "@/lib/constants/streamingCategory";
 import { usePathname, useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
@@ -24,8 +24,6 @@ const ScheduleDetailView = () => {
   const router = useRouter();
   const pathName = usePathname();
   const id = pathName.split("/")[pathName.split("/").length - 1];
-
-  const category = categoryJson();
 
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ["getScheduleById", id],
@@ -66,7 +64,7 @@ const ScheduleDetailView = () => {
                   categoryColorMap[data.category]
                 }`}
               >
-                &#91;{category[data.category]}&#93;
+                &#91;{AllCategoryLabel[data.category]}&#93;
               </span>
               {data.title}
             </p>
@@ -115,7 +113,7 @@ const ScheduleDetailView = () => {
           <div className="flex flex-wrap items-center justify-end gap-2">
             <BrandLink
               href={`${route.scheduleEdit}?schedule=${data._id}`}
-              classes="w-auto min-w-20"
+              className="w-auto min-w-20"
               scroll={false}
             >
               일정 수정
@@ -123,7 +121,7 @@ const ScheduleDetailView = () => {
             <BrandButton
               type="button"
               color="green"
-              classes="w-auto min-w-20"
+              className="w-auto min-w-20"
               onClick={() => router.back()}
             >
               확인

@@ -1,5 +1,6 @@
 import "dayjs/locale/ko";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
@@ -8,6 +9,8 @@ dayjs.locale("ko");
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Seoul");
+
+dayjs.extend(isBetween);
 
 export type TDayjsType = dayjs.Dayjs;
 
@@ -82,3 +85,26 @@ export const setDateAndTime = () => {
 
   return { date, time };
 };
+
+// 날짜가 같은지 비교
+export const isSameDate = (
+  baseDate: dayjs.ConfigType,
+  targetDate: dayjs.ConfigType
+) => {
+  return dayjs(baseDate).isSame(targetDate, "date");
+};
+
+// 날짜가 기간 안에 속해있는지 검증
+export const isBetweenDate = (
+  date: dayjs.ConfigType,
+  startDate: dayjs.ConfigType,
+  endDate: dayjs.ConfigType
+) => {
+  return dayjs(date).isBetween(startDate, endDate, "date");
+};
+
+// 타임라인 안에 날짜 비교 후 format 변환
+export const getScheduleDateString = (date: dayjs.ConfigType, today: Dayjs) =>
+  isSameDate(date, today)
+    ? dateToFormatString(date, "YYYY년 MM월 DD일 HH:mm")
+    : dateToFormatString(today, "YYYY년 MM월 DD일");

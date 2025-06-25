@@ -1,17 +1,17 @@
 import { BaseCategory, ChzzkCategory } from "@/schemas/schedule.schema";
 import { IOption } from "@/lib/types/optionType";
 
-export const BaseCategoryLabel: { [key: string]: string } = {
+export const BaseCategoryLabel = {
   [BaseCategory.PERSONAL]: "개인",
   [BaseCategory.TOGETHER]: "합방",
   [BaseCategory.CONTENT]: "컨텐츠",
   [BaseCategory.MATCH]: "대회",
-};
+} as const;
 
-export const ChzzkCategoryLabel: { [key: string]: string } = {
+export const ChzzkCategoryLabel = {
   [ChzzkCategory.OFFICIAL]: "공식 컨텐츠",
   [ChzzkCategory.WATCH]: "같이 보기",
-};
+} as const;
 
 export const baseCategoryOpt: IOption[] = [
   {
@@ -43,13 +43,10 @@ export const chzzkCategoryOpt: IOption[] = [
   },
 ];
 
-export const categoryJson = () => {
-  const allCategory = [...baseCategoryOpt, ...chzzkCategoryOpt];
-
-  const result: { [x: string]: string } = {};
-  allCategory.forEach((item) => (result[item.value] = item.label));
-
-  return result;
+export const AllCategoryLabel: typeof BaseCategoryLabel &
+  typeof ChzzkCategoryLabel = {
+  ...BaseCategoryLabel,
+  ...ChzzkCategoryLabel,
 };
 
 export const categoryColorMap: { [key: string]: string } = {

@@ -158,7 +158,7 @@ const ScheduleInput = ({
                   }
                 }}
               />
-              <BrandButton classes="w-16" onClick={onAddMember}>
+              <BrandButton className="w-16" onClick={onAddMember}>
                 추가
               </BrandButton>
             </div>
@@ -208,7 +208,7 @@ const ScheduleInput = ({
                     }
                   }}
                 />
-                <BrandButton classes="w-16" onClick={onAddMember}>
+                <BrandButton className="w-16" onClick={onAddMember}>
                   추가
                 </BrandButton>
               </div>
@@ -395,7 +395,7 @@ const ScheduleInput = ({
       <div className="flex flex-wrap items-center justify-between gap-2 mt-8">
         <BrandButton
           type="button"
-          classes="w-auto min-w-20"
+          className="w-auto min-w-20"
           onClick={() => onReset()}
         >
           초기화
@@ -403,12 +403,12 @@ const ScheduleInput = ({
         <div className="flex flex-wrap items-center justify-end gap-2">
           <BrandButton
             type="button"
-            classes="w-auto min-w-20"
+            className="w-auto min-w-20"
             onClick={() => router.push(previousAsPath!)}
           >
             취소
           </BrandButton>
-          <BrandButton type="submit" color="green" classes="w-auto min-w-20">
+          <BrandButton type="submit" color="green" className="w-auto min-w-20">
             저장
           </BrandButton>
         </div>

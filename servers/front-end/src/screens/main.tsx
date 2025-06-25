@@ -52,7 +52,7 @@ const MainView = ({ scheduleList, date }: IMainView) => {
             </p>
           </div>
           <div className="w-full max-w-xs md:w-auto">
-            <AddScheduleLink classes="w-full" />
+            <AddScheduleLink className="w-full" />
           </div>
         </div>
       </section>

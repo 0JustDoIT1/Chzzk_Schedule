@@ -1,5 +1,6 @@
 import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
@@ -8,6 +9,8 @@ dayjs.locale('ko');
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Seoul');
+
+dayjs.extend(isBetween);
 
 export type TDayjsType = dayjs.Dayjs;
 
@@ -81,4 +84,21 @@ export const setDateAndTime = () => {
   const time = dateToFormatString(dateTime, 'HH:mm');
 
   return { date, time };
+};
+
+// 날짜가 같은지 비교
+export const isSameDate = (
+  baseDate: dayjs.ConfigType,
+  targetDate: dayjs.ConfigType,
+) => {
+  return dayjs(baseDate).isSame(targetDate, 'date');
+};
+
+// 날짜가 기간 안에 속해있는지 검증
+export const isBetweenDate = (
+  date: dayjs.ConfigType,
+  startDate: dayjs.ConfigType,
+  endDate: dayjs.ConfigType,
+) => {
+  return dayjs(date).isBetween(startDate, endDate, 'date');
 };

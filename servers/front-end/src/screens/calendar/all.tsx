@@ -58,10 +58,10 @@ const AllCalendarView = () => {
             </CustomButton>
           </div>
           <div className="flex justify-center w-full md:w-1/3 md:justify-end">
-            <BrandButton classes="mr-2 w-16" onClick={setPresentMonth}>
+            <BrandButton className="mr-2 w-16" onClick={setPresentMonth}>
               오늘
             </BrandButton>
-            <AddScheduleLink classes="w-full max-w-64 md:w-auto" />
+            <AddScheduleLink className="w-full max-w-64 md:w-auto" />
           </div>
         </div>
       </section>

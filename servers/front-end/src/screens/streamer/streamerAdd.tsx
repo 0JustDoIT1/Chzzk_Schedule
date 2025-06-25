@@ -212,7 +212,7 @@ const StreamerAddView = () => {
                   placeholder="태그를 추가해 주세요."
                   onKeyDown={onKeyDownAddTag}
                 />
-                <BrandButton classes="w-16" onClick={onAddTag}>
+                <BrandButton className="w-16" onClick={onAddTag}>
                   추가
                 </BrandButton>
               </div>
@@ -240,7 +240,7 @@ const StreamerAddView = () => {
           <div className="flex flex-wrap items-center justify-between gap-2 mt-8">
             <BrandButton
               type="button"
-              classes="w-auto min-w-20"
+              className="w-auto min-w-20"
               onClick={onReset}
             >
               초기화
@@ -248,7 +248,7 @@ const StreamerAddView = () => {
             <div className="flex flex-wrap items-center justify-end gap-2">
               <BrandButton
                 type="button"
-                classes="w-auto min-w-20"
+                className="w-auto min-w-20"
                 onClick={() => router.back()}
               >
                 취소
@@ -256,7 +256,7 @@ const StreamerAddView = () => {
               <BrandButton
                 type="submit"
                 color="green"
-                classes="w-auto min-w-20"
+                className="w-auto min-w-20"
               >
                 저장
               </BrandButton>

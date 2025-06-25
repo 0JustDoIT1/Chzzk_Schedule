@@ -131,7 +131,7 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
                         href={getModalRoute(
                           getRoute(route.streaming, item._id)
                         )}
-                        classes="w-full"
+                        className="w-full"
                       >
                         방송 보기
                         <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
