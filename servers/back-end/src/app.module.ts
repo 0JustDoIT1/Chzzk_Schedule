@@ -12,7 +12,7 @@ import { ScheduleModule } from './schedule/schedule.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(process.env.DB_URI as string, {
+    MongooseModule.forRoot(process.env.DB_URI!, {
       dbName: process.env.DB_Name,
     }),
     StreamerModule,

@@ -1,12 +1,7 @@
 import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
-import Modal from "@/components/modal";
 
 const ScheduleDetailModal = () => {
-  return (
-    <Modal>
-      <ScheduleDetailView />
-    </Modal>
-  );
+  return <ScheduleDetailView />;
 };
 
 export default ScheduleDetailModal;
