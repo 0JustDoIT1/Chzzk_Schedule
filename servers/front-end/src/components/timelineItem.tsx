@@ -6,7 +6,7 @@ import { TScheduleSchema } from "@/schemas/schedule.schema";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
-import { getModalRoute, getRoute, route } from "@/lib/constants/router";
+import { getRoute, route } from "@/lib/constants/router";
 import { getScheduleDateString, TDayjsType } from "@/lib/utils/dateFormat";
 import clsx from "clsx";
 
@@ -46,7 +46,7 @@ const TimelineItem = ({ schedule, today, category }: ITimelineItem) => {
       </div>
       <div className="w-full md:w-auto">
         <BrandLink
-          href={getModalRoute(getRoute(route.schedule, schedule._id))}
+          href={getRoute(route.today, schedule._id)}
           className="w-full"
         >
           자세히 보기

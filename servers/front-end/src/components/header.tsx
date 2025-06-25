@@ -34,7 +34,7 @@ const Header = () => {
           </HeaderLink>
         </div>
         <div className="hidden items-center space-x-12 md:flex">
-          <HeaderLink href={route.index} className="text-sm">
+          <HeaderLink href={route.today} className="text-sm">
             오늘
           </HeaderLink>
           <HeaderLink href={route.allCalendar} className="text-sm">
@@ -56,7 +56,7 @@ const Header = () => {
           isOpen ? "h-52" : "h-0"
         }`}
       >
-        <HeaderLink href={route.index} className="text-sm w-full">
+        <HeaderLink href={route.today} className="text-sm w-full">
           오늘
         </HeaderLink>
         <HeaderLink href={route.allCalendar} className="text-sm w-full">

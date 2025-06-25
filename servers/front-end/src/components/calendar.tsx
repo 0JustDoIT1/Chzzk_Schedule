@@ -1,4 +1,4 @@
-import { getModalRoute, getRoute, route } from "@/lib/constants/router";
+import { getRoute, route } from "@/lib/constants/router";
 import {
   dateToFormatString,
   TDayjsType,
@@ -136,8 +136,9 @@ const CustomCalendar = ({
                                   return (
                                     <Link
                                       key={stream.title}
-                                      href={getModalRoute(
-                                        getRoute(route.schedule, stream._id)
+                                      href={getRoute(
+                                        route.schedule,
+                                        stream._id
                                       )}
                                       className={streamText(dateDiff, 0, 0)}
                                     >
@@ -158,8 +159,9 @@ const CustomCalendar = ({
                                     return (
                                       <Link
                                         key={stream.title}
-                                        href={getModalRoute(
-                                          getRoute(route.schedule, stream._id)
+                                        href={getRoute(
+                                          route.schedule,
+                                          stream._id
                                         )}
                                         className={streamText(
                                           dateDiff,

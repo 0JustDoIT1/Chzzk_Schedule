@@ -1,4 +1,4 @@
-import { getModalRoute, route } from "@/lib/constants/router";
+import { route } from "@/lib/constants/router";
 import clsx from "clsx";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -49,10 +49,7 @@ export const HeaderLink = ({ children, className, href }: IBrandLink) => {
 
 export const AddScheduleLink = ({ className }: { className: string }) => {
   return (
-    <BrandLink
-      href={getModalRoute(route.scheduleAdd)}
-      className={clsx("", className)}
-    >
+    <BrandLink href={route.scheduleAdd} className={clsx("", className)}>
       <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
       일정 추가
     </BrandLink>

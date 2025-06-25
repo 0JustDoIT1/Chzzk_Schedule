@@ -9,7 +9,7 @@ import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
 import { useEffect } from "react";
 import { sorting } from "@/lib/utils/sort";
-import { getModalRoute, getRoute, route } from "@/lib/constants/router";
+import { getRoute, route } from "@/lib/constants/router";
 
 interface ICustomDayLine {
   schedule: {
@@ -128,9 +128,7 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
                     list.day && (
                     <div className="w-full md:w-auto">
                       <BrandLink
-                        href={getModalRoute(
-                          getRoute(route.streaming, item._id)
-                        )}
+                        href={getRoute(route.streaming, item._id)}
                         className="w-full"
                       >
                         방송 보기

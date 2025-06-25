@@ -2,6 +2,7 @@ export class route {
   static index = "/";
   static all = route.index + "all";
   static streamer = route.index + "streamer";
+  static today = route.index + "today";
   static chzzk = route.index + "chzzk";
   static schedule = route.index + "schedule";
   static streaming = route.index + "streaming";
@@ -25,9 +26,4 @@ export class route {
 
 export const getRoute = (path: string, arg: string) => {
   return `${path}/${arg}`;
-};
-
-export const getModalRoute = (path: string) => {
-  const url = path.includes("?") ? `${path}&modal=true` : `${path}?modal=true`;
-  return url;
 };
