@@ -2,28 +2,28 @@
 
 import { AddScheduleLink } from "@/components/link";
 import CustomTimeline from "@/components/timeline";
-import { IDateSchedule } from "@/schemas/schedule.schema";
-import { dateToFormatString, getToday } from "@/lib/utils/dateFormat";
+import {
+  dateToFormatString,
+  dateTypeToDate,
+  getToday,
+} from "@/lib/utils/dateFormat";
 import React, { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleListByDate } from "@/api/schedule-api";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
 
-interface ITodayScreen {
-  scheduleList: IDateSchedule;
-  date: Date;
-}
-
-const TodayScreen = ({ scheduleList, date }: ITodayScreen) => {
+const TodayScreen = () => {
   useEffect(() => {
     window.scroll({ top: 0, behavior: "smooth" });
   }, []);
 
+  const today = dateToFormatString(getToday(), "YYYY-MM-DD");
+  const date = dateTypeToDate(today);
+
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ["getScheduleListByDate", date],
     queryFn: () => getScheduleListByDate(date),
-    initialData: scheduleList,
   });
 
   if (isLoading) return <IsLoading />;
