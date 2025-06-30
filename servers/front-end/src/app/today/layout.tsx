@@ -1,4 +1,5 @@
 import { getScheduleListByDate } from "@/api/schedule-api";
+import { queryKeys } from "@/lib/constants/react-query";
 import {
   dateToFormatString,
   dateTypeToDate,
@@ -19,7 +20,7 @@ export default async function TodayLayout({
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery<IDateSchedule>({
-    queryKey: ["getScheduleListByDate", date],
+    queryKey: queryKeys.getScheduleListByDate(date),
     queryFn: () => getScheduleListByDate(date),
   });
 

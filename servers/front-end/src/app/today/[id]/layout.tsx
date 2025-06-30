@@ -1,4 +1,5 @@
 import { getScheduleById } from "@/api/schedule-api";
+import { queryKeys } from "@/lib/constants/react-query";
 import {
   dehydrate,
   HydrationBoundary,
@@ -18,7 +19,7 @@ export default async function TodayIdLayout({
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["getScheduleById", id],
+    queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id),
   });
 

@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getScheduleListByDate } from "@/api/schedule-api";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
+import { queryKeys } from "@/lib/constants/react-query";
 
 const TodayScreen = () => {
   useEffect(() => {
@@ -22,7 +23,7 @@ const TodayScreen = () => {
   const date = dateTypeToDate(today);
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: ["getScheduleListByDate", date],
+    queryKey: queryKeys.getScheduleListByDate(date),
     queryFn: () => getScheduleListByDate(date),
     enabled: !!date,
   });

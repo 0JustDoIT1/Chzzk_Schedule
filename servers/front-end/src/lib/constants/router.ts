@@ -10,14 +10,17 @@ export class route {
   static streaming = route.index + "streaming";
   static add = route.index + "add";
 
-  static allCalendar = route.all + "/calendar";
-  static allTimeline = route.all + "/timeline";
+  static calendar = route.index + "calendar";
+  static timeline = route.index + "timeline";
 
-  static streamerCalendar = route.streamer + "/calendar";
-  static streamerTimeline = route.streamer + "/timeline";
+  static allCalendar = route.all + route.calendar;
+  static allTimeline = route.all + route.timeline;
 
-  static chzzkCalendar = route.chzzk + "/calendar";
-  static chzzkTimeline = route.chzzk + "/timeline";
+  static streamerCalendar = route.streamer + route.calendar;
+  static streamerTimeline = route.streamer + route.timeline;
+
+  static chzzkCalendar = route.chzzk + route.calendar;
+  static chzzkTimeline = route.chzzk + route.timeline;
 
   static scheduleAdd = route.schedule + "/add";
   static scheduleEdit = route.schedule + "/edit";

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "../../components/link";
-import { goBackRoute, route } from "@/lib/constants/router";
+import { getRoute, goBackRoute, route } from "@/lib/constants/router";
 import { BrandButton } from "@/components/button";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleById } from "@/api/schedule-api";
@@ -19,6 +19,7 @@ import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-
 import Link from "next/link";
 import { displayDate } from "@/lib/utils/chzzk-date";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
+import { queryKeys } from "@/lib/constants/react-query";
 
 interface IScheduleDetailView {
   id: string;
@@ -29,7 +30,7 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: ["getScheduleById", id],
+    queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id),
     enabled: !!id,
   });
@@ -96,7 +97,7 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
           )}
           <div className="flex flex-wrap items-center justify-end gap-2">
             <BrandLink
-              href={`${route.scheduleEdit}?schedule=${data._id}`}
+              href={getRoute(route.scheduleEdit, data._id)}
               className="w-auto min-w-20"
               scroll={false}
             >

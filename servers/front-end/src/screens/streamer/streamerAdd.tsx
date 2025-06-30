@@ -14,6 +14,7 @@ import { createStreamer } from "@/api/streamer-api";
 import { IApiError } from "@/lib/types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { goBackRoute, route } from "@/lib/constants/router";
+import { queryKeys } from "@/lib/constants/react-query";
 
 const StreamerAddView = () => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const StreamerAddView = () => {
     mutationFn: (data: IStreamer) => createStreamer(data),
     onSuccess: (streamer) => {
       showToast("success", `${streamer.name}을(를) 추가했습니다.`);
-      queryClient.invalidateQueries({ queryKey: ["getAllStreamerList"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.getAllStreamerList });
       goBackRoute(router, previousAsPath, route.allCalendar);
     },
     onError: (error: IApiError) => {

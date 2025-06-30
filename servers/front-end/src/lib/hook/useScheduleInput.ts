@@ -1,4 +1,8 @@
-import { dateTypeToDate, setDateAndTime } from "@/lib/utils/dateFormat";
+import {
+  dateToFormatString,
+  dateTypeToDate,
+  setDateAndTime,
+} from "@/lib/utils/dateFormat";
 import { useEffect, useMemo, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
 import {
@@ -12,6 +16,7 @@ import { createSchedule } from "@/api/schedule-api";
 import { IApiError } from "../types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { route } from "../constants/router";
+import { queryKeys } from "../constants/react-query";
 
 const useScheduleInput = (
   isOfficial: boolean,
@@ -139,7 +144,11 @@ const useScheduleInput = (
     mutationFn: (data: Partial<ISchedule>) => createSchedule(data),
     onSuccess: (schedule) => {
       showToast("success", `일정을 추가했습니다.`);
-      queryClient.invalidateQueries({ queryKey: ["getScheduleListByDate"] });
+      const dateStr = dateToFormatString(schedule.startAt, "YYYY-MM-DD");
+      const date = dateTypeToDate(dateStr);
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.getScheduleListByDate(date),
+      });
       router.push(route.schedule);
     },
     onError: (error: IApiError) => {

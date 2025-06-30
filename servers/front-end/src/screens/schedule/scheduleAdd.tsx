@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllStreamerList } from "@/api/streamer-api";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
+import { queryKeys } from "@/lib/constants/react-query";
 
 const ScheduleAddView = () => {
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
@@ -16,7 +17,7 @@ const ScheduleAddView = () => {
   };
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: ["getAllStreamerList"],
+    queryKey: queryKeys.getAllStreamerList,
     queryFn: getAllStreamerList,
   });
 

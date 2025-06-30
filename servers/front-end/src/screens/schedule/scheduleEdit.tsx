@@ -2,25 +2,25 @@
 
 import React, { useMemo, useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
-import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
 import { getScheduleById } from "@/api/schedule-api";
 import { getAllStreamerList } from "@/api/streamer-api";
+import { queryKeys } from "@/lib/constants/react-query";
 
-const ScheduleEditView = () => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("schedule");
-  const [isOfficial, setIsOfficial] = useState<boolean>(false);
+interface IScheduleEditView {
+  id: string;
+}
 
+const ScheduleEditView = ({ id }: IScheduleEditView) => {
   const {
     data: streamerData,
     isSuccess: streamerSuccess,
     isLoading: streamerLoading,
     isError: streamerError,
   } = useQuery({
-    queryKey: ["getAllStreamerList"],
+    queryKey: queryKeys.getAllStreamerList,
     queryFn: getAllStreamerList,
   });
 
@@ -30,10 +30,14 @@ const ScheduleEditView = () => {
     isLoading: scheduleLoading,
     isError: scheduleError,
   } = useQuery({
-    queryKey: ["getScheduleById", id],
+    queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id!),
     enabled: !!id,
   });
+
+  const [isOfficial, setIsOfficial] = useState<boolean>(
+    scheduleData?.isOfficial ?? false
+  );
 
   // 데이터가 있을 때만 필터링 처리
   const filteredList = useMemo(() => {

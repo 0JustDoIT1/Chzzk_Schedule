@@ -1,4 +1,5 @@
 import { getAllStreamerList } from "@/api/streamer-api";
+import { queryKeys } from "@/lib/constants/react-query";
 import {
   dehydrate,
   HydrationBoundary,
@@ -10,7 +11,7 @@ export default async function ScheduleAddLayout({
 }: React.PropsWithChildren) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["getAllStreamerList"],
+    queryKey: queryKeys.getAllStreamerList,
     queryFn: getAllStreamerList,
   });
 

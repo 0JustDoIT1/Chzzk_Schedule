@@ -1,4 +1,5 @@
 import { getScheduleById } from "@/api/schedule-api";
+import { getAllStreamerList } from "@/api/streamer-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import {
   dehydrate,
@@ -6,21 +7,25 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-interface ITodayIdLayout {
+interface IScheduleEditLayout {
   children: React.ReactNode;
-  params: { id: string };
+  params: { schedule: string };
 }
 
-export default async function TodayIdModalLayout({
+export default async function ScheduleEditLayout({
   children,
   params,
-}: ITodayIdLayout) {
-  const { id } = await params;
+}: IScheduleEditLayout) {
+  const { schedule } = await params;
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.getScheduleById(id),
-    queryFn: () => getScheduleById(id),
+    queryKey: queryKeys.getAllStreamerList,
+    queryFn: getAllStreamerList,
+  });
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.getScheduleById(schedule),
+    queryFn: () => getScheduleById(schedule),
   });
 
   return (
