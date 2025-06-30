@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { createSchedule } from "@/api/schedule-api";
 import { IApiError } from "../types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { route } from "../constants/router";
 
 const useScheduleInput = (
   isOfficial: boolean,
@@ -139,7 +140,7 @@ const useScheduleInput = (
     onSuccess: (schedule) => {
       showToast("success", `일정을 추가했습니다.`);
       queryClient.invalidateQueries({ queryKey: ["getScheduleListByDate"] });
-      router.back();
+      router.push(route.schedule);
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {

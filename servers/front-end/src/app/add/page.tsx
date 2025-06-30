@@ -1,5 +1,3 @@
-"use client";
-
 import StreamerAddView from "@/screens/streamer/streamerAdd";
 
 const StreamerAddPage = () => {

@@ -24,6 +24,7 @@ const TodayScreen = () => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ["getScheduleListByDate", date],
     queryFn: () => getScheduleListByDate(date),
+    enabled: !!date,
   });
 
   if (isLoading) return <IsLoading />;

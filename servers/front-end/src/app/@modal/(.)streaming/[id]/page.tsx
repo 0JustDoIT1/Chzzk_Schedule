@@ -1,9 +1,12 @@
-"use client";
-
+import Modal from "@/components/modal";
 import StreamingView from "@/screens/streaming";
 
-const StreamingModal = () => {
-  return <StreamingView />;
+const StreamingModalPage = () => {
+  return (
+    <Modal>
+      <StreamingView />
+    </Modal>
+  );
 };
 
-export default StreamingModal;
+export default StreamingModalPage;

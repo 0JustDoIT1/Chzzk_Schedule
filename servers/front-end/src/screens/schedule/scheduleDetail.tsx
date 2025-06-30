@@ -4,51 +4,35 @@ import {
   AllCategoryLabel,
   categoryColorMap,
 } from "@/lib/constants/streamingCategory";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "../../components/link";
-import { route } from "@/lib/constants/router";
+import { goBackRoute, route } from "@/lib/constants/router";
 import { BrandButton } from "@/components/button";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleById } from "@/api/schedule-api";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
-import { TScheduleSchema } from "@/schemas/schedule.schema";
-import { dateToFormatString } from "@/lib/utils/dateFormat";
 import UsersIcon from "~/public/assets/svg/users";
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import Link from "next/link";
+import { displayDate } from "@/lib/utils/chzzk-date";
+import { useAsPathStore } from "@/lib/providers/asPath-provider";
 
-const ScheduleDetailView = () => {
+interface IScheduleDetailView {
+  id: string;
+}
+
+const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
   const router = useRouter();
-  const pathName = usePathname();
-  const id = pathName.split("/")[pathName.split("/").length - 1];
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ["getScheduleById", id],
     queryFn: () => getScheduleById(id),
+    enabled: !!id,
   });
-
-  const displayDate = (data: TScheduleSchema) => {
-    const startAtDate = dateToFormatString(data.startAt, "YYYY-MM-DD");
-    const startAtTime = dateToFormatString(data.startAt, "HH:mm");
-    const endAtDate = dateToFormatString(data.startAt, "YYYY-MM-DD");
-    const endAtTime = dateToFormatString(data.startAt, "HH:mm");
-
-    let result = startAtDate;
-    if (startAtDate === endAtDate) {
-      if (startAtTime === endAtTime) {
-        result += ` ${startAtTime}`;
-      } else {
-        result += ` ${startAtTime} - ${endAtTime}`;
-      }
-    } else {
-      result += ` ${startAtTime} ~ ${endAtDate} ${endAtTime}`;
-    }
-
-    return result;
-  };
 
   if (isLoading) return <IsLoading />;
   if (isError) return <IsError />;
@@ -122,7 +106,7 @@ const ScheduleDetailView = () => {
               type="button"
               color="green"
               className="w-auto min-w-20"
-              onClick={() => router.back()}
+              onClick={() => goBackRoute(router, previousAsPath, route.today)}
             >
               확인
             </BrandButton>

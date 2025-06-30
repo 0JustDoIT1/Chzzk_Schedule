@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { TScheduleSchema } from "@/schemas/schedule.schema";
 
 dayjs.locale("ko");
 
@@ -102,9 +103,3 @@ export const isBetweenDate = (
 ) => {
   return dayjs(date).isBetween(startDate, endDate, "date");
 };
-
-// 타임라인 안에 날짜 비교 후 format 변환
-export const getScheduleDateString = (date: dayjs.ConfigType, today: Dayjs) =>
-  isSameDate(date, today)
-    ? dateToFormatString(date, "YYYY년 MM월 DD일 HH:mm")
-    : dateToFormatString(today, "YYYY년 MM월 DD일");

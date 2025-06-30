@@ -13,10 +13,12 @@ import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { createStreamer } from "@/api/streamer-api";
 import { IApiError } from "@/lib/types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { goBackRoute, route } from "@/lib/constants/router";
 
 const StreamerAddView = () => {
   const router = useRouter();
   const showToast = useToastStore((state) => state.showToast);
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   const queryClient = useQueryClient();
 
@@ -25,7 +27,7 @@ const StreamerAddView = () => {
     onSuccess: (streamer) => {
       showToast("success", `${streamer.name}을(를) 추가했습니다.`);
       queryClient.invalidateQueries({ queryKey: ["getAllStreamerList"] });
-      router.back();
+      goBackRoute(router, previousAsPath, route.allCalendar);
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {
@@ -248,7 +250,7 @@ const StreamerAddView = () => {
               <BrandButton
                 type="button"
                 className="w-auto min-w-20"
-                onClick={() => router.back()}
+                onClick={() => goBackRoute(router, previousAsPath, route.today)}
               >
                 취소
               </BrandButton>

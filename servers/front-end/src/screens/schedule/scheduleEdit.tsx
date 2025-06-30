@@ -4,28 +4,47 @@ import React, { useMemo, useState } from "react";
 import ScheduleInput from "../../components/scheduleInput";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getAllStreamerList } from "@/api/streamer-api";
 import IsLoading from "@/components/isLoading";
 import IsError from "@/components/isError";
+import { getScheduleById } from "@/api/schedule-api";
+import { getAllStreamerList } from "@/api/streamer-api";
 
 const ScheduleEditView = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("schedule");
   const [isOfficial, setIsOfficial] = useState<boolean>(false);
 
-  const { data, isSuccess, isLoading, isError } = useQuery({
+  const {
+    data: streamerData,
+    isSuccess: streamerSuccess,
+    isLoading: streamerLoading,
+    isError: streamerError,
+  } = useQuery({
     queryKey: ["getAllStreamerList"],
     queryFn: getAllStreamerList,
   });
 
+  const {
+    data: scheduleData,
+    isSuccess: scheduleSuccess,
+    isLoading: scheduleLoading,
+    isError: scheduleError,
+  } = useQuery({
+    queryKey: ["getScheduleById", id],
+    queryFn: () => getScheduleById(id!),
+    enabled: !!id,
+  });
+
   // 데이터가 있을 때만 필터링 처리
   const filteredList = useMemo(() => {
-    if (!data) return [];
-    return isOfficial ? data : data.filter((streamer) => !streamer.isOfficial);
-  }, [data, isOfficial]);
+    if (!streamerData) return [];
+    return isOfficial
+      ? streamerData
+      : streamerData.filter((streamer) => !streamer.isOfficial);
+  }, [streamerData, isOfficial]);
 
-  if (isLoading) return <IsLoading />;
-  if (isError) return <IsError />;
+  if (streamerLoading || scheduleLoading) return <IsLoading />;
+  if (streamerError || scheduleError) return <IsError />;
 
   return (
     <>
@@ -37,7 +56,7 @@ const ScheduleEditView = () => {
         </div>
       </section>
       <main className="w-full p-4">
-        {isSuccess && (
+        {streamerSuccess && scheduleSuccess && (
           <ScheduleInput
             streamerList={filteredList}
             isOfficial={isOfficial}

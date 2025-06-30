@@ -7,8 +7,9 @@ import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "./link";
 import { getRoute, route } from "@/lib/constants/router";
-import { getScheduleDateString, TDayjsType } from "@/lib/utils/dateFormat";
+import { TDayjsType } from "@/lib/utils/dateFormat";
 import clsx from "clsx";
+import { getScheduleDateString } from "@/lib/utils/chzzk-date";
 
 interface ITimelineItem {
   schedule: TScheduleSchema;

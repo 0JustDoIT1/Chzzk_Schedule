@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 import CloseIcon from "~/public/assets/svg/close";
 import { CustomButton } from "./button";
+import { useAsPathStore } from "@/lib/providers/asPath-provider";
+import { goBackRoute, route } from "@/lib/constants/router";
 
 const Modal = ({
   children,
@@ -11,9 +13,14 @@ const Modal = ({
   children: ReactNode;
 }>) => {
   const router = useRouter();
+  const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
   useEffect(() => {
     document.body.classList.add("overflow-y-hidden");
+
+    return () => {
+      document.body.classList.remove("overflow-y-hidden");
+    };
   }, []);
 
   return (
@@ -24,7 +31,7 @@ const Modal = ({
           <div className="flex items-center justify-end px-4">
             <CustomButton
               onClick={() => {
-                router.back();
+                goBackRoute(router, previousAsPath, route.index);
               }}
             >
               <CloseIcon className="w-6 h-6 text-textNormal" />
