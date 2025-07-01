@@ -47,6 +47,11 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
       : streamerData.filter((streamer) => !streamer.isOfficial);
   }, [streamerData, isOfficial]);
 
+  const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setIsOfficial(checked);
+  };
+
   if (streamerLoading || scheduleLoading) return <IsLoading />;
   if (streamerError || scheduleError) return <IsError />;
 
@@ -56,6 +61,23 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
             <p className="text-2xl">일정 수정</p>
+            <p className="text-sm text-textNormal">
+              원하는 스트리머의 방송 일정을 수정해 보세요.
+            </p>
+          </div>
+          <div className="flex flex-col items-center justify-center w-full md:w-1/3 md:items-end">
+            <label className="inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={isOfficial}
+                onChange={onChangeToggle}
+              />
+              <div className="relative w-11 h-6 bg-textSuperLight peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-textLight after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandMain peer-focus:ring-2 peer-focus:ring-double peer-focus:ring-brandLight"></div>
+              <span className="mx-3 text-sm text-textMain mt-[2px]">
+                치지직 공식
+              </span>
+            </label>
           </div>
         </div>
       </section>
@@ -65,7 +87,7 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
             streamerList={filteredList}
             isOfficial={isOfficial}
             setIsOfficial={setIsOfficial}
-            // initData={TestScheduleData}
+            initData={scheduleData}
           />
         )}
       </main>

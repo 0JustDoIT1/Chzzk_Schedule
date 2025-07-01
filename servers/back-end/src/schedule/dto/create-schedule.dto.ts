@@ -39,6 +39,11 @@ export class CreateScheduleDto {
   @IsArray()
   readonly member: string[];
 
+  @ApiProperty({ description: '방송 종일 체크 여부' })
+  @IsNotEmpty()
+  @IsBoolean()
+  readonly fullDay: boolean;
+
   @ApiProperty({ description: '방송 시작 일시' })
   @IsNotEmpty()
   @IsDateString()

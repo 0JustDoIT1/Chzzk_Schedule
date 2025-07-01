@@ -1,11 +1,8 @@
-import {
-  dateToFormatString,
-  dateTypeToDate,
-  setDateAndTime,
-} from "@/lib/utils/dateFormat";
+import { dateToFormatString, dateTypeToDate } from "@/lib/utils/dateFormat";
 import { useEffect, useMemo, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
 import {
+  AllCategory,
   getStreamerNameByCategory,
   ISchedule,
   IScheduleInput,
@@ -17,28 +14,21 @@ import { IApiError } from "../types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { route } from "../constants/router";
 import { queryKeys } from "../constants/react-query";
+import { adjustScheduleTimes } from "../utils/chzzk-date";
+import { getScheduleInitValue } from "../utils/chzzk-input";
+import { useMember } from "./useMember";
 
 const useScheduleInput = (
   isOfficial: boolean,
-  setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>
+  setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>,
+  initData?: ISchedule // optional 초기값
 ) => {
   const router = useRouter();
   const showToast = useToastStore((state) => state.showToast);
 
   const initValue: Partial<IScheduleInput> = useMemo(
-    () => ({
-      streamerName: "",
-      category: undefined,
-      title: "",
-      member: [],
-      fullDay: false,
-      startAtDate: setDateAndTime().date,
-      startAtTime: setDateAndTime().time,
-      endAtDate: setDateAndTime().date,
-      endAtTime: setDateAndTime().time,
-      contents: "",
-    }),
-    []
+    () => getScheduleInitValue(initData),
+    [initData]
   );
 
   const {
@@ -53,19 +43,27 @@ const useScheduleInput = (
     handleSubmit,
   } = useReactHookForm(initValue);
 
-  const [member, setMember] = useState<string[]>([]);
+  const { member, setMember, addMember, removeMember, resetMember } = useMember(
+    initData?.member ?? []
+  );
 
   // Reset input value
   const resetInputValue = () => {
-    reset();
+    reset(initValue);
     clearErrors();
-    setMember([]);
+    resetMember();
+    setIsOfficial(initValue.isOfficial ?? false);
   };
 
-  // Reset input value when change isOfficial
+  // initData가 존재할 경우 form에 반영
   useEffect(() => {
     resetInputValue();
-  }, [isOfficial]);
+  }, [initValue]);
+
+  // // Reset input value when change isOfficial
+  // useEffect(() => {
+  //   if (!initData) resetInputValue();
+  // }, [isOfficial]);
 
   const category = watch("category");
   const fullDay = watch("fullDay");
@@ -82,20 +80,14 @@ const useScheduleInput = (
       setValue("memberInput", "");
       setMember([]);
     }
-
-    if (fullDay) {
-      setValue("endAtDate", startAtDate, { shouldValidate: true });
-      setValue("startAtTime", "00:00", { shouldValidate: true });
-      setValue("endAtTime", "23:59", { shouldValidate: true });
-    }
-
-    if (startAtDate === endAtDate && startAtTime > endAtTime) {
-      setValue("startAtTime", endAtTime);
-      setValue("endAtTime", startAtTime);
-    } else if (startAtDate > endAtDate) {
-      setValue("startAtDate", endAtDate);
-      setValue("endAtDate", startAtDate);
-    }
+    adjustScheduleTimes({
+      startAtDate,
+      startAtTime,
+      endAtDate,
+      endAtTime,
+      fullDay,
+      setValue,
+    });
   }, [category, fullDay, startAtDate, startAtTime, endAtDate, endAtTime]);
 
   // When streamerName input has error, focus input
@@ -110,18 +102,15 @@ const useScheduleInput = (
   // Add member button event
   const onAddMember = () => {
     const name = watch("memberInput");
-    if (!name) return;
+    if (!name || member.includes(name)) return;
 
-    if (!member.includes(name)) {
-      setMember((prev) => [...prev, name]);
-    }
-
+    addMember(name);
     setValue("memberInput", "");
   };
 
   // Remove member button event
   const onRemoveMember = (name: string) => {
-    setMember((prev) => prev.filter((item) => item !== name));
+    removeMember(name);
   };
 
   // Focus tiptap label
@@ -135,7 +124,6 @@ const useScheduleInput = (
   // Reset button event
   const onReset = () => {
     resetInputValue();
-    setIsOfficial(false);
   };
 
   const queryClient = useQueryClient();
@@ -149,7 +137,7 @@ const useScheduleInput = (
       queryClient.invalidateQueries({
         queryKey: queryKeys.getScheduleListByDate(date),
       });
-      router.push(route.schedule);
+      router.push(route.allCalendar);
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {
@@ -176,16 +164,17 @@ const useScheduleInput = (
     const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
     const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
     const streamerName = getStreamerNameByCategory(
-      inputData.category,
+      inputData.category as AllCategory,
       inputData.streamerName
     );
 
     const createData: Partial<ISchedule> = {
       isOfficial: inputData.isOfficial,
       streamerName: streamerName,
-      category: inputData.category,
+      category: inputData.category as AllCategory,
       title: inputData.title,
       member: inputData.member,
+      fullDay: inputData.fullDay,
       startAt: dateTypeToDate(startAt),
       endAt: dateTypeToDate(endAt),
       contents: inputData.contents,

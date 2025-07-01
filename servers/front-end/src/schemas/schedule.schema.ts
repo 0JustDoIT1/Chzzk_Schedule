@@ -46,6 +46,7 @@ export interface ISchedule {
   category: AllCategory;
   title: string;
   member?: string[];
+  fullDay: boolean;
   startAt: Date;
   endAt: Date;
   contents?: string;
@@ -54,8 +55,9 @@ export interface ISchedule {
 export interface IScheduleInput {
   isOfficial: boolean;
   streamerName: string;
-  category: AllCategory;
+  category: AllCategory | "";
   title: string;
+  memberInput: string;
   member?: string[];
   fullDay: boolean;
   startAtDate: string;

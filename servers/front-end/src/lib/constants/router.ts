@@ -6,10 +6,11 @@ export class route {
   static streamer = route.index + "streamer";
   static today = route.index + "today";
   static chzzk = route.index + "chzzk";
-  static schedule = route.index + "schedule";
   static streaming = route.index + "streaming";
   static add = route.index + "add";
 
+  // 해당 route는 const용 (실제 routing X)
+  static schedule = route.index + "schedule";
   static calendar = route.index + "calendar";
   static timeline = route.index + "timeline";
 

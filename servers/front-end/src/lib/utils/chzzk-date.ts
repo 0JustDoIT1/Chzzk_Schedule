@@ -31,3 +31,40 @@ export const displayDate = (data: TScheduleSchema) => {
 
   return result;
 };
+
+// 종일 체크 or 날짜 비교에 따라 값 조정
+export const adjustScheduleTimes = ({
+  startAtDate,
+  startAtTime,
+  endAtDate,
+  endAtTime,
+  fullDay,
+  setValue,
+}: {
+  startAtDate: string;
+  startAtTime: string;
+  endAtDate: string;
+  endAtTime: string;
+  fullDay: boolean;
+  setValue: (name: string, value: any, options?: any) => void;
+}) => {
+  if (fullDay) {
+    setValue("endAtDate", startAtDate, { shouldValidate: true });
+    setValue("startAtTime", "00:00", { shouldValidate: true });
+    setValue("endAtTime", "23:59", { shouldValidate: true });
+  }
+
+  if (startAtDate === endAtDate && startAtTime > endAtTime) {
+    setValue("startAtTime", endAtTime);
+    setValue("endAtTime", startAtTime);
+  } else if (startAtDate > endAtDate) {
+    setValue("startAtDate", endAtDate);
+    setValue("endAtDate", startAtDate);
+  }
+};
+
+// 중복 날짜 표시 date와 time 묶기
+export const formatDateParts = (date: Date) => ({
+  date: dateToFormatString(date, "YYYY-MM-DD"),
+  time: dateToFormatString(date, "HH:mm"),
+});

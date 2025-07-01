@@ -27,6 +27,9 @@ export class Schedule {
   @Prop({ required: false, type: () => [String] })
   member?: string[];
 
+  @Prop({ required: true, type: Boolean })
+  fullDay: boolean;
+
   @Prop({ required: true, type: Date })
   startAt: Date;
 
