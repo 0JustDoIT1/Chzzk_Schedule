@@ -27,34 +27,60 @@ export class ScheduleService {
     const streamer = await this.streamerService.getStreamerByName(
       scheduleData.streamerName,
     );
-    // 스트리머 없을 경우는 getStreamerByName에서 이미 exception 처리
-    // 해당 스트리머의 이름과 시작날짜로 겹치는 일정이 존재하는지 확인
-    const existSchedule1 = await this.scheduleModel
-      .findOne({
-        streamer: streamer?.name,
-        startAt: scheduleData.startAt,
-      })
-      .exec();
-    // Validate schedule
-    this.scheduleValidate.throwIfScheduleExists(existSchedule1);
 
-    // 해당 스케줄 제목으로 이미 스케줄이 존재하는지 확인
-    const existSchedule2 = await this.scheduleModel
-      .findOne({
-        title: scheduleData.title,
-      })
-      .exec();
-    // Validate schedule
-    this.scheduleValidate.throwIfScheduleExists(existSchedule2);
+    // validate schedule already exist
+    await this.validateDuplicateSchedule(
+      streamer.name,
+      scheduleData.title,
+      scheduleData.startAt,
+    );
 
     const createData: Schedule = {
       ...scheduleData,
-      streamerId: streamer!._id,
-      chzzkLink: streamer!.chzzkLink,
+      streamerId: streamer._id,
+      chzzkLink: streamer.chzzkLink,
     };
 
     // Create schedule
     return await this.scheduleModel.create(createData);
+  }
+
+  // Update schedule
+  async updateSchedule(
+    id: string,
+    scheduleData: CreateScheduleDto,
+  ): Promise<ScheduleDocument> {
+    const existSchedule = await this.scheduleModel.findById(id).exec();
+    // Validate schedule
+    this.scheduleValidate.throwIfScheduleNotFound(existSchedule);
+
+    const streamer = await this.streamerService.getStreamerByName(
+      scheduleData.streamerName,
+    );
+
+    // validate schedule already exist
+    await this.validateDuplicateSchedule(
+      streamer.name,
+      scheduleData.title,
+      scheduleData.startAt,
+      id,
+    );
+
+    const updateData: Schedule = {
+      ...scheduleData,
+      streamerId: streamer._id,
+      chzzkLink: streamer.chzzkLink,
+    };
+
+    const updated = await this.scheduleModel
+      .findByIdAndUpdate(id, updateData, {
+        new: true,
+      })
+      .exec();
+
+    this.scheduleValidate.throwIfScheduleNotFound(updated); // 혹시 null이면 방지
+
+    return updated;
   }
 
   // Get schedule by Object Id
@@ -114,5 +140,34 @@ export class ScheduleService {
     });
 
     return result;
+  }
+
+  async validateDuplicateSchedule(
+    streamerName: string,
+    title: string,
+    startAt: Date,
+    excludeId?: string,
+  ) {
+    // 스트리머 없을 경우는 getStreamerByName에서 이미 exception 처리
+    // 해당 스트리머의 이름과 시작날짜로 겹치는 일정이 존재하는지 확인
+    const existByDate = await this.scheduleModel
+      .findOne({
+        _id: { $ne: excludeId },
+        streamer: streamerName,
+        startAt: startAt,
+      })
+      .exec();
+    // Validate schedule
+    this.scheduleValidate.throwIfScheduleExists(existByDate);
+
+    // 해당 스케줄 제목으로 이미 스케줄이 존재하는지 확인
+    const existByTitle = await this.scheduleModel
+      .findOne({
+        _id: { $ne: excludeId },
+        title: title,
+      })
+      .exec();
+    // Validate schedule
+    this.scheduleValidate.throwIfScheduleExists(existByTitle);
   }
 }

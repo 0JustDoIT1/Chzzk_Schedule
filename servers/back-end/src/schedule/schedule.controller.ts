@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ScheduleDocument } from 'src/schemas/schedule.schema';
@@ -17,6 +17,18 @@ export class ScheduleController {
     @Body() scheduleData: CreateScheduleDto,
   ): Promise<ScheduleDocument> {
     return await this.scheduleService.create(scheduleData);
+  }
+
+  @ApiOperation({ summary: '_id에 해당하는 스케줄 수정 API' })
+  @ApiParam({ name: 'id', description: 'Schedule ObjectId' })
+  // 전체 데이터를 항상 받아오기 때문에 create dto 사용
+  @ApiBody({ description: '수정할 스케줄 데이터', type: CreateScheduleDto })
+  @Patch(ApiPath.SCHEDULE_UPDATE)
+  async updateSchedule(
+    @Param('id') id: string,
+    @Body() scheduleData: CreateScheduleDto,
+  ): Promise<ScheduleDocument> {
+    return await this.scheduleService.updateSchedule(id, scheduleData);
   }
 
   @ApiOperation({ summary: '_id에 해당하는 스케줄 반환 API' })

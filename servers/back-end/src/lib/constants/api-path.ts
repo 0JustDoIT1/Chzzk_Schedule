@@ -7,6 +7,7 @@ const enum ApiPath {
 
   SCHEDULE = 'schedule',
   SCHEDULE_ADD = '/add',
+  SCHEDULE_UPDATE = '/update/:id',
   SCHEDULE_BY_ID = '/id/:id',
   SCHEDULE_BY_DATE = '/date/:date',
   SCHEDULE_BY_MONTH = '/month/:month',

@@ -15,14 +15,14 @@ import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { IStreamer } from "@/schemas/streamer.schema";
 import { goBackRoute, route } from "@/lib/constants/router";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
-import { ISchedule } from "@/schemas/schedule.schema";
+import { TScheduleSchema } from "@/schemas/schedule.schema";
 import MemberList from "./memberList";
 
 interface IScheduleInput {
   streamerList: IStreamer[];
   isOfficial: boolean;
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>;
-  initData?: ISchedule;
+  initData?: TScheduleSchema;
 }
 
 const ScheduleInput = ({

@@ -1,27 +1,28 @@
-import { dateToFormatString, dateTypeToDate } from "@/lib/utils/dateFormat";
-import { useEffect, useMemo, useState } from "react";
+import { dateTypeToDate } from "@/lib/utils/dateFormat";
+import { useEffect, useMemo } from "react";
 import useReactHookForm from "./useReactHookForm";
 import {
   AllCategory,
   getStreamerNameByCategory,
-  ISchedule,
   IScheduleInput,
+  TScheduleSchema,
 } from "@/schemas/schedule.schema";
 import { useToastStore } from "@/lib/providers/toast-provider";
 import { useRouter } from "next/navigation";
-import { createSchedule } from "@/api/schedule-api";
+import { createSchedule, updateSchedule } from "@/api/schedule-api";
 import { IApiError } from "../types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { route } from "../constants/router";
-import { queryKeys } from "../constants/react-query";
 import { adjustScheduleTimes } from "../utils/chzzk-date";
 import { getScheduleInitValue } from "../utils/chzzk-input";
 import { useMember } from "./useMember";
+import { handleScheduleApiError } from "../utils/error-handler";
+import { invalidateScheduleListByDate } from "../utils/react-query-utils";
 
 const useScheduleInput = (
   isOfficial: boolean,
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>,
-  initData?: ISchedule // optional 초기값
+  initData?: TScheduleSchema // optional 초기값
 ) => {
   const router = useRouter();
   const showToast = useToastStore((state) => state.showToast);
@@ -43,8 +44,18 @@ const useScheduleInput = (
     handleSubmit,
   } = useReactHookForm(initValue);
 
+  const category = watch("category");
+  const fullDay = watch("fullDay");
+  const startAtDate = watch("startAtDate");
+  const startAtTime = watch("startAtTime");
+  const endAtDate = watch("endAtDate");
+  const endAtTime = watch("endAtTime");
+  const streamerName = watch("streamerName");
+
   const { member, setMember, addMember, removeMember, resetMember } = useMember(
-    initData?.member ?? []
+    initData?.member ?? [],
+    showToast,
+    streamerName
   );
 
   // Reset input value
@@ -64,13 +75,6 @@ const useScheduleInput = (
   // useEffect(() => {
   //   if (!initData) resetInputValue();
   // }, [isOfficial]);
-
-  const category = watch("category");
-  const fullDay = watch("fullDay");
-  const startAtDate = watch("startAtDate");
-  const startAtTime = watch("startAtTime");
-  const endAtDate = watch("endAtDate");
-  const endAtTime = watch("endAtTime");
 
   // Set value(member) when change category
   // Check fullDay event
@@ -128,29 +132,27 @@ const useScheduleInput = (
 
   const queryClient = useQueryClient();
 
+  // create schedule
   const createScheduleMutation = useMutation({
-    mutationFn: (data: Partial<ISchedule>) => createSchedule(data),
+    mutationFn: (data: Partial<TScheduleSchema>) => createSchedule(data),
     onSuccess: (schedule) => {
+      invalidateScheduleListByDate(queryClient, schedule.startAt);
       showToast("success", `일정을 추가했습니다.`);
-      const dateStr = dateToFormatString(schedule.startAt, "YYYY-MM-DD");
-      const date = dateTypeToDate(dateStr);
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.getScheduleListByDate(date),
-      });
       router.push(route.allCalendar);
     },
-    onError: (error: IApiError) => {
-      if (error.status === 409) {
-        // 중복 시간대 스케줄
-        showToast("error", "같은 시간대에 스케줄이 존재합니다.");
-      } else if (error.status === 400) {
-        // 클라이언트 요청 문제
-        showToast("error", "입력값을 다시 확인해주세요.");
-      } else {
-        // 알 수 없는 에러
-        showToast("error", "알 수 없는 오류가 발생했습니다.");
-      }
+    onError: (error: IApiError) => handleScheduleApiError(error, showToast),
+  });
+
+  // update schedule
+  const updateScheduleMutation = useMutation({
+    mutationFn: (data: { id: string; payload: Partial<TScheduleSchema> }) =>
+      updateSchedule(data.id, data.payload),
+    onSuccess: (schedule) => {
+      invalidateScheduleListByDate(queryClient, schedule.startAt);
+      showToast("success", `일정을 수정했습니다.`);
+      router.push(route.allCalendar);
     },
+    onError: (error: IApiError) => handleScheduleApiError(error, showToast),
   });
 
   // Submit event
@@ -168,7 +170,7 @@ const useScheduleInput = (
       inputData.streamerName
     );
 
-    const createData: Partial<ISchedule> = {
+    const createData: Partial<TScheduleSchema> = {
       isOfficial: inputData.isOfficial,
       streamerName: streamerName,
       category: inputData.category as AllCategory,
@@ -184,7 +186,14 @@ const useScheduleInput = (
       delete createData.member;
     if (!createData.contents) delete createData.contents;
 
-    createScheduleMutation.mutate(createData);
+    if (initData) {
+      updateScheduleMutation.mutate({
+        id: initData._id,
+        payload: createData,
+      });
+    } else {
+      createScheduleMutation.mutate(createData);
+    }
   });
 
   return {

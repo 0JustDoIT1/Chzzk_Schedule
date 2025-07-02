@@ -6,6 +6,7 @@ import {
 import { ApiPath } from "@/lib/constants/api-path";
 import { postFetch } from "@/lib/fetch/post-fetch";
 import { getFetch } from "@/lib/fetch/get-fetch";
+import { patchFetch } from "@/lib/fetch/patch-fetch";
 
 const isServer = () => typeof window === "undefined";
 
@@ -15,6 +16,20 @@ export const createSchedule = async (
   token?: string
 ): Promise<ISchedule> => {
   return await postFetch(isServer(), ApiPath.SCHEDULE_ADD, data, token);
+};
+
+// Update schedule
+export const updateSchedule = async (
+  id: string,
+  data: Partial<ISchedule>,
+  token?: string
+): Promise<ISchedule> => {
+  return await patchFetch(
+    isServer(),
+    `${ApiPath.SCHEDULE_UPDATE}/${id}`,
+    data,
+    token
+  );
 };
 
 // Get schedule by Id

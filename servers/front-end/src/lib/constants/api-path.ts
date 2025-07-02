@@ -9,6 +9,7 @@ export const enum ApiPath {
 
   SCHEDULE = ApiPath.PREFIX + "/schedule",
   SCHEDULE_ADD = ApiPath.SCHEDULE + "/add",
+  SCHEDULE_UPDATE = ApiPath.SCHEDULE + "/update",
   SCHEDULE_BY_ID = ApiPath.SCHEDULE + "/id",
   SCHEDULE_BY_DATE = ApiPath.SCHEDULE + "/date",
   SCHEDULE_BY_MONTH = ApiPath.SCHEDULE + "/month",
