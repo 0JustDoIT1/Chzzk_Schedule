@@ -1,9 +1,8 @@
 import "dayjs/locale/ko";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { TScheduleSchema } from "@/schemas/schedule.schema";
 
 dayjs.locale("ko");
 
@@ -21,7 +20,7 @@ export const getToday = () => {
 };
 
 // string 날짜 dayjs형태로 전환
-export const getDateByString = (date: string) => {
+export const getDayjs = (date: dayjs.ConfigType) => {
   return dayjs(date);
 };
 
@@ -51,6 +50,11 @@ export const getStartDate = (
   type: dayjs.OpUnitType
 ) => {
   return dayjs(date).startOf(type);
+};
+
+// 마지막 날짜 구하기
+export const getEndDate = (date: dayjs.ConfigType, type: dayjs.OpUnitType) => {
+  return dayjs(date).endOf(type);
 };
 
 // 날짜 더하기

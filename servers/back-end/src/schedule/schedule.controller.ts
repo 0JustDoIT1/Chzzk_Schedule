@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ScheduleDocument } from 'src/schemas/schedule.schema';
-import { IDateSchedule } from 'src/lib/types/schedule.type';
+import { IDateSchedule, IMonthSchedule } from 'src/lib/types/schedule.type';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Schedule')
@@ -44,5 +44,13 @@ export class ScheduleController {
     @Param('date') date: string,
   ): Promise<IDateSchedule> {
     return await this.scheduleService.getScheduleListByDate(date);
+  }
+
+  @ApiOperation({ summary: 'month에 맞는 스케줄 리스트 반환 API' })
+  @Get(ApiPath.SCHEDULE_BY_MONTH)
+  async getScheduleListByMont(
+    @Param('month') month: string,
+  ): Promise<IMonthSchedule> {
+    return await this.scheduleService.getScheduleListByMonth(month);
   }
 }

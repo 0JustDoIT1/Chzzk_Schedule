@@ -20,7 +20,7 @@ export const getToday = () => {
 };
 
 // string 날짜 dayjs형태로 전환
-export const getDateByString = (date: string) => {
+export const getDayjs = (date: dayjs.ConfigType) => {
   return dayjs(date);
 };
 
@@ -50,6 +50,11 @@ export const getStartDate = (
   type: dayjs.OpUnitType,
 ) => {
   return dayjs(date).startOf(type);
+};
+
+// 마지막 날짜 구하기
+export const getEndDate = (date: dayjs.ConfigType, type: dayjs.OpUnitType) => {
+  return dayjs(date).endOf(type);
 };
 
 // 날짜 더하기
@@ -84,6 +89,13 @@ export const setDateAndTime = () => {
   const time = dateToFormatString(dateTime, 'HH:mm');
 
   return { date, time };
+};
+
+export const isBeforeDate = (
+  baseDate: dayjs.ConfigType,
+  targetDate: dayjs.ConfigType,
+) => {
+  return dayjs(baseDate).isBefore(targetDate, 'date');
 };
 
 // 날짜가 같은지 비교

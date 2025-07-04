@@ -1,7 +1,7 @@
 import {
   addDate,
   TDayjsType,
-  getDateByString,
+  getDayjs,
   getStartDate,
   getToday,
   subtractDate,
@@ -24,18 +24,18 @@ const useCalendar = () => {
   const calendarColumns = 6;
 
   const daysInMonth = today.daysInMonth();
-  const startDayOfMonth = getStartDate(today, "month");
+  const startDayOfMonth = getStartDate(today, "M");
 
-  const preMonth = today.subtract(1, "month");
-  const endDayOfPreMonth = preMonth.endOf("month");
+  const preMonth = today.subtract(1, "M");
+  const endDayOfPreMonth = preMonth.endOf("M");
 
-  const nextMonth = today.add(1, "month");
-  const startDayOfNextMonth = nextMonth.startOf("month");
+  const nextMonth = today.add(1, "M");
+  const startDayOfNextMonth = nextMonth.startOf("M");
 
   // Set today by url query
   useEffect(() => {
     if (!dateParam) return;
-    const newDate = getDateByString(dateParam);
+    const newDate = getDayjs(dateParam);
     setToday((prev) => (prev.isSame(newDate, "day") ? prev : newDate));
   }, [dateParam]);
 
@@ -47,7 +47,7 @@ const useCalendar = () => {
     const preEmptyDates = Array.from(
       { length: startDayOfMonth.day() },
       (_, index) => subtractDate(endDayOfPreMonth, index, "day")
-    ).sort((a, b) => -1);
+    ).sort((a, b) => a.valueOf() - b.valueOf());
 
     const preCalendar = [...preEmptyDates, ...days];
 
@@ -81,12 +81,12 @@ const useCalendar = () => {
   };
 
   const setPreMonth = () => {
-    const prevDate = subtractDate(today, 1, "month");
+    const prevDate = subtractDate(today, 1, "M");
     updateToday(getStartDate(prevDate, "M"));
   };
 
   const setNextMonth = () => {
-    const nextDate = addDate(today, 1, "month");
+    const nextDate = addDate(today, 1, "M");
     updateToday(getStartDate(nextDate, "M"));
   };
 
