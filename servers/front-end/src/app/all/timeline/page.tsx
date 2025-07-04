@@ -1,4 +1,4 @@
-import AllTimelineView from "@/screens/timeline/all";
+import AllTimelineView from "@/screens/all/timeline";
 
 const AllTimelinePage = () => {
   return <AllTimelineView />;

@@ -6,16 +6,16 @@ import {
   getToday,
   subtractDate,
 } from "@/lib/utils/dateFormat";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const useCalendar = () => {
   const searchParams = useSearchParams();
-  const date = searchParams.get("date");
+  const router = useRouter();
 
-  const [today, setToday] = useState<TDayjsType>(
-    date ? getDateByString(date) : getToday()
-  );
+  const dateParam = searchParams.get("date");
+
+  const [today, setToday] = useState<TDayjsType>(getToday());
   const [dayArray, setDayArray] = useState<{ [x: number]: TDayjsType[] }[]>([]);
 
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -32,6 +32,14 @@ const useCalendar = () => {
   const nextMonth = today.add(1, "month");
   const startDayOfNextMonth = nextMonth.startOf("month");
 
+  // Set today by url query
+  useEffect(() => {
+    if (!dateParam) return;
+    const newDate = getDateByString(dateParam);
+    setToday((prev) => (prev.isSame(newDate, "day") ? prev : newDate));
+  }, [dateParam]);
+
+  // Set calendar by today state
   useEffect(() => {
     const days = Array.from({ length: daysInMonth }, (_, index) =>
       addDate(startDayOfMonth, index, "day")
@@ -51,12 +59,12 @@ const useCalendar = () => {
       addDate(startDayOfNextMonth, index, "day")
     );
 
-    const nextCalendar = [...preCalendar, ...nextEmptyDates];
+    const fullCalendar = [...preCalendar, ...nextEmptyDates];
     const result = [];
 
     for (let i = 0; i < calendarRows; i++) {
       result.push({
-        [i]: nextCalendar.slice(
+        [i]: fullCalendar.slice(
           i * calendarRows,
           i * calendarRows + calendarRows
         ),
@@ -66,20 +74,24 @@ const useCalendar = () => {
     setDayArray(result);
   }, [today]);
 
+  // Change url query when today update
+  const updateToday = (date: TDayjsType) => {
+    const formatDate = date.format("YYYY-MM-DD");
+    router.replace(`?date=${formatDate}`);
+  };
+
   const setPreMonth = () => {
-    let date = subtractDate(today, 1, "month");
-    date = getStartDate(date, "M");
-    setToday(date);
+    const prevDate = subtractDate(today, 1, "month");
+    updateToday(getStartDate(prevDate, "M"));
   };
 
   const setNextMonth = () => {
-    let date = addDate(today, 1, "month");
-    date = getStartDate(date, "M");
-    setToday(date);
+    const nextDate = addDate(today, 1, "month");
+    updateToday(getStartDate(nextDate, "M"));
   };
 
   const setPresentMonth = () => {
-    setToday(getToday());
+    updateToday(getToday());
   };
 
   return {

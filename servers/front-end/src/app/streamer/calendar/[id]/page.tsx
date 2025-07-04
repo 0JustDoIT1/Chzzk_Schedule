@@ -1,4 +1,4 @@
-import StreamerCalendarView from "@/screens/calendar/streamer";
+import StreamerCalendarView from "@/screens/streamer/calendar";
 
 const StreamerCalendarPage = () => {
   return <StreamerCalendarView />;

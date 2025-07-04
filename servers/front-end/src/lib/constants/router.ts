@@ -53,3 +53,17 @@ export const goBackRoute = (
     router.push(fallbackPath); // 완전한 fallback
   }
 };
+
+// calendar에서 date를 유지한채로 url 변경
+export const getDatePreservedRoute = (
+  basePath: string,
+  searchParams: URLSearchParams
+) => {
+  const params = new URLSearchParams();
+  const date = searchParams.get("date");
+  if (date) params.set("date", date);
+
+  const query = params.toString() ? `?${params.toString()}` : "";
+
+  return `${basePath}${query}`;
+};

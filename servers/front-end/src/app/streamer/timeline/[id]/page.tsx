@@ -1,4 +1,4 @@
-import StreamerTimelineView from "@/screens/timeline/streamer";
+import StreamerTimelineView from "@/screens/streamer/timeline";
 
 const StreamerTimelinePage = () => {
   return <StreamerTimelineView />;

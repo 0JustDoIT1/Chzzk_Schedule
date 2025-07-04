@@ -49,13 +49,18 @@ const StreamerCategoryView = () => {
   };
 
   const scrollSection = (initial: string) => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return;
+
     const element = document.getElementById(initial);
     const topOfElement = element!.offsetTop - 72 - 10;
     window.scroll({ top: topOfElement, behavior: "smooth" });
   };
 
   useEffect(() => {
-    window.scroll({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scroll({ top: 0, behavior: "smooth" });
+    }
 
     const result: { [x: string]: string[] } = {};
     TestStreamerList.forEach((item) => {

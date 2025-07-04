@@ -1,4 +1,4 @@
-import ChzzkCalendarView from "@/screens/calendar/chzzk";
+import ChzzkCalendarView from "@/screens/chzzk/calendar";
 
 const ChzzkCalendarPage = () => {
   return <ChzzkCalendarView />;

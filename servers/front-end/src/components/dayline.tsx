@@ -36,6 +36,9 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
   const dateString = dateToFormatString(date, "YYYY-MM-DD");
 
   useEffect(() => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return;
+
     const element = document.getElementById(dateString);
     if (element) {
       const elementRect = element.getBoundingClientRect();
@@ -47,7 +50,7 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
   }, [schedule, date]);
 
   return (
-    <div className="w-full mx-auto md:pl-12 lg:max-w-6xl">
+    <div className="w-full mt-12 mx-auto md:pl-12 lg:max-w-6xl">
       <ol className="relative ml-12 border-l-2 border-brandMain md:ml-0">
         {schedule.map((list) => {
           let timeCircle = "";

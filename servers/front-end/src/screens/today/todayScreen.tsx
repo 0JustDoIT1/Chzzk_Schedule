@@ -16,7 +16,9 @@ import { queryKeys } from "@/lib/constants/react-query";
 
 const TodayScreen = () => {
   useEffect(() => {
-    window.scroll({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scroll({ top: 0, behavior: "smooth" });
+    }
   }, []);
 
   const today = dateToFormatString(getToday(), "YYYY-MM-DD");

@@ -1,4 +1,4 @@
-import ChzzkTimelineView from "@/screens/timeline/chzzk";
+import ChzzkTimelineView from "@/screens/chzzk/timeline";
 
 const ChzzkTimelinePage = () => {
   return <ChzzkTimelineView />;

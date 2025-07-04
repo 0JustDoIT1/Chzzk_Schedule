@@ -6,17 +6,19 @@ import { TestDayList } from "@/lib/constants/test";
 import React, { useEffect } from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
+import { BrandButton, CustomButton } from "@/components/button";
 import { AddScheduleLink } from "@/components/link";
 import TimelineIcon from "~/public/assets/svg/timeline";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { route } from "@/lib/constants/router";
-import { BrandButton, CustomButton } from "@/components/button";
+import { useParams, usePathname } from "next/navigation";
+import { getRoute, route } from "@/lib/constants/router";
 import CustomCalendar from "@/components/calendar";
 
-const AllCalendarView = () => {
+const StreamerCalendarView = () => {
+  const params = useParams<{ id: string }>();
   const pathName = usePathname();
+  const { id } = params;
 
   const { today, week, dayArray, setPreMonth, setNextMonth, setPresentMonth } =
     useCalendar();
@@ -33,7 +35,9 @@ const AllCalendarView = () => {
   };
 
   useEffect(() => {
-    window.scroll({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scroll({ top: 0, behavior: "smooth" });
+    }
   }, []);
 
   return (
@@ -41,9 +45,10 @@ const AllCalendarView = () => {
       <section className="w-full border-b border-b-textLight py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
-            <p className="text-2xl">전체 일정</p>
+            <p className="text-2xl">{id} 일정</p>
             <p className="text-sm text-textNormal">
-              치지직 방송 일정을 한눈에 살펴보세요.
+              <span className="text-sm text-brandMain">{id}</span>의 방송 일정을
+              한눈에 살펴보세요.
             </p>
           </div>
           <div className="flex items-center justify-center w-full md:w-1/3">
@@ -71,8 +76,8 @@ const AllCalendarView = () => {
             일정 형태
           </p>
           <Link
-            className={linkClassName(route.allCalendar)}
-            href={route.allCalendar}
+            className={linkClassName(getRoute(route.streamerCalendar, id))}
+            href={getRoute(route.streamerCalendar, id)}
           >
             <div className="w-full flex justify-center md:justify-start">
               <CalendarIcon className="w-4 h-4 mr-2" />
@@ -80,8 +85,8 @@ const AllCalendarView = () => {
             </div>
           </Link>
           <Link
-            className={linkClassName(route.allTimeline)}
-            href={route.allTimeline}
+            className={linkClassName(getRoute(route.streamerTimeline, id))}
+            href={getRoute(route.streamerTimeline, id)}
           >
             <div className="w-full flex justify-center md:justify-start">
               <TimelineIcon className="w-4 h-4 mr-2" />
@@ -89,7 +94,7 @@ const AllCalendarView = () => {
             </div>
           </Link>
         </aside>
-        <section className="w-full">
+        <div className="w-full">
           <CustomCalendar
             today={today}
             week={week}
@@ -97,10 +102,10 @@ const AllCalendarView = () => {
             isHasSchedule={true}
             schedule={TestDayList}
           />
-        </section>
+        </div>
       </main>
     </>
   );
 };
 
-export default AllCalendarView;
+export default StreamerCalendarView;

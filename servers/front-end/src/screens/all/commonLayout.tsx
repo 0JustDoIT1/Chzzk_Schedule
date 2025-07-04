@@ -1,35 +1,45 @@
 "use client";
 
+import { ReactNode, useMemo } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { getDatePreservedRoute, route } from "@/lib/constants/router";
 import useCalendar from "@/lib/hook/useCalendar";
 import { dateToFormatString } from "@/lib/utils/dateFormat";
-import { TestDayList } from "@/lib/constants/test";
-import React from "react";
+import { BrandButton, CustomButton } from "@/components/button";
+import { AddScheduleLink } from "@/components/link";
+import CalendarIcon from "~/public/assets/svg/calendar";
+import TimelineIcon from "~/public/assets/svg/timeline";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
-import { AddScheduleLink } from "@/components/link";
-import CustomDayline from "@/components/dayline";
-import TimelineIcon from "~/public/assets/svg/timeline";
-import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { route } from "@/lib/constants/router";
-import { BrandButton, CustomButton } from "@/components/button";
+import clsx from "clsx";
 
-const AllTimelineView = () => {
+interface Props {
+  children: ReactNode;
+}
+
+export default function AllCommonLayout({ children }: Props) {
   const pathName = usePathname();
+  const searchParams = useSearchParams();
 
   const { today, setPreMonth, setNextMonth, setPresentMonth } = useCalendar();
 
-  const linkClassName = (path: string) => {
-    let className = "";
-    pathName === path
-      ? (className +=
-          "w-full max-w-40 rounded-md px-3 py-2 text-sm bg-textHover text-textMain/90 md:w-auto hover:bg-textHover")
-      : (className +=
-          "w-full max-w-40 rounded-md px-3 py-2 text-sm bg-white text-textMain/90 md:w-auto hover:bg-textHover");
+  const linkClassName = (path: string) =>
+    clsx(
+      "w-full max-w-40 rounded-md px-3 py-2 text-sm text-textMain/90 md:w-auto",
+      pathName === path ? "bg-textBlur" : "bg-white",
+      "hover:bg-textBlur"
+    );
 
-    return className;
-  };
+  const calendarHref = useMemo(
+    () => getDatePreservedRoute(route.allCalendar, searchParams),
+    [searchParams]
+  );
+
+  const timelineHref = useMemo(
+    () => getDatePreservedRoute(route.allTimeline, searchParams),
+    [searchParams]
+  );
 
   return (
     <>
@@ -67,7 +77,7 @@ const AllTimelineView = () => {
           </p>
           <Link
             className={linkClassName(route.allCalendar)}
-            href={route.allCalendar}
+            href={calendarHref}
           >
             <div className="w-full flex justify-center md:justify-start">
               <CalendarIcon className="w-4 h-4 mr-2" />
@@ -76,7 +86,7 @@ const AllTimelineView = () => {
           </Link>
           <Link
             className={linkClassName(route.allTimeline)}
-            href={route.allTimeline}
+            href={timelineHref}
           >
             <div className="w-full flex justify-center md:justify-start">
               <TimelineIcon className="w-4 h-4 mr-2" />
@@ -84,12 +94,8 @@ const AllTimelineView = () => {
             </div>
           </Link>
         </aside>
-        <section className="w-full pt-12">
-          <CustomDayline schedule={TestDayList} date={today} />
-        </section>
+        <section className="w-full">{children}</section>
       </main>
     </>
   );
-};
-
-export default AllTimelineView;
+}
