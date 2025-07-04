@@ -1,5 +1,6 @@
 import {
   IDateSchedule,
+  IMonthSchedule,
   ISchedule,
   TScheduleSchema,
 } from "@/schemas/schedule.schema";
@@ -44,5 +45,15 @@ export const getScheduleListByDate = async (
   return await getFetch(
     isServer(),
     `${ApiPath.SCHEDULE_BY_DATE}/${date.toDateString()}`
+  );
+};
+
+// Get schedule list by month
+export const getScheduleListByMonth = async (
+  month: Date
+): Promise<IMonthSchedule> => {
+  return await getFetch(
+    isServer(),
+    `${ApiPath.SCHEDULE_BY_MONTH}/${month.toDateString()}`
   );
 };

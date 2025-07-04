@@ -1,11 +1,19 @@
 "use client";
 
 import useCalendar from "@/lib/hook/useCalendar";
-import { TestDayList } from "@/lib/constants/test";
 import React, { useEffect } from "react";
 import CustomCalendar from "@/components/calendar";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/constants/react-query";
+import { getScheduleListByMonth } from "@/api/schedule-api";
+import IsLoading from "@/components/isLoading";
+import IsError from "@/components/isError";
 
-const AllCalendarView = () => {
+interface IAllCalendarView {
+  date: Date;
+}
+
+const AllCalendarView = ({ date }: IAllCalendarView) => {
   const { today, week, dayArray } = useCalendar();
 
   useEffect(() => {
@@ -14,14 +22,26 @@ const AllCalendarView = () => {
     }
   }, []);
 
+  const { data, isSuccess, isLoading, isError } = useQuery({
+    queryKey: queryKeys.getScheduleListByMonth(date),
+    queryFn: () => getScheduleListByMonth(date),
+  });
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError />;
+
   return (
-    <CustomCalendar
-      today={today}
-      week={week}
-      dayArray={dayArray}
-      isHasSchedule={true}
-      schedule={TestDayList}
-    />
+    <>
+      {isSuccess && (
+        <CustomCalendar
+          today={today}
+          week={week}
+          dayArray={dayArray}
+          isHasSchedule={true}
+          schedule={data}
+        />
+      )}
+    </>
   );
 };
 

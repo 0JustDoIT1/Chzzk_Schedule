@@ -2,7 +2,6 @@
 
 import useCalendar from "@/lib/hook/useCalendar";
 import { dateToFormatString } from "@/lib/utils/dateFormat";
-import { TestDayList } from "@/lib/constants/test";
 import React, { useEffect } from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
@@ -97,7 +96,7 @@ const ChzzkCalendarView = () => {
             week={week}
             dayArray={dayArray}
             isHasSchedule={true}
-            schedule={TestDayList}
+            // schedule={TestDayList}
           />
         </section>
       </main>

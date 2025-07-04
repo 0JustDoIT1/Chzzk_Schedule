@@ -10,25 +10,10 @@ import { BrandLink } from "./link";
 import { useEffect } from "react";
 import { sorting } from "@/lib/utils/sort";
 import { getRoute, route } from "@/lib/constants/router";
+import { IMonthSchedule } from "@/schemas/schedule.schema";
 
 interface ICustomDayLine {
-  schedule: {
-    day: string;
-    preList: {
-      _id: string;
-      title: string;
-      member: string[];
-      startAt: Date | TDayjsType;
-      endAt: Date | TDayjsType;
-    }[];
-    list: {
-      _id: string;
-      title: string;
-      member: string[];
-      startAt: Date | TDayjsType;
-      endAt: Date | TDayjsType;
-    }[];
-  }[];
+  schedule: IMonthSchedule;
   date: TDayjsType;
 }
 
@@ -48,6 +33,13 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
       window.scroll({ top: 0, behavior: "smooth" });
     }
   }, [schedule, date]);
+
+  if (schedule.length === 0)
+    return (
+      <div className="container flex justify-center items-center py-32 mx-auto md:pl-12 lg:max-w-6xl">
+        <p className="text-xl text-textNormal">이번 달 방송 일정이 없습니다.</p>
+      </div>
+    );
 
   return (
     <div className="w-full mt-12 mx-auto md:pl-12 lg:max-w-6xl">
@@ -113,17 +105,20 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
                         <UserIcon className="w-4 h-4 text-textIcon" />
                       </span>
                       <div className="flex items-center flex-wrap">
-                        {item.member.map((member: string, index: number) => {
-                          const memberLength = item.member.length;
-                          const memberText =
-                            memberLength === index + 1 ? member : `${member},`;
+                        {item.member &&
+                          item.member.map((member: string, index: number) => {
+                            const memberLength = item.member?.length;
+                            const memberText =
+                              memberLength === index + 1
+                                ? member
+                                : `${member},`;
 
-                          return (
-                            <p key={member} className="text-sm">
-                              {memberText}&nbsp;
-                            </p>
-                          );
-                        })}
+                            return (
+                              <p key={member} className="text-sm">
+                                {memberText}&nbsp;
+                              </p>
+                            );
+                          })}
                       </div>
                     </div>
                   </div>

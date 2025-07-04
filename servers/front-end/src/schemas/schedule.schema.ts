@@ -72,3 +72,11 @@ export type TScheduleSchema = ISchedule & IBaseSchema;
 export interface IDateSchedule {
   [key: string]: TScheduleSchema[];
 }
+
+export interface IMonthScheduleItem {
+  day: string;
+  preList: TScheduleSchema[];
+  list: TScheduleSchema[];
+}
+
+export type IMonthSchedule = IMonthScheduleItem[];

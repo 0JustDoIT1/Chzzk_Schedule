@@ -11,6 +11,7 @@ import {
   dateTypeToDate,
   getDayjs,
   getEndDate,
+  getStartDate,
   getToday,
   isBeforeDate,
   isSameDate,
@@ -149,14 +150,13 @@ export class ScheduleService {
   }
 
   async getScheduleListByMonth(month: string): Promise<IMonthSchedule> {
-    const startDate = dateTypeToDate(month); // e.g. 2025-03-01
+    const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
 
     const scheduleList = await this.scheduleModel
       .find(
         {
           $or: [
-            // 비교해보자
             { startAt: { $gte: startDate, $lte: endDate } },
             {
               startAt: { $lt: startDate },

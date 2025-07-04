@@ -91,12 +91,28 @@ export const setDateAndTime = () => {
   return { date, time };
 };
 
+// 날짜가 이전인지 비교
+export const isBeforeDate = (
+  baseDate: dayjs.ConfigType,
+  targetDate: dayjs.ConfigType
+) => {
+  return dayjs(baseDate).isBefore(targetDate, "date");
+};
+
 // 날짜가 같은지 비교
 export const isSameDate = (
   baseDate: dayjs.ConfigType,
   targetDate: dayjs.ConfigType
 ) => {
   return dayjs(baseDate).isSame(targetDate, "date");
+};
+
+// 날짜가 이후인지 비교
+export const isAfterDate = (
+  baseDate: dayjs.ConfigType,
+  targetDate: dayjs.ConfigType
+) => {
+  return dayjs(baseDate).isAfter(targetDate, "date");
 };
 
 // 날짜가 기간 안에 속해있는지 검증
