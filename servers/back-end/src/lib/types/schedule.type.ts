@@ -5,9 +5,7 @@ export interface IDateSchedule {
 }
 
 export interface IMonthScheduleItem {
-  day: string;
-  preList: ScheduleDocument[];
   list: ScheduleDocument[];
 }
 
-export type IMonthSchedule = IMonthScheduleItem[];
+export type TMonthSchedule = Record<string, IMonthScheduleItem>;

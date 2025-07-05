@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ScheduleDocument } from 'src/schemas/schedule.schema';
-import { IDateSchedule, IMonthSchedule } from 'src/lib/types/schedule.type';
+import { IDateSchedule, TMonthSchedule } from 'src/lib/types/schedule.type';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Schedule')
@@ -50,7 +50,7 @@ export class ScheduleController {
   @Get(ApiPath.SCHEDULE_BY_MONTH)
   async getScheduleListByMont(
     @Param('month') month: string,
-  ): Promise<IMonthSchedule> {
+  ): Promise<TMonthSchedule> {
     return await this.scheduleService.getScheduleListByMonth(month);
   }
 }

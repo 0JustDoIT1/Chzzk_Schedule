@@ -5,7 +5,8 @@ import {
   getDateDiff,
   getToday,
 } from "@/lib/utils/dateFormat";
-import { IMonthSchedule } from "@/schemas/schedule.schema";
+import { TMonthSchedule } from "@/schemas/schedule.schema";
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
@@ -15,7 +16,7 @@ interface ICustomCalendar {
   week: string[];
   dayArray: { [x: number]: TDayjsType[] }[];
   isHasSchedule?: boolean;
-  schedule?: IMonthSchedule;
+  scheduleList?: TMonthSchedule;
 }
 
 const streamWidth: { [x: number]: string } = {
@@ -35,77 +36,103 @@ const streamTopMargin: { [x: number]: string } = {
   3: "mt-[66px]",
 };
 
+const colStart = [
+  "col-start-1",
+  "col-start-2",
+  "col-start-3",
+  "col-start-4",
+  "col-start-5",
+  "col-start-6",
+  "col-start-7",
+];
+
+const colSpan = [
+  "col-span-1",
+  "col-span-2",
+  "col-span-3",
+  "col-span-4",
+  "col-span-5",
+  "col-span-6",
+  "col-span-7",
+];
+
 const CustomCalendar = ({
   today,
   week,
   dayArray,
   isHasSchedule = false,
-  schedule,
+  scheduleList,
 }: ICustomCalendar) => {
-  schedule = isHasSchedule ? schedule : undefined;
+  scheduleList = isHasSchedule ? scheduleList : undefined;
 
   const pathName = usePathname();
   const etcLink = pathName.replace(route.calendar, route.timeline);
 
-  const streamText = (dateDiff: number, preList: number, column: number) => {
-    const index = dateDiff > 6 - column ? 6 - column : dateDiff;
+  // const getStreamClass = (
+  //   dateDiff: number,
+  //   preList: number,
+  //   column: number
+  // ) => {
+  //   const index = dateDiff > 6 - column ? 6 - column : dateDiff;
 
-    return [
-      streamWidth[index],
-      streamTopMargin[preList],
-      "flex items-center h-5 px-1 bg-white z-10 border border-brandMain rounded-md text-textMain text-xs truncate",
-    ].join(" ");
+  //   return [
+  //     streamWidth[index],
+  //     streamTopMargin[preList],
+  //     "flex items-center h-5 px-1 bg-white z-10 border border-brandMain rounded-md text-textMain text-xs truncate",
+  //   ].join(" ");
+  // };
+  const getStreamSpanClass = (dateDiff: number, column: number) => {
+    const span = Math.min(dateDiff + 1, 7 - column);
+    return `col-start-${column + 1} col-span-${span}`;
   };
 
   return (
     <div className="w-full mx-auto lg:max-w-6xl">
-      <div className="box-border w-full border border-textLight border-t-0 divide-y divide-y-textLight md:border-l-0">
+      <div className="box-border w-full border border-textLight border-y-0">
         <div className="grid grid-cols-7 divide-x divide-x-textLight">
           {week.map((item) => (
             <div
               key={item}
-              className={`h-8 leading-8 text-center text-sm ${
-                item === "일"
-                  ? "text-red-600"
-                  : item === "토"
-                  ? "text-blue-600"
-                  : "text-textMain"
-              }`}
+              className={clsx(
+                "h-8 leading-8 text-center text-sm border-b border-textLight",
+                {
+                  "text-red-600": item === "일",
+                  "text-blue-600": item === "토",
+                  "text-textMain": item !== "일" && item !== "토",
+                }
+              )}
             >
               {item}
             </div>
           ))}
         </div>
-        {dayArray.map((week, row) => (
-          <div
-            key={row}
-            className="grid grid-cols-7 divide-x divide-x-textLight"
-          >
-            {week[row].map((day, column) => {
-              const dayStr = dateToFormatString(day, "YYYY-MM-DD");
-              const todayStr = dateToFormatString(getToday(), "YYYY-MM-DD");
+        {dayArray.map((week, weekIdx) => (
+          <div key={weekIdx} className="relative w-full">
+            <div className="grid grid-cols-7 divide-x divide-x-textLight border-b border-textLight">
+              {week[weekIdx].map((day, dayIdx) => {
+                const dayStr = dateToFormatString(day, "YYYY-MM-DD");
+                const todayStr = dateToFormatString(getToday(), "YYYY-MM-DD");
 
-              const todayCheck = todayStr === dayStr;
-              const monthCheck =
-                dateToFormatString(today, "YYYY-MM") ===
-                dateToFormatString(day, "YYYY-MM");
+                const isToday = todayStr === dayStr;
+                const isSameMonth =
+                  dateToFormatString(today, "YYYY-MM") ===
+                  dateToFormatString(day, "YYYY-MM");
 
-              return (
-                <div key={day.unix()} className="relative h-36">
-                  <div
-                    className={`pl-1 py-1 text-left text-xs ${
-                      monthCheck ? "font-normal" : "font-light"
-                    } ${
-                      monthCheck && !column
-                        ? "text-red-600"
-                        : monthCheck && column === 6
-                        ? "text-blue-600"
-                        : monthCheck
-                        ? "text-textMain"
-                        : "text-textNormal"
-                    }`}
-                  >
-                    {todayCheck ? (
+                const dayClass = clsx(
+                  "pl-1 py-1 text-left text-xs h-36",
+                  isSameMonth ? "font-normal" : "font-light",
+                  {
+                    "text-red-600": isSameMonth && dayIdx === 0,
+                    "text-blue-600": isSameMonth && dayIdx === 6,
+                    "text-textMain":
+                      isSameMonth && dayIdx !== 0 && dayIdx !== 6,
+                    "text-textNormal": !isSameMonth,
+                  }
+                );
+
+                return (
+                  <div key={day.unix()} className={dayClass}>
+                    {isToday ? (
                       <div className="flex items-center justify-center w-6 h-6 bg-brandMain rounded-full text-white">
                         {dateToFormatString(day, "D")}
                       </div>
@@ -115,90 +142,67 @@ const CustomCalendar = ({
                       </div>
                     )}
                   </div>
-                  {isHasSchedule && (
-                    <div className="w-full flex flex-col gap-[2px]">
-                      {schedule &&
-                        schedule.map((item) => {
-                          const dateCheck = item.day === dayStr;
-                          const todayViewLength = 4 - item.preList.length;
-                          const todayViewCheck = todayViewLength;
+                );
+              })}
+            </div>
+            {isHasSchedule && scheduleList && (
+              <div className="absolute top-8 left-0 right-0 z-10 grid grid-cols-7 gap-[2px]">
+                {(() => {
+                  const renderedIds = new Set(); // 💡 한 주 내에서 이미 렌더링된 stream._id 추적
 
-                          const etc =
-                            item.list.length + item.preList.length - 4;
-                          const etcCheck = dateCheck && etc;
+                  return week[weekIdx].flatMap((day, dayIdx) => {
+                    const dayStr = dateToFormatString(day, "YYYY-MM-DD");
+                    const daySchedule = scheduleList[dayStr]?.list ?? [];
 
-                          return (
-                            <React.Fragment key={item.day}>
-                              {dateCheck &&
-                                !column &&
-                                item.preList.map((stream) => {
-                                  const dateDiff = getDateDiff(
-                                    stream.endAt,
-                                    item.day,
-                                    "day"
-                                  );
+                    return daySchedule
+                      .filter((stream) => {
+                        if (renderedIds.has(stream._id)) return false;
 
-                                  return (
-                                    <Link
-                                      key={stream.title}
-                                      href={getRoute(
-                                        route.schedule,
-                                        stream._id
-                                      )}
-                                      className={streamText(dateDiff, 0, 0)}
-                                    >
-                                      {stream.title}
-                                    </Link>
-                                  );
-                                })}
-                              {dateCheck &&
-                                todayViewCheck &&
-                                item.list
-                                  .slice(0, todayViewLength)
-                                  .map((stream) => {
-                                    const dateDiff = getDateDiff(
-                                      stream.endAt,
-                                      item.day,
-                                      "day"
-                                    );
-                                    return (
-                                      <Link
-                                        key={stream.title}
-                                        href={getRoute(
-                                          route.schedule,
-                                          stream._id
-                                        )}
-                                        className={streamText(
-                                          dateDiff,
-                                          item.preList.length,
-                                          column
-                                        )}
-                                        scroll={false}
-                                      >
-                                        {stream.title}
-                                      </Link>
-                                    );
-                                  })}
-                              {etcCheck && (
-                                <Link
-                                  href={`${etcLink}?date=${dateToFormatString(
-                                    day,
-                                    "YYYY-MM-DD"
-                                  )}`}
-                                  className="flex items-center justify-center w-full h-5 px-1 bg-brandMain rounded-md text-white text-xs font-light truncate"
-                                  scroll={false}
-                                >
-                                  {etc}개 더보기
-                                </Link>
-                              )}
-                            </React.Fragment>
-                          );
-                        })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                        const start = dateToFormatString(
+                          stream.startAt,
+                          "YYYY-MM-DD"
+                        );
+                        const end = dateToFormatString(
+                          stream.endAt,
+                          "YYYY-MM-DD"
+                        );
+
+                        const isWithinWeek = start <= dayStr && dayStr <= end;
+
+                        if (isWithinWeek) {
+                          renderedIds.add(stream._id);
+                          return true;
+                        }
+
+                        return false;
+                      })
+                      .map((stream) => {
+                        const diff = getDateDiff(
+                          stream.endAt,
+                          stream.startAt,
+                          "d"
+                        );
+                        const span = Math.min(diff + 1, 7 - dayIdx);
+
+                        return (
+                          <div
+                            key={`${stream._id}-${dayStr}`}
+                            className={clsx(
+                              colStart[dayIdx],
+                              colSpan[span - 1],
+                              "h-5 px-1 bg-white border border-brandMain rounded-md text-textMain text-xs truncate"
+                            )}
+                          >
+                            <Link href={getRoute(route.schedule, stream._id)}>
+                              {stream.title}
+                            </Link>
+                          </div>
+                        );
+                      });
+                  });
+                })()}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -219,7 +223,7 @@ export default CustomCalendar;
 // } from "@/lib/utils/dateFormat";
 // import { getRoute, route } from "@/lib/constants/router";
 // import { TDayjsType } from "@/lib/utils/dateFormat";
-// import { IMonthSchedule } from "@/schemas/schedule.schema";
+// import { TMonthSchedule } from "@/schemas/schedule.schema";
 // import Link from "next/link";
 // import { usePathname } from "next/navigation";
 // import React from "react";
@@ -229,7 +233,7 @@ export default CustomCalendar;
 //   week: string[];
 //   dayArray: { [x: number]: TDayjsType[] }[];
 //   isHasSchedule?: boolean;
-//   schedule?: IMonthSchedule;
+//   schedule?: TMonthSchedule;
 // }
 
 // const streamWidth: { [x: number]: string } = {
@@ -337,8 +341,8 @@ export default CustomCalendar;
 //             {week[row].map((day, column) => {
 //               const dayStr = dateToFormatString(day, "YYYY-MM-DD");
 //               const todayStr = dateToFormatString(getToday(), "YYYY-MM-DD");
-//               const todayCheck = todayStr === dayStr;
-//               const monthCheck =
+//               const isToday = todayStr === dayStr;
+//               const isSameMonth =
 //                 dateToFormatString(today, "YYYY-MM") ===
 //                 dateToFormatString(day, "YYYY-MM");
 
@@ -354,18 +358,18 @@ export default CustomCalendar;
 //                 <div key={day.unix()} className="relative h-36">
 //                   <div
 //                     className={`pl-1 py-1 text-left text-xs ${
-//                       monthCheck ? "font-normal" : "font-light"
+//                       isSameMonth ? "font-normal" : "font-light"
 //                     } ${
-//                       monthCheck && !column
+//                       isSameMonth && !column
 //                         ? "text-red-600"
-//                         : monthCheck && column === 6
+//                         : isSameMonth && column === 6
 //                         ? "text-blue-600"
-//                         : monthCheck
+//                         : isSameMonth
 //                         ? "text-textMain"
 //                         : "text-textNormal"
 //                     }`}
 //                   >
-//                     {todayCheck ? (
+//                     {isToday ? (
 //                       <div className="flex items-center justify-center w-6 h-6 bg-brandMain rounded-full text-white">
 //                         {dateToFormatString(day, "D")}
 //                       </div>

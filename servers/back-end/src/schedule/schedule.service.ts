@@ -17,7 +17,7 @@ import {
   isSameDate,
   TDayjsType,
 } from 'src/lib/utils/dateFormat';
-import { IDateSchedule, IMonthSchedule } from 'src/lib/types/schedule.type';
+import { IDateSchedule, TMonthSchedule } from 'src/lib/types/schedule.type';
 
 @Injectable()
 export class ScheduleService {
@@ -149,7 +149,7 @@ export class ScheduleService {
     return result;
   }
 
-  async getScheduleListByMonth(month: string): Promise<IMonthSchedule> {
+  async getScheduleListByMonth(month: string): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
 
@@ -182,19 +182,17 @@ export class ScheduleService {
     scheduleList: ScheduleDocument[],
     startDate: Date,
     endDate: Date,
-  ): IMonthSchedule {
-    const resultMap = new Map<
-      string,
-      { preList: ScheduleDocument[]; list: ScheduleDocument[] }
-    >();
+  ): TMonthSchedule {
+    const result: TMonthSchedule = {};
+
+    // 해당 월의 시작일과 종료일
+    const startLimit = getDayjs(startDate);
+    const endLimit = getDayjs(endDate);
 
     for (const schedule of scheduleList) {
       // 현재 스케줄 시작일과 종료일
       const start = getDayjs(schedule.startAt);
       const end = getDayjs(schedule.endAt);
-      // 해당 월의 시작일과 종료일
-      const startLimit = getDayjs(startDate);
-      const endLimit = getDayjs(endDate);
 
       // 기준일 (초기값은 스케줄의 시작일)
       let current = start.clone();
@@ -213,33 +211,26 @@ export class ScheduleService {
         const dayStr = dateToFormatString(current, 'YYYY-MM-DD');
 
         // dayStr의 key 값이 처음 등장하면 해당 값 초기화
-        if (!resultMap.has(dayStr)) {
-          resultMap.set(dayStr, { list: [], preList: [] });
+        if (!result[dayStr]) {
+          result[dayStr] = { list: [] };
         }
 
         // current가 방송 시작일과 같은지 체크 (list, preList 구분하기 위해서)
         const isStartDay = isSameDate(current, start);
-        // dayStr을 키값으로 가져옴
-        const group = resultMap.get(dayStr)!;
-
         // current가 방송 시작일이면 list에 담고 아니라면 preList에 담기
-        if (isStartDay) group.list.push(schedule);
-        else group.preList.push(schedule);
+        result[dayStr].list.push(schedule);
 
         // 다음 날짜로 이동
         current = addDate(current, 1, 'd');
       }
-    }
 
-    // 현재 생성한 resultMap은 map이기 때문에 day를 기준으로 원하는 형태의 array로 변경
-    const result: IMonthSchedule = Array.from(resultMap.entries())
-      .map(([day, value]) => ({
-        day,
-        preList: value.preList,
-        list: value.list,
-      }))
-      // day가 ISO string 형태기 때문에 날짜문자열 sort 가능
-      .sort((a, b) => a.day.localeCompare(b.day));
+      // 각 날짜별로 list를 startAt 기준으로 정렬
+      for (const dayStr in result) {
+        result[dayStr].list.sort(
+          (a, b) => a.startAt.getTime() - b.startAt.getTime(),
+        );
+      }
+    }
 
     return result;
   }

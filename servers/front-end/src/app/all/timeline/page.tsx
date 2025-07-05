@@ -5,7 +5,7 @@ import {
   dateTypeToDate,
   getToday,
 } from "@/lib/utils/dateFormat";
-import { IMonthSchedule } from "@/schemas/schedule.schema";
+import { TMonthSchedule } from "@/schemas/schedule.schema";
 import AllTimelineView from "@/screens/all/timeline";
 import { QueryClient } from "@tanstack/react-query";
 
@@ -19,7 +19,7 @@ const AllTimelinePage = async ({ searchParams }: IAllTimelinePage) => {
   const targetDate = dateTypeToDate(dateStr);
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery<IMonthSchedule>({
+  await queryClient.prefetchQuery<TMonthSchedule>({
     queryKey: queryKeys.getScheduleListByMonth(targetDate),
     queryFn: () => getScheduleListByMonth(targetDate),
   });

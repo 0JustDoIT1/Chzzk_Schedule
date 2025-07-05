@@ -71,7 +71,8 @@ export default function AllCommonLayout({ children }: Props) {
         </div>
       </section>
       <main className="w-full md:container mx-auto flex flex-col items-start justify-start md:px-8 md:flex-row lg:max-w-6xl">
-        <aside className="w-full h-full flex flex-row justify-center gap-2 py-6 px-2 border-b border-b-textSuperLight md:flex-col md:justify-start md:w-44 md:border-r md:border-r-textSuperLight md:border-b-0">
+        {/* pl-1 py-1 text-left text-xs h-36 border-b border-textLight */}
+        <aside className="w-full h-full flex flex-row justify-center gap-2 py-6 px-2 border-b border-b-textSuperLight md:flex-col md:justify-start md:w-44 md:border-b-0">
           <p className="hidden mb-2 text-textNormal text-sm md:inline-block">
             일정 형태
           </p>

@@ -74,9 +74,7 @@ export interface IDateSchedule {
 }
 
 export interface IMonthScheduleItem {
-  day: string;
-  preList: TScheduleSchema[];
   list: TScheduleSchema[];
 }
 
-export type IMonthSchedule = IMonthScheduleItem[];
+export type TMonthSchedule = Record<string, IMonthScheduleItem>;

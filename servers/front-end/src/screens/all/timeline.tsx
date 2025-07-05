@@ -24,7 +24,7 @@ const AllTimelineView = ({ date }: IAllTimelineView) => {
   if (isLoading) return <IsLoading />;
   if (isError) return <IsError />;
 
-  return <>{isSuccess && <CustomDayline schedule={data} date={today} />}</>;
+  return <>{isSuccess && <CustomDayline scheduleList={data} date={today} />}</>;
 };
 
 export default AllTimelineView;

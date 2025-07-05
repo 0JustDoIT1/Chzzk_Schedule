@@ -10,14 +10,14 @@ import { BrandLink } from "./link";
 import { useEffect } from "react";
 import { sorting } from "@/lib/utils/sort";
 import { getRoute, route } from "@/lib/constants/router";
-import { IMonthSchedule } from "@/schemas/schedule.schema";
+import { TMonthSchedule } from "@/schemas/schedule.schema";
 
 interface ICustomDayLine {
-  schedule: IMonthSchedule;
+  scheduleList: TMonthSchedule;
   date: TDayjsType;
 }
 
-const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
+const CustomDayline = ({ scheduleList, date }: ICustomDayLine) => {
   const dateString = dateToFormatString(date, "YYYY-MM-DD");
 
   useEffect(() => {
@@ -32,9 +32,9 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
     } else {
       window.scroll({ top: 0, behavior: "smooth" });
     }
-  }, [schedule, date]);
+  }, [scheduleList, date]);
 
-  if (schedule.length === 0)
+  if (scheduleList.length === 0)
     return (
       <div className="container flex justify-center items-center py-32 mx-auto md:pl-12 lg:max-w-6xl">
         <p className="text-xl text-textNormal">이번 달 방송 일정이 없습니다.</p>
@@ -44,11 +44,11 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
   return (
     <div className="w-full mt-12 mx-auto md:pl-12 lg:max-w-6xl">
       <ol className="relative ml-12 border-l-2 border-brandMain md:ml-0">
-        {schedule.map((list) => {
+        {scheduleList.map((schedule) => {
           let timeCircle = "";
           let circleText = "";
 
-          if (dateString === list.day) {
+          if (dateString === schedule.day) {
             timeCircle +=
               "flex absolute items-center justify-center w-12 h-12 rounded-full ring-4 ring-white border-2 border-brandMain bg-brandMain -start-6";
             circleText = "mt-[1px] text-base font-bold text-white";
@@ -59,24 +59,24 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
           }
 
           const dayList = sorting(
-            [...list.list, ...list.preList],
+            [...schedule.list, ...schedule.preList],
             1,
             "startAt"
           );
 
           return (
             <li
-              key={list.day}
-              id={dateToFormatString(list.day, "YYYY-MM-DD")}
+              key={schedule.day}
+              id={dateToFormatString(schedule.day, "YYYY-MM-DD")}
               className="mb-16 ml-12 mr-8 md:mr-0"
             >
               {dayList.length > 0 && (
                 <div className={timeCircle}>
                   <p className={circleText}>
-                    {dateToFormatString(list.day, "DD")}
+                    {dateToFormatString(schedule.day, "DD")}
                   </p>
                   <p className="absolute top-12 py-1 text-center bg-white text-sm text-brandMain">
-                    {dateToFormatString(list.day, "dddd")}
+                    {dateToFormatString(schedule.day, "dddd")}
                   </p>
                 </div>
               )}
@@ -123,7 +123,7 @@ const CustomDayline = ({ schedule, date }: ICustomDayLine) => {
                     </div>
                   </div>
                   {dateToFormatString(getToday(), "YYYY-MM-DD") ===
-                    list.day && (
+                    schedule.day && (
                     <div className="w-full md:w-auto">
                       <BrandLink
                         href={getRoute(route.streaming, item._id)}

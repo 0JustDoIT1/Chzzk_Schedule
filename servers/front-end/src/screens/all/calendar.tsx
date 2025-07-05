@@ -38,7 +38,7 @@ const AllCalendarView = ({ date }: IAllCalendarView) => {
           week={week}
           dayArray={dayArray}
           isHasSchedule={true}
-          schedule={data}
+          scheduleList={data}
         />
       )}
     </>
