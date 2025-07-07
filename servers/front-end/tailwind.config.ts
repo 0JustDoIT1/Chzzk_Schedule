@@ -14,6 +14,15 @@ export default {
     "text-pink-800",
     "text-green-600",
     "text-green-400",
+    {
+      pattern: /col-start-\d+/,
+    },
+    {
+      pattern: /col-span-\d+/,
+    },
+    {
+      pattern: /row-start-\d+/,
+    },
   ],
   theme: {
     extend: {

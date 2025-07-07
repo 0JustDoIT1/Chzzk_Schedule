@@ -47,7 +47,7 @@ const TimelineItem = ({ schedule, today, category }: ITimelineItem) => {
       </div>
       <div className="w-full md:w-auto">
         <BrandLink
-          href={getRoute(route.today, schedule._id)}
+          href={getRoute(route.detail, schedule._id)}
           className="w-full"
         >
           자세히 보기

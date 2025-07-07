@@ -6,15 +6,15 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-interface ITodayIdLayout {
+interface IDetailIdModalLayout {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default async function TodayIdLayout({
+export default async function DetailIdModalLayout({
   children,
   params,
-}: ITodayIdLayout) {
+}: IDetailIdModalLayout) {
   const { id } = await params;
 
   const queryClient = new QueryClient();

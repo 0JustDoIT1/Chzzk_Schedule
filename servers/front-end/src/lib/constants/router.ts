@@ -1,19 +1,19 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export class route {
+  // Base Route
   static index = "/";
   static all = route.index + "all";
   static streamer = route.index + "streamer";
   static today = route.index + "today";
   static chzzk = route.index + "chzzk";
-  static streaming = route.index + "streaming";
-  static add = route.index + "add";
 
   // 해당 route는 const용 (실제 routing X)
   static schedule = route.index + "schedule";
   static calendar = route.index + "calendar";
   static timeline = route.index + "timeline";
 
+  // 실제 사용되는 Route
   static allCalendar = route.all + route.calendar;
   static allTimeline = route.all + route.timeline;
 
@@ -25,6 +25,11 @@ export class route {
 
   static scheduleAdd = route.schedule + "/add";
   static scheduleEdit = route.schedule + "/edit";
+
+  // Modal Route
+  static add = route.index + "add";
+  static detail = route.index + "detail";
+  static streaming = route.index + "streaming";
 }
 
 export const getRoute = (path: string, arg: string) => {

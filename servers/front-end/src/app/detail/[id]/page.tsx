@@ -1,13 +1,13 @@
 import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
 
-interface ITodayIdPage {
+interface IDetailIdPage {
   params: { id: string };
 }
 
-const TodayIdPage = async ({ params }: ITodayIdPage) => {
+const DetailIdPage = async ({ params }: IDetailIdPage) => {
   const { id } = await params;
 
   return <ScheduleDetailView id={id} />;
 };
 
-export default TodayIdPage;
+export default DetailIdPage;

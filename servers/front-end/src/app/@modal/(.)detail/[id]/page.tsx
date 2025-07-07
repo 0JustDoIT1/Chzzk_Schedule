@@ -1,11 +1,11 @@
 import Modal from "@/components/modal";
 import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
 
-interface ITodayIdModalPage {
+interface IDetailIdModalPage {
   params: { id: string };
 }
 
-const TodayIdModalPage = async ({ params }: ITodayIdModalPage) => {
+const DetailIdModalPage = async ({ params }: IDetailIdModalPage) => {
   const { id } = await params;
 
   return (
@@ -15,4 +15,4 @@ const TodayIdModalPage = async ({ params }: ITodayIdModalPage) => {
   );
 };
 
-export default TodayIdModalPage;
+export default DetailIdModalPage;
