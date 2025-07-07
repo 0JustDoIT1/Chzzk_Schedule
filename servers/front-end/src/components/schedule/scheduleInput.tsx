@@ -2,21 +2,21 @@ import {
   baseCategoryOpt,
   chzzkCategoryOpt,
 } from "@/lib/constants/streamingCategory";
-import TiptapEditor from "./tiptapEditor";
+import TiptapEditor from "../tiptap/tiptapEditor";
 import { Controller } from "react-hook-form";
-import SearchableDropdown from "./searchableDropdown";
+import SearchableDropdown from "../searchableDropdown";
 import React from "react";
 import useScheduleInput from "@/lib/hook/useScheduleInput";
 import CheckIcon from "~/public/assets/svg/check";
-import HelperText from "./helperText";
+import HelperText from "../helperText";
 import { useRouter } from "next/navigation";
-import { BrandButton } from "./button";
+import { BrandButton } from "../button";
 import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { IStreamer } from "@/schemas/streamer.schema";
 import { goBackRoute, route } from "@/lib/constants/router";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { TScheduleSchema } from "@/schemas/schedule.schema";
-import MemberList from "./memberList";
+import MemberList from "../memberList";
 
 interface IScheduleInput {
   streamerList: IStreamer[];

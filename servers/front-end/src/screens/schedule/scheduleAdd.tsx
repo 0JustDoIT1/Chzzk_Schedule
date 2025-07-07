@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import ScheduleInput from "../../components/scheduleInput";
+import ScheduleInput from "../../components/schedule/scheduleInput";
 import { useQuery } from "@tanstack/react-query";
 import { getAllStreamerList } from "@/api/streamer-api";
-import IsLoading from "@/components/isLoading";
-import IsError from "@/components/isError";
+import IsLoading from "@/components/layout/isLoading";
+import IsError from "@/components/layout/isError";
 import { queryKeys } from "@/lib/constants/react-query";
 
 const ScheduleAddView = () => {

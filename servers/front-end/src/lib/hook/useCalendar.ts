@@ -18,7 +18,7 @@ const useCalendar = () => {
   const [today, setToday] = useState<TDayjsType>(getToday());
   const [dayArray, setDayArray] = useState<{ [x: number]: TDayjsType[] }[]>([]);
 
-  const week = ["일", "월", "화", "수", "목", "금", "토"];
+  const weekHeader = ["일", "월", "화", "수", "목", "금", "토"];
 
   const calendarRows = 7;
   const calendarColumns = 6;
@@ -99,7 +99,7 @@ const useCalendar = () => {
     setToday,
     dayArray,
     setDayArray,
-    week,
+    weekHeader,
     setPreMonth,
     setNextMonth,
     setPresentMonth,

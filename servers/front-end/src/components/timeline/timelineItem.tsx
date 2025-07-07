@@ -5,7 +5,7 @@ import {
 import { TScheduleSchema } from "@/schemas/schedule.schema";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandLink } from "./link";
+import { BrandLink } from "../link";
 import { getRoute, route } from "@/lib/constants/router";
 import { TDayjsType } from "@/lib/utils/dateFormat";
 import clsx from "clsx";

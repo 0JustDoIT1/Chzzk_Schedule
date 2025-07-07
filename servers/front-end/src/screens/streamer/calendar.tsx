@@ -13,7 +13,7 @@ import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { getRoute, route } from "@/lib/constants/router";
-import CustomCalendar from "@/components/calendar";
+import CustomCalendar from "@/components/calendar/calendar";
 
 const StreamerCalendarView = () => {
   const params = useParams<{ id: string }>();

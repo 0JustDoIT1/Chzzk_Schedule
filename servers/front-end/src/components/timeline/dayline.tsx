@@ -6,7 +6,7 @@ import {
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandLink } from "./link";
+import { BrandLink } from "../link";
 import { useEffect } from "react";
 import { sorting } from "@/lib/utils/sort";
 import { getRoute, route } from "@/lib/constants/router";

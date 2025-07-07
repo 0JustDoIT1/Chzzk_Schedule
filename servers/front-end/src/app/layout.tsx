@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/components/header";
+import Header from "@/components/layout/header";
 import { ReactNode } from "react";
 import { FloatingButton } from "@/components/floatingButton";
 import RootProvider from "@/lib/providers";

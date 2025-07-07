@@ -2,19 +2,19 @@
 
 import useCalendar from "@/lib/hook/useCalendar";
 import React, { useEffect } from "react";
-import CustomCalendar from "@/components/calendar";
+import CustomCalendar from "@/components/calendar/calendar";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/constants/react-query";
 import { getScheduleListByMonth } from "@/api/schedule-api";
-import IsLoading from "@/components/isLoading";
-import IsError from "@/components/isError";
+import IsLoading from "@/components/layout/isLoading";
+import IsError from "@/components/layout/isError";
 
 interface IAllCalendarView {
   date: Date;
 }
 
 const AllCalendarView = ({ date }: IAllCalendarView) => {
-  const { today, week, dayArray } = useCalendar();
+  const { today, weekHeader, dayArray } = useCalendar();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -35,7 +35,7 @@ const AllCalendarView = ({ date }: IAllCalendarView) => {
       {isSuccess && (
         <CustomCalendar
           today={today}
-          week={week}
+          weekHeader={weekHeader}
           dayArray={dayArray}
           isHasSchedule={true}
           scheduleList={data}

@@ -12,7 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { route } from "@/lib/constants/router";
 import { BrandButton, CustomButton } from "@/components/button";
-import CustomCalendar from "@/components/calendar";
+import CustomCalendar from "@/components/calendar/calendar";
 
 const ChzzkCalendarView = () => {
   const pathName = usePathname();

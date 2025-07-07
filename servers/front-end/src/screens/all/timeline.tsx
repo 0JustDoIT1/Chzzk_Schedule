@@ -2,12 +2,12 @@
 
 import useCalendar from "@/lib/hook/useCalendar";
 import React from "react";
-import CustomDayline from "@/components/dayline";
+import CustomDayline from "@/components/timeline/dayline";
 import { queryKeys } from "@/lib/constants/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleListByMonth } from "@/api/schedule-api";
-import IsLoading from "@/components/isLoading";
-import IsError from "@/components/isError";
+import IsLoading from "@/components/layout/isLoading";
+import IsError from "@/components/layout/isError";
 
 interface IAllTimelineView {
   date: Date;

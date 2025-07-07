@@ -2,11 +2,11 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 // import { Markdown } from "tiptap-markdown";
-import TiptapToolbar from "./tiptapToolbar";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect } from "react";
+import TiptapToolbar from "./tiptapToolbar";
 
 interface ITiptapEditor {
   text: string;

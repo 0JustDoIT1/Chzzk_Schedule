@@ -1,7 +1,7 @@
 "use client";
 
 import { AddScheduleLink } from "@/components/link";
-import CustomTimeline from "@/components/timeline";
+import CustomTimeline from "@/components/timeline/timeline";
 import {
   dateToFormatString,
   dateTypeToDate,
@@ -10,8 +10,8 @@ import {
 import React, { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleListByDate } from "@/api/schedule-api";
-import IsLoading from "@/components/isLoading";
-import IsError from "@/components/isError";
+import IsLoading from "@/components/layout/isLoading";
+import IsError from "@/components/layout/isError";
 import { queryKeys } from "@/lib/constants/react-query";
 
 const TodayScreen = () => {

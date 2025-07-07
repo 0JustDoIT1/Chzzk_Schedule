@@ -11,7 +11,7 @@ import TimelineIcon from "~/public/assets/svg/timeline";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import CustomDayline from "@/components/dayline";
+import CustomDayline from "@/components/timeline/dayline";
 import { getRoute, route } from "@/lib/constants/router";
 import { BrandButton, CustomButton } from "@/components/button";
 
