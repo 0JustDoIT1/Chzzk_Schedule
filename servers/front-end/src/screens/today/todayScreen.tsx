@@ -1,6 +1,6 @@
 "use client";
 
-import { AddScheduleLink } from "@/components/link";
+import { AddScheduleLink } from "@/components/common/link";
 import CustomTimeline from "@/components/timeline/timeline";
 import {
   dateToFormatString,

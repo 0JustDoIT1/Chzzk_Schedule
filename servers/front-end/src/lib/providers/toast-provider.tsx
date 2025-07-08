@@ -1,6 +1,6 @@
 "use client";
 
-import ToastList from "@/components/toast";
+import ToastList from "@/components/common/toast";
 import { createToastStore, TToastStore } from "@/lib/stores/toast-store";
 import { createContext, ReactNode, useContext, useRef } from "react";
 import { useStore } from "zustand";

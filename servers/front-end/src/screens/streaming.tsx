@@ -11,7 +11,7 @@ const StreamingView = () => {
         {id}
         <p>채널 보기</p>
         <p>
-          <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
+          <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain" />
         </p>
       </div>
     </section>

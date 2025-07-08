@@ -1,4 +1,4 @@
-import Modal from "@/components/modal";
+import Modal from "@/components/common/modal";
 import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
 
 interface IDetailIdModalPage {

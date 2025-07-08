@@ -28,7 +28,7 @@ const CalendarDateGrid = ({ week, weekIdx, today }: ICalendarDateGrid) => {
         const isSameMonth =
           currentMonthStr === dateToFormatString(day, "YYYY-MM");
 
-        const baseDayClass = "pl-1 py-1 text-left text-xs h-36";
+        const baseDayClass = "pl-1 py-1 text-left text-xs h-[150px]";
         const dayClass = clsx(baseDayClass, {
           "text-red-600": isSameMonth && dayIdx === 0,
           "text-blue-600": isSameMonth && dayIdx === 6,
@@ -36,12 +36,13 @@ const CalendarDateGrid = ({ week, weekIdx, today }: ICalendarDateGrid) => {
           "text-textNormal": !isSameMonth,
           "font-normal": isSameMonth,
           "font-light": !isSameMonth,
+          "bg-brandSuperLight": isToday,
         });
 
         return (
           <div key={day.unix()} className={dayClass}>
             {isToday ? (
-              <div className="flex items-center justify-center w-6 h-6 bg-brandMain rounded-full text-white">
+              <div className="flex items-center justify-center w-6 h-6 rounded-full text-brandDark font-bold">
                 {dateToFormatString(day, "D")}
               </div>
             ) : (

@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import { ReactNode } from "react";
-import { FloatingButton } from "@/components/floatingButton";
+import { FloatingButton } from "@/components/common/floatingButton";
 import RootProvider from "@/lib/providers";
 
 const gmarket = localFont({

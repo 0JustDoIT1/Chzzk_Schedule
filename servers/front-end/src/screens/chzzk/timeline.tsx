@@ -5,14 +5,14 @@ import { dateToFormatString } from "@/lib/utils/dateFormat";
 import React from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
-import { AddScheduleLink } from "@/components/link";
+import { AddScheduleLink } from "@/components/common/link";
 import CustomDayline from "@/components/timeline/dayline";
 import TimelineIcon from "~/public/assets/svg/timeline";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { route } from "@/lib/constants/router";
-import { BrandButton, CustomButton } from "@/components/button";
+import { BrandButton, CustomButton } from "@/components/common/button";
 
 const ChzzkTimelineView = () => {
   const pathName = usePathname();

@@ -6,14 +6,14 @@ import { TestDayList } from "@/lib/constants/test";
 import React from "react";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
-import { AddScheduleLink } from "@/components/link";
+import { AddScheduleLink } from "@/components/common/link";
 import TimelineIcon from "~/public/assets/svg/timeline";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import CustomDayline from "@/components/timeline/dayline";
 import { getRoute, route } from "@/lib/constants/router";
-import { BrandButton, CustomButton } from "@/components/button";
+import { BrandButton, CustomButton } from "@/components/common/button";
 
 const StreamerTimelineView = () => {
   const params = useParams<{ id: string }>();

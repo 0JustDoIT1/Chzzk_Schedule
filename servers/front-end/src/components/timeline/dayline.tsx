@@ -6,7 +6,7 @@ import {
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandLink } from "../link";
+import { BrandLink } from "../common/link";
 import { useEffect } from "react";
 import { sorting } from "@/lib/utils/sort";
 import { getRoute, route } from "@/lib/constants/router";
@@ -130,7 +130,7 @@ const CustomDayline = ({ scheduleList, date }: ICustomDayLine) => {
                         className="w-full"
                       >
                         방송 보기
-                        <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain mt-[0.5]" />
+                        <ArrowUpRightFromSquareIcon className="w-4 h-4 text-textMain" />
                       </BrandLink>
                     </div>
                   )}

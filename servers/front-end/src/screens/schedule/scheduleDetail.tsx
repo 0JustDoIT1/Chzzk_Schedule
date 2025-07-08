@@ -1,15 +1,11 @@
 "use client";
 
-import {
-  AllCategoryLabel,
-  categoryColorMap,
-} from "@/lib/constants/streamingCategory";
 import { useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandLink } from "../../components/link";
+import { BrandLink } from "../../components/common/link";
 import { getRoute, goBackRoute, route } from "@/lib/constants/router";
-import { BrandButton } from "@/components/button";
+import { BrandButton } from "@/components/common/button";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleById } from "@/api/schedule-api";
 import IsLoading from "@/components/layout/isLoading";
@@ -20,6 +16,7 @@ import Link from "next/link";
 import { displayDate } from "@/lib/utils/chzzk-date";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { queryKeys } from "@/lib/constants/react-query";
+import CategoryTag from "@/components/common/categoryTag";
 
 interface IScheduleDetailView {
   id: string;
@@ -42,17 +39,15 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
     <section className="w-full">
       {isSuccess && (
         <div className="w-full mx-auto flex flex-col md:container md:p-8 lg:max-w-6xl">
-          <Link target="_blank" href={data.chzzkLink} className="flex mb-2">
-            <p className="text-xl mr-2">
-              <span
-                className={`mr-2 font-semibold ${
-                  categoryColorMap[data.category]
-                }`}
-              >
-                &#91;{AllCategoryLabel[data.category]}&#93;
-              </span>
-              {data.title}
-            </p>
+          <Link
+            target="_blank"
+            href={data.chzzkLink}
+            className="flex items-center mb-2"
+          >
+            <h3 className="text-xl mr-2">
+              <CategoryTag category={data.category} className="text-base" />
+              <span className="ml-1">{data.title}</span>
+            </h3>
             <ArrowUpRightFromSquareIcon className="w-6 h-6 mr-2" />
           </Link>
           <div className="flex flex-col gap-2 mb-2 text-textNormal text-sm">

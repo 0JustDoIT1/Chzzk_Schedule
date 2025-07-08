@@ -50,7 +50,7 @@ export const HeaderLink = ({ children, className, href }: IBrandLink) => {
 export const AddScheduleLink = ({ className }: { className: string }) => {
   return (
     <BrandLink href={route.scheduleAdd} className={clsx("", className)}>
-      <PlusIcon className="w-4 h-4 text-textMain mt-[0.5]" />
+      <PlusIcon className="w-4 h-4 text-textMain" />
       일정 추가
     </BrandLink>
   );

@@ -1,4 +1,4 @@
-import Modal from "@/components/modal";
+import Modal from "@/components/common/modal";
 import StreamingView from "@/screens/streaming";
 
 const StreamingModalPage = () => {

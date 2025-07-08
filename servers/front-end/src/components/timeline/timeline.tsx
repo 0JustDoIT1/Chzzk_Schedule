@@ -1,6 +1,5 @@
 import { dateToFormatString, getToday } from "@/lib/utils/dateFormat";
 import { IDateSchedule } from "@/schemas/schedule.schema";
-import { AllCategoryLabel } from "@/lib/constants/streamingCategory";
 import clsx from "clsx";
 import TimelineItem from "./timelineItem";
 
@@ -57,7 +56,6 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
                   key={schedule._id}
                   schedule={schedule}
                   today={today}
-                  category={AllCategoryLabel}
                 />
               ))}
             </li>

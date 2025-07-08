@@ -1,4 +1,8 @@
-import { BaseCategory, ChzzkCategory } from "@/schemas/schedule.schema";
+import {
+  AllCategory,
+  BaseCategory,
+  ChzzkCategory,
+} from "@/schemas/schedule.schema";
 import { IOption } from "@/lib/types/optionType";
 
 export const BaseCategoryLabel = {
@@ -43,17 +47,49 @@ export const chzzkCategoryOpt: IOption[] = [
   },
 ];
 
-export const AllCategoryLabel: typeof BaseCategoryLabel &
-  typeof ChzzkCategoryLabel = {
+export const AllCategoryLabel: Record<AllCategory, string> = {
   ...BaseCategoryLabel,
   ...ChzzkCategoryLabel,
 };
 
-export const categoryColorMap: { [key: string]: string } = {
-  personal: "text-yellow-800",
-  together: "text-purple-800",
-  content: "text-teal-800",
-  match: "text-pink-800",
-  official: "text-green-600",
-  watch: "text-green-400",
+export const categoryStyleMap: Record<
+  AllCategory,
+  { bg: string; text: string; border: string; hover: string }
+> = {
+  [AllCategory.PERSONAL]: {
+    bg: "bg-yellow-600",
+    text: "text-white",
+    border: "border-yellow-600",
+    hover: "hover:bg-yellow-100",
+  },
+  [AllCategory.TOGETHER]: {
+    bg: "bg-purple-600",
+    text: "text-white",
+    border: "border-purple-600",
+    hover: "hover:bg-purple-100",
+  },
+  [AllCategory.CONTENT]: {
+    bg: "bg-teal-600",
+    text: "text-white",
+    border: "border-teal-600",
+    hover: "hover:bg-teal-100",
+  },
+  [AllCategory.MATCH]: {
+    bg: "bg-pink-600",
+    text: "text-white",
+    border: "border-pink-600",
+    hover: "hover:bg-pink-100",
+  },
+  [AllCategory.OFFICIAL]: {
+    bg: "bg-green-500",
+    text: "text-white",
+    border: "border-green-500",
+    hover: "hover:bg-green-100",
+  },
+  [AllCategory.WATCH]: {
+    bg: "bg-green-400",
+    text: "text-white",
+    border: "border-green-400",
+    hover: "hover:bg-green-100",
+  },
 };

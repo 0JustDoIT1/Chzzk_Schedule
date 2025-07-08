@@ -24,21 +24,13 @@ const ToastItem = ({ id, type, message, shown }: IToastItem) => {
   const ToastIcon = () => {
     switch (type) {
       case "success":
-        return (
-          <CheckCircleIcon className="text-green-600 w-5 h-5 mr-3 mb-[0.5px]" />
-        );
+        return <CheckCircleIcon className="text-green-600 w-5 h-5 mr-3" />;
       case "info":
-        return (
-          <InfoCircleIcon className="text-blue-600 w-5 h-5 mr-3 mb-[0.5px]" />
-        );
+        return <InfoCircleIcon className="text-blue-600 w-5 h-5 mr-3" />;
       case "warning":
-        return (
-          <WarningCircleIcon className="text-yellow-600 w-5 h-5 mr-3 mb-[0.5px]" />
-        );
+        return <WarningCircleIcon className="text-yellow-600 w-5 h-5 mr-3" />;
       case "error":
-        return (
-          <ErrorCircleIcon className="text-red-600 w-5 h-5 mr-3 mb-[0.5px]" />
-        );
+        return <ErrorCircleIcon className="text-red-600 w-5 h-5 mr-3" />;
       default:
         return null;
     }

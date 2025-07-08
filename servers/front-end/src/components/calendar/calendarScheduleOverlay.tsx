@@ -19,6 +19,7 @@ import {
   findAvailableRow,
   isScheduleAlreadyRenderedInWeek,
 } from "@/lib/utils/calendarUtils";
+import { categoryStyleMap } from "@/lib/constants/streamingCategory";
 
 interface IDayScheduleItemProps {
   schedule: TScheduleSchema;
@@ -60,14 +61,16 @@ const DayScheduleItem = ({
     colStart[dayIdx],
     colSpan[span - 1],
     rowStart[row],
-    "h-5 px-1 bg-white border border-brandMain rounded-md text-textMain text-xs truncate"
+    "flex items-center h-5 px-1 bg-white rounded-md text-textMain text-xs truncate border",
+    categoryStyleMap[schedule.category].border,
+    categoryStyleMap[schedule.category].hover
   );
 
   return (
     <Link
       key={`${schedule._id}-${dayStr}`}
       className={linkClassName}
-      href={getRoute(route.schedule, schedule._id)}
+      href={getRoute(route.detail, schedule._id)}
     >
       {schedule.title}
     </Link>
@@ -86,7 +89,7 @@ const DayOverflowLink = ({
       className={clsx(
         colStart[dayIdx],
         rowStart[maxRenderCount + 1],
-        "flex items-center justify-center w-full h-5 px-1 bg-brandMain rounded-md text-white text-xs font-light truncate"
+        "flex items-center justify-center w-full h-5 px-1 mt-[2px] bg-brandMain rounded-md text-white text-xs font-light truncate hover:bg-brandMainHover"
       )}
       scroll={false}
     >
@@ -109,7 +112,7 @@ const CalendarScheduleOverlay = ({
   const currentWeek = week[weekIdx];
 
   return (
-    <div className="absolute top-8 left-0 right-0 z-10 grid grid-cols-7 gap-[2px]">
+    <div className="absolute top-8 left-0 right-0 z-10 grid grid-cols-7 gap-[2.5px]">
       {currentWeek.map((day, dayIdx) => {
         // 캘린더 별 날짜
         const dayStr = dateToFormatString(day, "YYYY-MM-DD");

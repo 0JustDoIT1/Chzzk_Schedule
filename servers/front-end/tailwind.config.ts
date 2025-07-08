@@ -8,21 +8,36 @@ export default {
     "./src/screens/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   safelist: [
-    "text-yellow-800",
-    "text-purple-800",
-    "text-teal-800",
-    "text-pink-800",
-    "text-green-600",
-    "text-green-400",
-    {
-      pattern: /col-start-\d+/,
-    },
-    {
-      pattern: /col-span-\d+/,
-    },
-    {
-      pattern: /row-start-\d+/,
-    },
+    // 배경색 (bg)
+    "bg-yellow-600",
+    "bg-purple-600",
+    "bg-teal-600",
+    "bg-pink-600",
+    "bg-green-500",
+    "bg-green-400",
+
+    // 테두리색 (border)
+    "border-yellow-600",
+    "border-purple-600",
+    "border-teal-600",
+    "border-pink-600",
+    "border-green-500",
+    "border-green-400",
+
+    // hover 배경색 (hover:bg)
+    "hover:bg-yellow-100",
+    "hover:bg-purple-100",
+    "hover:bg-teal-100",
+    "hover:bg-pink-100",
+    "hover:bg-green-100",
+
+    // 텍스트색 (text)
+    "text-white",
+
+    // 동적 클래스 (grid 사용시 필수)
+    { pattern: /col-start-\d+/ },
+    { pattern: /col-span-\d+/ },
+    { pattern: /row-start-\d+/ },
   ],
   theme: {
     extend: {
