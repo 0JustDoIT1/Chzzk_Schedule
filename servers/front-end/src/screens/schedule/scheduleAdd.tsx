@@ -19,6 +19,7 @@ const ScheduleAddView = () => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getAllStreamerList,
     queryFn: getAllStreamerList,
+    placeholderData: (prev) => prev,
   });
 
   // 데이터가 있을 때만 필터링 처리

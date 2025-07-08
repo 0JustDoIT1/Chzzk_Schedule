@@ -19,6 +19,7 @@ const AllTimelineView = ({ date }: IAllTimelineView) => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getScheduleListByMonth(date),
     queryFn: () => getScheduleListByMonth(date),
+    placeholderData: (prev) => prev,
   });
 
   if (isLoading) return <IsLoading />;

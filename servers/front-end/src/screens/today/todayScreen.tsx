@@ -28,6 +28,7 @@ const TodayScreen = () => {
     queryKey: queryKeys.getScheduleListByDate(date),
     queryFn: () => getScheduleListByDate(date),
     enabled: !!date,
+    placeholderData: (prev) => prev,
   });
 
   if (isLoading) return <IsLoading />;

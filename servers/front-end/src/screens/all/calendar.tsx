@@ -25,6 +25,7 @@ const AllCalendarView = ({ date }: IAllCalendarView) => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getScheduleListByMonth(date),
     queryFn: () => getScheduleListByMonth(date),
+    placeholderData: (prev) => prev,
   });
 
   if (isLoading) return <IsLoading />;

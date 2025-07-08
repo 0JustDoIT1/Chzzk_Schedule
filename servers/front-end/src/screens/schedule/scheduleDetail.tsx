@@ -30,6 +30,7 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
     queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id),
     enabled: !!id,
+    placeholderData: (prev) => prev,
   });
 
   if (isLoading) return <IsLoading />;

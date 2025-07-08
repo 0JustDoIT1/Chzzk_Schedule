@@ -22,6 +22,7 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
   } = useQuery({
     queryKey: queryKeys.getAllStreamerList,
     queryFn: getAllStreamerList,
+    placeholderData: (prev) => prev,
   });
 
   const {
@@ -33,6 +34,7 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
     queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id!),
     enabled: !!id,
+    placeholderData: (prev) => prev,
   });
 
   const [isOfficial, setIsOfficial] = useState<boolean>(
