@@ -13,4 +13,5 @@ export const enum ApiPath {
   SCHEDULE_BY_ID = ApiPath.SCHEDULE + "/id",
   SCHEDULE_BY_DATE = ApiPath.SCHEDULE + "/date",
   SCHEDULE_BY_MONTH = ApiPath.SCHEDULE + "/month",
+  SCHEDULE_LINK_BY_ID = ApiPath.SCHEDULE + "/link",
 }

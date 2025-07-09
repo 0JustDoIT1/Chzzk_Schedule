@@ -8,4 +8,4 @@ export interface IStreamer {
   check: boolean;
 }
 
-export type TScheduleSchema = IStreamer & IBaseSchema;
+export type TStreamerSchema = IStreamer & IBaseSchema;

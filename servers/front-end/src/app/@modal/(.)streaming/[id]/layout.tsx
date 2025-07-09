@@ -1,4 +1,4 @@
-import { getScheduleById } from "@/api/schedule-api";
+import { getScheduleLinkById } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import {
   dehydrate,
@@ -19,8 +19,8 @@ export default async function StreamingModalLayout({
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.getScheduleById(id),
-    queryFn: () => getScheduleById(id),
+    queryKey: queryKeys.getScheduleLinkById(id),
+    queryFn: () => getScheduleLinkById(id),
   });
 
   return (

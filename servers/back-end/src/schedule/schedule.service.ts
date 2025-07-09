@@ -18,6 +18,7 @@ import {
   TDayjsType,
 } from 'src/lib/utils/dateFormat';
 import { IDateSchedule, TMonthSchedule } from 'src/lib/types/schedule.type';
+import { StreamerDocument } from 'src/schemas/streamer.schema';
 
 @Injectable()
 export class ScheduleService {
@@ -236,12 +237,27 @@ export class ScheduleService {
   }
 
   // Get Schedule streamer info by Object id
-  async getScheduleById(id: string): Promise<ScheduleDocument> {
+  async getScheduleLinkById(id: string): Promise<StreamerDocument[]> {
     const schedule = await this.scheduleModel.findOne({ _id: id }).exec();
     // Validate schedule
     this.scheduleValidate.throwIfScheduleNotFound(schedule);
 
-    return schedule;
+    const result: StreamerDocument[] = [];
+
+    // 메인 스트리머 추가
+    const mainStreamer = await this.streamerService.getStreamerByName(
+      schedule.streamerName,
+    );
+    result.push(mainStreamer);
+
+    if (schedule.member) {
+      for (const member of schedule.member) {
+        const streamer = await this.streamerService.getStreamerByName(member);
+        result.push(streamer);
+      }
+    }
+
+    return result;
   }
 
   // validate schedule duplicate

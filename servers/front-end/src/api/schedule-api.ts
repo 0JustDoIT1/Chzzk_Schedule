@@ -8,6 +8,7 @@ import { ApiPath } from "@/lib/constants/api-path";
 import { postFetch } from "@/lib/fetch/post-fetch";
 import { getFetch } from "@/lib/fetch/get-fetch";
 import { patchFetch } from "@/lib/fetch/patch-fetch";
+import { IStreamer, TStreamerSchema } from "@/schemas/streamer.schema";
 
 const isServer = () => typeof window === "undefined";
 
@@ -56,4 +57,11 @@ export const getScheduleListByMonth = async (
     isServer(),
     `${ApiPath.SCHEDULE_BY_MONTH}/${month.toDateString()}`
   );
+};
+
+// Get Schedule streamer info by Object id
+export const getScheduleLinkById = async (
+  id: string
+): Promise<TStreamerSchema[]> => {
+  return await getFetch(isServer(), `${ApiPath.SCHEDULE_LINK_BY_ID}/${id}`);
 };

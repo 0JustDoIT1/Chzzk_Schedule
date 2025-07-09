@@ -21,7 +21,7 @@ export class ScheduleController {
   }
 
   @ApiOperation({ summary: '_id에 해당하는 스케줄 수정 API' })
-  @ApiParam({ name: 'id', description: 'Schedule ObjectId' })
+  @ApiParam({ name: 'id', description: '스케줄 Object Id' })
   // 전체 데이터를 항상 받아오기 때문에 create dto 사용
   @ApiBody({ description: '수정할 스케줄 데이터', type: CreateScheduleDto })
   @Patch(ApiPath.SCHEDULE_UPDATE)
@@ -33,13 +33,14 @@ export class ScheduleController {
   }
 
   @ApiOperation({ summary: '_id에 해당하는 스케줄 반환 API' })
-  @ApiParam({ name: 'id', description: 'Schedule ObjectId' })
+  @ApiParam({ name: 'id', description: '스케줄 Object Id' })
   @Get(ApiPath.SCHEDULE_BY_ID)
   async getScheduleById(@Param('id') id: string): Promise<ScheduleDocument> {
     return await this.scheduleService.getScheduleById(id);
   }
 
   @ApiOperation({ summary: 'date에 맞는 스케줄 리스트 반환 API' })
+  @ApiParam({ name: 'date', description: '날짜 (YYYY-MM-DD)' })
   @Get(ApiPath.SCHEDULE_BY_DATE)
   async getScheduleListByDate(
     @Param('date') date: string,
@@ -47,13 +48,23 @@ export class ScheduleController {
     return await this.scheduleService.getScheduleListByDate(date);
   }
 
+  @ApiOperation({ summary: 'month에 맞는 스케줄 리스트 반환 API' })
+  @ApiParam({ name: 'month', description: '월 (MM)' })
+  @Get(ApiPath.SCHEDULE_BY_MONTH)
+  async getScheduleListByMont(
+    @Param('month') month: string,
+  ): Promise<TMonthSchedule> {
+    return await this.scheduleService.getScheduleListByMonth(month);
+  }
+
   @ApiOperation({
     summary: '_id에 해당하는 스케줄의 스트리머들 정보 반환 API',
   })
-  @ApiParam({ name: 'id', description: 'Schedule ObjectId' })
+  @ApiParam({ name: 'id', description: '스케줄 Object Id' })
+  @Get(ApiPath.SCHEDULE_LINK_BY_ID)
   async getScheduleLinkById(
     @Param('id') id: string,
-  ): Promise<StreamerDocument> {
+  ): Promise<StreamerDocument[]> {
     return await this.scheduleService.getScheduleLinkById(id);
   }
 }

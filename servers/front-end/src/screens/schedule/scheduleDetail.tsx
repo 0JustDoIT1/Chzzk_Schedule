@@ -40,17 +40,20 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
     <section className="w-full">
       {isSuccess && (
         <div className="w-full mx-auto flex flex-col md:container md:p-8 lg:max-w-6xl">
-          <Link
-            target="_blank"
-            href={data.chzzkLink}
-            className="flex items-center mb-2"
-          >
+          <div className="mb-2">
+            <CategoryTag
+              category={data.category}
+              className="text-xs font-medium"
+            />
+          </div>
+          <div className="flex items-center justify-between mb-2">
             <h3 className="text-xl mr-2">
-              <CategoryTag category={data.category} className="text-base" />
-              <span className="ml-1">{data.title}</span>
+              <span>{data.title}</span>
             </h3>
-            <ArrowUpRightFromSquareIcon className="w-6 h-6 mr-2" />
-          </Link>
+            <Link target="_blank" href={data.chzzkLink}>
+              <ArrowUpRightFromSquareIcon className="w-6 h-6 text-brandMain" />
+            </Link>
+          </div>
           <div className="flex flex-col gap-2 mb-2 text-textNormal text-sm">
             <div className="flex items-center">
               <CalendarTimeIcon className="w-6 h-6 mr-2" />
