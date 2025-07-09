@@ -23,7 +23,7 @@ export default function AllCommonLayout({ children }: PropsWithChildren) {
   const linkClassName = (path: string) =>
     clsx(
       "w-full max-w-40 rounded-md px-3 py-2 text-sm text-textMain/90 md:w-auto",
-      pathName === path ? "bg-textBlur" : "bg-white",
+      pathName.startsWith(path) ? "bg-textBlur" : "bg-white",
       "hover:bg-textBlur"
     );
 
@@ -67,7 +67,6 @@ export default function AllCommonLayout({ children }: PropsWithChildren) {
         </div>
       </section>
       <main className="w-full md:container mx-auto flex flex-col items-start justify-start md:px-8 md:flex-row lg:max-w-6xl">
-        {/* pl-1 py-1 text-left text-xs h-36 border-b border-textLight */}
         <aside className="w-full h-full flex flex-row justify-center gap-2 py-6 px-2 border-b border-b-textSuperLight md:flex-col md:justify-start md:w-44 md:border-b-0">
           <p className="hidden mb-2 text-textNormal text-sm md:inline-block">
             일정 형태

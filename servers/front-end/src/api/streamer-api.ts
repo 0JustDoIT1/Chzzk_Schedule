@@ -17,3 +17,8 @@ export const createStreamer = (
 export const getAllStreamerList = (): Promise<TStreamerSchema[]> => {
   return getFetch(isServer(), ApiPath.STREAMER_ALL);
 };
+
+// Get streamer by Object Id
+export const getStreamerById = (id: string): Promise<TStreamerSchema> => {
+  return getFetch(isServer(), `${ApiPath.STREAMER_BY_ID}/${id}`);
+};

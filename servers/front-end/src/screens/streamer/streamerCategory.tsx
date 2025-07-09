@@ -1,52 +1,30 @@
 "use client";
 
+import { getAllStreamerList } from "@/api/streamer-api";
+import IsError from "@/components/layout/isError";
+import IsLoading from "@/components/layout/isLoading";
+import { queryKeys } from "@/lib/constants/react-query";
 import { getRoute, route } from "@/lib/constants/router";
-import { TestStreamerList } from "@/lib/constants/test";
+import { getInitials } from "@/lib/utils/chzzk-utils";
+import { TStreamerSchema } from "@/schemas/streamer.schema";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const StreamerCategoryView = () => {
+  const { data, isSuccess, isLoading, isError } = useQuery({
+    queryKey: queryKeys.getAllStreamerList,
+    queryFn: getAllStreamerList,
+    placeholderData: (prev) => prev,
+  });
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError />;
+
   const [initialList, setInitialList] = useState<string[]>([]);
   const [streamerList, setStreamerList] = useState<{
-    [x: string]: string[];
+    [x: string]: TStreamerSchema[];
   } | null>(null);
-
-  const getInitials = (name: string) => {
-    const str = name;
-    const cho = [
-      "ㄱ",
-      "ㄲ",
-      "ㄴ",
-      "ㄷ",
-      "ㄸ",
-      "ㄹ",
-      "ㅁ",
-      "ㅂ",
-      "ㅃ",
-      "ㅅ",
-      "ㅆ",
-      "ㅇ",
-      "ㅈ",
-      "ㅉ",
-      "ㅊ",
-      "ㅋ",
-      "ㅌ",
-      "ㅍ",
-      "ㅎ",
-    ];
-    let result = "";
-    for (let i = 0; i < str.length; i++) {
-      const charCode = str.charCodeAt(i);
-      if (charCode >= 0xac00 && charCode <= 0xd7a3) {
-        const uni = charCode - 0xac00;
-        const choIdx = Math.floor(uni / (21 * 28));
-        result += cho[choIdx];
-      } else {
-        result += str[i];
-      }
-    }
-    return result;
-  };
 
   const scrollSection = (initial: string) => {
     if (typeof window === "undefined" || typeof document === "undefined")
@@ -58,22 +36,23 @@ const StreamerCategoryView = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.scroll({ top: 0, behavior: "smooth" });
-    }
+    if (!isSuccess) return;
 
-    const result: { [x: string]: string[] } = {};
-    TestStreamerList.forEach((item) => {
-      const initial = getInitials(item.member.slice(0, 1));
+    const result: { [x: string]: TStreamerSchema[] } = {};
+    data.forEach((streamer) => {
+      const initial = getInitials(streamer.name.slice(0, 1));
       if (result[initial]) {
-        result[initial].push(item.member);
+        result[initial].push(streamer);
       } else {
-        result[initial] = [item.member];
+        result[initial] = [streamer];
       }
     });
+
     setInitialList(Object.keys(result).sort());
     setStreamerList(result);
-  }, []);
+
+    window.scroll({ top: 0, behavior: "smooth" });
+  }, [data, isSuccess]);
 
   return (
     <main>
@@ -98,6 +77,7 @@ const StreamerCategoryView = () => {
                     type="button"
                     className="py-1 px-6 text-xl text-textMain ring-2 ring-brandMain shadow-md rounded-lg"
                     onClick={() => scrollSection(initial)}
+                    aria-label={`${initial} 이니셜로 이동`}
                   >
                     {initial}
                   </button>
@@ -116,15 +96,16 @@ const StreamerCategoryView = () => {
                     <div className="flex flex-wrap items-center gap-2">
                       {streamerList[initial].map((streamer) => (
                         <Link
-                          key={streamer}
+                          key={streamer._id}
                           href={getRoute(
                             route.streamer,
-                            streamer,
+                            streamer._id,
                             route.calendar
                           )}
                           className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-textLight shadow-sm rounded-lg hover:bg-brandMainHover"
+                          aria-label={`${streamer.name} 일정 보기`}
                         >
-                          {streamer}
+                          {streamer.name}
                         </Link>
                       ))}
                     </div>

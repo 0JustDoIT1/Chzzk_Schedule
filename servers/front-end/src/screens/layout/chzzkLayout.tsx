@@ -23,7 +23,7 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
   const linkClassName = (path: string) =>
     clsx(
       "w-full max-w-40 rounded-md px-3 py-2 text-sm text-textMain/90 md:w-auto",
-      pathName === path ? "bg-textBlur" : "bg-white",
+      pathName.startsWith(path) ? "bg-textBlur" : "bg-white",
       "hover:bg-textBlur"
     );
 
@@ -42,7 +42,7 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
       <section className="w-full border-b border-b-textLight py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
-            <p className="text-2xl">전체 일정</p>
+            <p className="text-2xl">치지직 공식 일정</p>
             <p className="text-sm text-textNormal">
               치지직 공식 방송 일정을 한눈에 살펴보세요.
             </p>
@@ -67,7 +67,6 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
         </div>
       </section>
       <main className="w-full md:container mx-auto flex flex-col items-start justify-start md:px-8 md:flex-row lg:max-w-6xl">
-        {/* pl-1 py-1 text-left text-xs h-36 border-b border-textLight */}
         <aside className="w-full h-full flex flex-row justify-center gap-2 py-6 px-2 border-b border-b-textSuperLight md:flex-col md:justify-start md:w-44 md:border-b-0">
           <p className="hidden mb-2 text-textNormal text-sm md:inline-block">
             일정 형태
