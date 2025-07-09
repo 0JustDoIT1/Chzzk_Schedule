@@ -11,4 +11,5 @@ const enum ApiPath {
   SCHEDULE_BY_ID = '/id/:id',
   SCHEDULE_BY_DATE = '/date/:date',
   SCHEDULE_BY_MONTH = '/month/:month',
+  SCHEDULE_LINK_BY_ID = '/link',
 }

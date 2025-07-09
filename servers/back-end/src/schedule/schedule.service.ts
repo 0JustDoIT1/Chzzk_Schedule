@@ -235,6 +235,15 @@ export class ScheduleService {
     return result;
   }
 
+  // Get Schedule streamer info by Object id
+  async getScheduleById(id: string): Promise<ScheduleDocument> {
+    const schedule = await this.scheduleModel.findOne({ _id: id }).exec();
+    // Validate schedule
+    this.scheduleValidate.throwIfScheduleNotFound(schedule);
+
+    return schedule;
+  }
+
   // validate schedule duplicate
   async validateDuplicateSchedule(
     streamerName: string,

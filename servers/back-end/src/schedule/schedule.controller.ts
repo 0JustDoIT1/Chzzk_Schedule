@@ -4,6 +4,7 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ScheduleDocument } from 'src/schemas/schedule.schema';
 import { IDateSchedule, TMonthSchedule } from 'src/lib/types/schedule.type';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { StreamerDocument } from 'src/schemas/streamer.schema';
 
 @ApiTags('Schedule')
 @Controller(ApiPath.SCHEDULE)
@@ -46,11 +47,13 @@ export class ScheduleController {
     return await this.scheduleService.getScheduleListByDate(date);
   }
 
-  @ApiOperation({ summary: 'month에 맞는 스케줄 리스트 반환 API' })
-  @Get(ApiPath.SCHEDULE_BY_MONTH)
-  async getScheduleListByMont(
-    @Param('month') month: string,
-  ): Promise<TMonthSchedule> {
-    return await this.scheduleService.getScheduleListByMonth(month);
+  @ApiOperation({
+    summary: '_id에 해당하는 스케줄의 스트리머들 정보 반환 API',
+  })
+  @ApiParam({ name: 'id', description: 'Schedule ObjectId' })
+  async getScheduleLinkById(
+    @Param('id') id: string,
+  ): Promise<StreamerDocument> {
+    return await this.scheduleService.getScheduleLinkById(id);
   }
 }
