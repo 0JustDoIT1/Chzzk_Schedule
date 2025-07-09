@@ -1,8 +1,8 @@
 "use client";
 
-import { ReactNode, useMemo } from "react";
+import { PropsWithChildren, ReactNode, useMemo } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { getDatePreservedRoute, route } from "@/lib/constants/router";
+import { getDatePreservedRoute, getRoute, route } from "@/lib/constants/router";
 import useCalendar from "@/lib/hook/useCalendar";
 import { dateToFormatString } from "@/lib/utils/dateFormat";
 import { BrandButton, CustomButton } from "@/components/common/button";
@@ -14,13 +14,19 @@ import AngleRightIcon from "~/public/assets/svg/angle-right";
 import Link from "next/link";
 import clsx from "clsx";
 
-interface Props {
+interface IStreamerCommonLayout {
   children: ReactNode;
+  id: string;
 }
 
-export default function AllCommonLayout({ children }: Props) {
+export default function StreamerCommonLayout({
+  children,
+  id,
+}: IStreamerCommonLayout) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
+
+  console.log("###", pathName, getRoute(route.streamer, id, route.calendar));
 
   const { today, setPreMonth, setNextMonth, setPresentMonth } = useCalendar();
 
@@ -32,12 +38,20 @@ export default function AllCommonLayout({ children }: Props) {
     );
 
   const calendarHref = useMemo(
-    () => getDatePreservedRoute(route.allCalendar, searchParams),
+    () =>
+      getDatePreservedRoute(
+        getRoute(route.streamer, id, route.calendar),
+        searchParams
+      ),
     [searchParams]
   );
 
   const timelineHref = useMemo(
-    () => getDatePreservedRoute(route.allTimeline, searchParams),
+    () =>
+      getDatePreservedRoute(
+        getRoute(route.streamer, id, route.timeline),
+        searchParams
+      ),
     [searchParams]
   );
 
@@ -48,7 +62,7 @@ export default function AllCommonLayout({ children }: Props) {
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
             <p className="text-2xl">전체 일정</p>
             <p className="text-sm text-textNormal">
-              치지직 방송 일정을 한눈에 살펴보세요.
+              {id} 방송 일정을 한눈에 살펴보세요.
             </p>
           </div>
           <div className="flex items-center justify-center w-full md:w-1/3">
@@ -77,7 +91,9 @@ export default function AllCommonLayout({ children }: Props) {
             일정 형태
           </p>
           <Link
-            className={linkClassName(route.allCalendar)}
+            className={linkClassName(
+              getRoute(route.streamer, id, route.calendar)
+            )}
             href={calendarHref}
           >
             <div className="w-full flex justify-center md:justify-start">
@@ -86,7 +102,9 @@ export default function AllCommonLayout({ children }: Props) {
             </div>
           </Link>
           <Link
-            className={linkClassName(route.allTimeline)}
+            className={linkClassName(
+              getRoute(route.streamer, id, route.timeline)
+            )}
             href={timelineHref}
           >
             <div className="w-full flex justify-center md:justify-start">

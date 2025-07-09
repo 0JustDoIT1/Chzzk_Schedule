@@ -9,11 +9,11 @@ import { getScheduleListByMonth } from "@/api/schedule-api";
 import IsLoading from "@/components/layout/isLoading";
 import IsError from "@/components/layout/isError";
 
-interface IAllTimelineView {
+interface ITimelineView {
   date: Date;
 }
 
-const AllTimelineView = ({ date }: IAllTimelineView) => {
+const TimelineView = ({ date }: ITimelineView) => {
   const { today } = useCalendar();
 
   const { data, isSuccess, isLoading, isError } = useQuery({
@@ -28,4 +28,4 @@ const AllTimelineView = ({ date }: IAllTimelineView) => {
   return <>{isSuccess && <CustomDayline scheduleList={data} date={today} />}</>;
 };
 
-export default AllTimelineView;
+export default TimelineView;

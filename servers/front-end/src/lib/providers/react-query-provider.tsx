@@ -1,11 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode } from "react";
-
-export interface IReactQueryProvider {
-  children: ReactNode;
-}
+import { PropsWithChildren } from "react";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -35,7 +31,7 @@ function getQueryClient() {
   }
 }
 
-export default function ReactQueryProviders({ children }: IReactQueryProvider) {
+export default function ReactQueryProviders({ children }: PropsWithChildren) {
   // NOTE: queryClient를 useState를 사용하여 초기화 하면 안된다.
   // suspense boundary가 없을 경우 React의 렌더링이 중단될 수도 있고
   // queryClient 자체를 폐기할 수 도 있다.

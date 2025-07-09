@@ -2,7 +2,7 @@
 
 import ToastList from "@/components/common/toast";
 import { createToastStore, TToastStore } from "@/lib/stores/toast-store";
-import { createContext, ReactNode, useContext, useRef } from "react";
+import { createContext, PropsWithChildren, useContext, useRef } from "react";
 import { useStore } from "zustand";
 
 export type TToastStoreApi = ReturnType<typeof createToastStore>;
@@ -11,11 +11,7 @@ export const ToastStoreContext = createContext<TToastStoreApi | undefined>(
   undefined
 );
 
-export interface IToastStoreProvider {
-  children: ReactNode;
-}
-
-export const ToastStoreProvider = ({ children }: IToastStoreProvider) => {
+export const ToastStoreProvider = ({ children }: PropsWithChildren) => {
   const toastRef = useRef<TToastStoreApi | null>(null);
   if (toastRef.current === null) {
     toastRef.current = createToastStore();

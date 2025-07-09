@@ -6,7 +6,7 @@ import {
   getToday,
 } from "@/lib/utils/dateFormat";
 import { TMonthSchedule } from "@/schemas/schedule.schema";
-import AllTimelineView from "@/screens/all/timeline";
+import TimelineView from "@/screens/timelineView";
 import { QueryClient } from "@tanstack/react-query";
 
 interface IAllTimelinePage {
@@ -24,7 +24,7 @@ const AllTimelinePage = async ({ searchParams }: IAllTimelinePage) => {
     queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  return <AllTimelineView date={targetDate} />;
+  return <TimelineView date={targetDate} />;
 };
 
 export default AllTimelinePage;

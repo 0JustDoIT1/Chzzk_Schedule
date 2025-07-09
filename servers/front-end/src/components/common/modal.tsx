@@ -1,17 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { ReactNode, useEffect } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import CloseIcon from "~/public/assets/svg/close";
 import { CustomButton } from "./button";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { goBackRoute, route } from "@/lib/constants/router";
 
-const Modal = ({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) => {
+const Modal = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 

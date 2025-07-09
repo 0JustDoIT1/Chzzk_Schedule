@@ -6,14 +6,16 @@ import {
   getToday,
 } from "@/lib/utils/dateFormat";
 import { TMonthSchedule } from "@/schemas/schedule.schema";
-import CalendarView from "@/screens/calendarView";
+import TimelineView from "@/screens/timelineView";
 import { QueryClient } from "@tanstack/react-query";
 
-interface IAllCalendarPage {
+interface IStreamerTimelinePage {
   searchParams: { date?: string };
 }
 
-const AllCalendarPage = async ({ searchParams }: IAllCalendarPage) => {
+const StreamerTimelinePage = async ({
+  searchParams,
+}: IStreamerTimelinePage) => {
   const { date } = await searchParams;
   const dateStr = date || dateToFormatString(getToday(), "YYYY-MM-DD");
   const targetDate = dateTypeToDate(dateStr);
@@ -24,7 +26,7 @@ const AllCalendarPage = async ({ searchParams }: IAllCalendarPage) => {
     queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  return <CalendarView date={targetDate} />;
+  return <TimelineView date={targetDate} />;
 };
 
-export default AllCalendarPage;
+export default StreamerTimelinePage;

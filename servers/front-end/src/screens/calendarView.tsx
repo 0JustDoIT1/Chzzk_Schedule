@@ -9,11 +9,11 @@ import { getScheduleListByMonth } from "@/api/schedule-api";
 import IsLoading from "@/components/layout/isLoading";
 import IsError from "@/components/layout/isError";
 
-interface IAllCalendarView {
+interface ICalendarView {
   date: Date;
 }
 
-const AllCalendarView = ({ date }: IAllCalendarView) => {
+const CalendarView = ({ date }: ICalendarView) => {
   const { today, weekHeader, dayArray } = useCalendar();
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const AllCalendarView = ({ date }: IAllCalendarView) => {
   );
 };
 
-export default AllCalendarView;
+export default CalendarView;

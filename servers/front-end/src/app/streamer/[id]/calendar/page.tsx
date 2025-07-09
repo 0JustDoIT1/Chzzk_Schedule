@@ -9,11 +9,13 @@ import { TMonthSchedule } from "@/schemas/schedule.schema";
 import CalendarView from "@/screens/calendarView";
 import { QueryClient } from "@tanstack/react-query";
 
-interface IAllCalendarPage {
+interface IStreamerCalendarPage {
   searchParams: { date?: string };
 }
 
-const AllCalendarPage = async ({ searchParams }: IAllCalendarPage) => {
+const StreamerCalendarPage = async ({
+  searchParams,
+}: IStreamerCalendarPage) => {
   const { date } = await searchParams;
   const dateStr = date || dateToFormatString(getToday(), "YYYY-MM-DD");
   const targetDate = dateTypeToDate(dateStr);
@@ -27,4 +29,4 @@ const AllCalendarPage = async ({ searchParams }: IAllCalendarPage) => {
   return <CalendarView date={targetDate} />;
 };
 
-export default AllCalendarPage;
+export default StreamerCalendarPage;

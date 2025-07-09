@@ -17,9 +17,6 @@ export class route {
   static allCalendar = route.all + route.calendar;
   static allTimeline = route.all + route.timeline;
 
-  static streamerCalendar = route.streamer + route.calendar;
-  static streamerTimeline = route.streamer + route.timeline;
-
   static chzzkCalendar = route.chzzk + route.calendar;
   static chzzkTimeline = route.chzzk + route.timeline;
 
@@ -32,8 +29,10 @@ export class route {
   static channel = route.index + "channel";
 }
 
-export const getRoute = (path: string, arg: string) => {
-  return `${path}/${arg}`;
+export const getRoute = (basePath: string, ...segments: string[]) => {
+  const trimmedBase = basePath.replace(/\/+$/, "");
+  const fullPath = segments.map((s) => s.replace(/^\/+|\/+$/g, "")).join("/");
+  return `${trimmedBase}/${fullPath}`;
 };
 
 export const goBackRoute = (

@@ -1,6 +1,6 @@
-import AllCommonLayout from "@/screens/all/commonLayout";
-import { ReactNode } from "react";
+import AllCommonLayout from "@/screens/layout/allLayout";
+import { PropsWithChildren } from "react";
 
-export default async function AllLayout({ children }: { children: ReactNode }) {
+export default async function AllLayout({ children }: PropsWithChildren) {
   return <AllCommonLayout>{children}</AllCommonLayout>;
 }

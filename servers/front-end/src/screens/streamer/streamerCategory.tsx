@@ -117,7 +117,11 @@ const StreamerCategoryView = () => {
                       {streamerList[initial].map((streamer) => (
                         <Link
                           key={streamer}
-                          href={getRoute(route.streamerCalendar, streamer)}
+                          href={getRoute(
+                            route.streamer,
+                            streamer,
+                            route.calendar
+                          )}
                           className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-textLight shadow-sm rounded-lg hover:bg-brandMainHover"
                         >
                           {streamer}
