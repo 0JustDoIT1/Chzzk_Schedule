@@ -32,8 +32,7 @@ const TodayStreamingLink = ({ scheduleId }: TodayStreamingLinkProps) => {
     </div>
   );
 };
-//  target="_blank"
-//             href={data.chzzkLink}
+
 const DaylineItem = ({ item, isToday }: IDaylineItem) => {
   return (
     <div className="flex flex-wrap items-center justify-between mb-4 border-b border-textSuperLight">

@@ -40,7 +40,7 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
     <section className="w-full">
       {isSuccess && (
         <div className="w-full mx-auto flex flex-col md:container md:p-8 lg:max-w-6xl">
-          <div className="mb-2">
+          <div className="mb-1">
             <CategoryTag
               category={data.category}
               className="text-xs font-medium"

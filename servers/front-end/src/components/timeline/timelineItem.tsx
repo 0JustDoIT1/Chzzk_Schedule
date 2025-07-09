@@ -14,23 +14,19 @@ interface ITimelineItem {
 
 const TimelineItem = ({ schedule, today }: ITimelineItem) => {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 border-b border-textSuperLight pb-2 mb-6">
-      <div>
-        <h3 className="flex items-center mb-1 text-lg font-normal text-textMain">
+    <div className="flex flex-wrap items-center justify-between mb-4 border-b border-textSuperLight">
+      <div className="p-2">
+        <h3 className="flex items-center mb-2 text-lg font-normal text-textMain">
           <CategoryTag category={schedule.category} />
           <span className="ml-1">{schedule.title}</span>
         </h3>
-        <div className="flex items-center mb-2 text-sm font-normal leading-none text-textNormal">
-          <p className="mr-1 mb-1">
-            <CalendarIcon className="w-4 h-4 text-textIcon" />
-          </p>
-          <p>{getScheduleDateString(schedule.startAt, today)}</p>
+        <div className="flex items-center mb-1 text-sm font-normal leading-none text-textNormal">
+          <CalendarIcon className="mr-1 w-4 h-4 text-textIcon" />
+          <span>{getScheduleDateString(schedule.startAt, today)}</span>
         </div>
-        <div className="flex items-center text-base font-normal text-textNormal">
-          <p className="mr-1 mb-1">
-            <UserIcon className="w-4 h-4 text-textIcon" />
-          </p>
-          <p className="text-sm">{schedule.streamerName}</p>
+        <div className="flex items-center mb-1 text-sm font-normal text-textNormal">
+          <UserIcon className="mr-1 w-4 h-4 text-textIcon" />
+          <span>{schedule.streamerName}</span>
         </div>
       </div>
       <div className="w-full md:w-auto">
