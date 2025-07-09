@@ -22,7 +22,7 @@ const TodayStreamingLink = ({ scheduleId }: TodayStreamingLinkProps) => {
   return (
     <div className="w-full shrink-0 md:w-[120px]">
       <BrandLink
-        href={getRoute(route.streaming, scheduleId)}
+        href={getRoute(route.channel, scheduleId)}
         className="w-full"
         scroll={false}
       >

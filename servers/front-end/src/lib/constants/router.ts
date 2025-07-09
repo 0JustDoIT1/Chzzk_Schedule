@@ -29,7 +29,7 @@ export class route {
   // Modal Route
   static add = route.index + "add";
   static detail = route.index + "detail";
-  static streaming = route.index + "streaming";
+  static channel = route.index + "channel";
 }
 
 export const getRoute = (path: string, arg: string) => {

@@ -7,11 +7,11 @@ import IsLoading from "@/components/layout/isLoading";
 import { queryKeys } from "@/lib/constants/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-interface IStreamingView {
+interface IScheduleChannelView {
   id: string;
 }
 
-const StreamingView = ({ id }: IStreamingView) => {
+const ScheduleChannelView = ({ id }: IScheduleChannelView) => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getScheduleLinkById(id),
     queryFn: () => getScheduleLinkById(id),
@@ -57,4 +57,4 @@ const StreamingView = ({ id }: IStreamingView) => {
   );
 };
 
-export default StreamingView;
+export default ScheduleChannelView;

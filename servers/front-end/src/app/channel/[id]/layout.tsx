@@ -6,15 +6,15 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-interface IStreamingPageLayout {
+interface IChannelPageLayout {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default async function StreamingPageLayout({
+export default async function ChannelPageLayout({
   children,
   params,
-}: IStreamingPageLayout) {
+}: IChannelPageLayout) {
   const { id } = await params;
 
   const queryClient = new QueryClient();

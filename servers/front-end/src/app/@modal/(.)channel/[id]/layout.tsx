@@ -6,15 +6,15 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-interface IStreamingModalLayout {
+interface IChannelModalLayout {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default async function StreamingModalLayout({
+export default async function ChannelModalLayout({
   children,
   params,
-}: IStreamingModalLayout) {
+}: IChannelModalLayout) {
   const { id } = await params;
 
   const queryClient = new QueryClient();
