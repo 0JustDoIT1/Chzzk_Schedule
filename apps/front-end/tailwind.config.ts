@@ -39,6 +39,10 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "brand-gradient":
+          "linear-gradient(to right, #00692c 0%, #009944 45%, #009944 55%, #00692c 100%)",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -75,10 +79,19 @@ export default {
             opacity: "0",
           },
         },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.5s ease-in-out",
         fadeOut: "fadeOut 0.5s ease-in-out",
+        fadeInUp: "fadeInUp 0.8s ease forwards",
+      },
+      transitionDelay: {
+        100: "100ms",
+        200: "200ms",
       },
     },
   },

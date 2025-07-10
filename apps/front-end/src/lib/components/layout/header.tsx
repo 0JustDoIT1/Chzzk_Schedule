@@ -18,7 +18,7 @@ const Header = () => {
 
   useEffect(() => {
     setAsPathData(pathName);
-  }, [pathName]);
+  }, [pathName, setAsPathData]);
 
   /** handle header menu */
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -26,16 +26,20 @@ const Header = () => {
   const handleMenu = () => setIsOpen((prev) => !prev);
 
   return (
-    <nav className="sticky top-0 z-50 bg-textMain/90 p-4 text-white backdrop-blur-md">
+    <nav className="sticky top-0 z-50 bg-gray-900/95 p-4 text-gray-300 backdrop-blur-md shadow-md min-h-[72px]">
       <div className="mx-auto flex items-center justify-between px-4 md:px-8 md:container lg:max-w-6xl">
-        <div className="flex items-center space-x-4 text-xl font-bold">
+        <div className="flex items-center space-x-4 text-xl font-bold text-gray-100">
           <HeaderLink href={route.index} className="text-lg">
             0's Life
           </HeaderLink>
         </div>
         <div className="hidden items-center space-x-12 md:flex">
           {menuItems.map((menu) => (
-            <HeaderLink key={menu.href} href={menu.href} className="text-sm">
+            <HeaderLink
+              key={menu.href}
+              href={menu.href}
+              className="text-sm hover:text-white transition-colors"
+            >
               {menu.label}
             </HeaderLink>
           ))}
@@ -45,7 +49,7 @@ const Header = () => {
           onClick={handleMenu}
           aria-label="메뉴 열기/닫기"
         >
-          <MenuIcon className="w-6 h-6 text-white" />
+          <MenuIcon className="w-6 h-6 text-gray-300 hover:text-white transition-colors" />
         </CustomButton>
       </div>
       <div
@@ -58,7 +62,7 @@ const Header = () => {
           <HeaderLink
             key={menu.href}
             href={menu.href}
-            className="w-full text-sm"
+            className="w-full text-sm text-gray-300 hover:text-white block px-4 py-2"
           >
             {menu.label}
           </HeaderLink>
