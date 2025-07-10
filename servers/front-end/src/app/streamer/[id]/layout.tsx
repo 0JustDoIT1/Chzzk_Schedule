@@ -1,6 +1,6 @@
 import { getStreamerById } from "@/api/streamer-api";
 import { queryKeys } from "@/lib/constants/react-query";
-import StreamerCommonLayout from "@/screens/layout/streamerLayout";
+import StreamerCommonLayout from "@/lib/screens/layout/streamerLayout";
 import {
   dehydrate,
   HydrationBoundary,

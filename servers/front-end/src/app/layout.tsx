@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/components/layout/header";
+import Header from "@/lib/components/layout/header";
 import { ReactNode } from "react";
-import { FloatingButton } from "@/components/common/floatingButton";
+import { FloatingButton } from "@/lib/components/common/floatingButton";
 import RootProvider from "@/lib/providers";
 
 const gmarket = localFont({

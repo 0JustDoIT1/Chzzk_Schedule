@@ -5,8 +5,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { getDatePreservedRoute, getRoute, route } from "@/lib/constants/router";
 import useCalendar from "@/lib/hook/useCalendar";
 import { dateToFormatString } from "@/lib/utils/dateFormat";
-import { BrandButton, CustomButton } from "@/components/common/button";
-import { AddScheduleLink } from "@/components/common/link";
+import { BrandButton, CustomButton } from "@/lib/components/common/button";
+import { AddScheduleLink } from "@/lib/components/common/link";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import TimelineIcon from "~/public/assets/svg/timeline";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
@@ -16,8 +16,8 @@ import clsx from "clsx";
 import { queryKeys } from "@/lib/constants/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamerById } from "@/api/streamer-api";
-import IsLoading from "@/components/layout/isLoading";
-import IsError from "@/components/layout/isError";
+import IsLoading from "@/lib/components/layout/isLoading";
+import IsError from "@/lib/components/layout/isError";
 
 interface IStreamerCommonLayout {
   children: ReactNode;

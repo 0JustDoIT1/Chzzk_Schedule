@@ -1,4 +1,4 @@
-import StreamerCategoryView from "@/screens/streamer/streamerCategory";
+import StreamerCategoryView from "@/lib/screens/streamer/streamerCategory";
 
 const StreamerCategoryPage = () => {
   return <StreamerCategoryView />;

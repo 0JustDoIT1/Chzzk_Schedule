@@ -1,5 +1,5 @@
-import Modal from "@/components/common/modal";
-import ScheduleLinkView from "@/screens/schedule/scheduleChannel";
+import Modal from "@/lib/components/common/modal";
+import ScheduleLinkView from "@/lib/screens/schedule/scheduleChannel";
 
 interface IChannelModalPage {
   params: { id: string };

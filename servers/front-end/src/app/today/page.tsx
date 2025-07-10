@@ -1,4 +1,4 @@
-import TodayScreen from "@/screens/today/todayScreen";
+import TodayScreen from "@/lib/screens/today/todayScreen";
 
 const TodayPage = async () => {
   return <TodayScreen />;

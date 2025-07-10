@@ -1,9 +1,9 @@
 "use client";
 
 import { getScheduleLinkById } from "@/api/schedule-api";
-import ChzzkLink from "@/components/common/ChzzkLink";
-import IsError from "@/components/layout/isError";
-import IsLoading from "@/components/layout/isLoading";
+import ChzzkLink from "@/lib/components/common/ChzzkLink";
+import IsError from "@/lib/components/layout/isError";
+import IsLoading from "@/lib/components/layout/isLoading";
 import { queryKeys } from "@/lib/constants/react-query";
 import { useQuery } from "@tanstack/react-query";
 

@@ -1,4 +1,4 @@
-import StreamerAddView from "@/screens/streamer/streamerAdd";
+import StreamerAddView from "@/lib/screens/streamer/streamerAdd";
 
 const StreamerAddPage = () => {
   return <StreamerAddView />;

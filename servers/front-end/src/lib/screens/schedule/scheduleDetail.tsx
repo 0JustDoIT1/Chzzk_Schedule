@@ -5,18 +5,18 @@ import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "../../components/common/link";
 import { getRoute, goBackRoute, route } from "@/lib/constants/router";
-import { BrandButton } from "@/components/common/button";
+import { BrandButton } from "@/lib/components/common/button";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleById } from "@/api/schedule-api";
-import IsLoading from "@/components/layout/isLoading";
-import IsError from "@/components/layout/isError";
+import IsLoading from "@/lib/components/layout/isLoading";
+import IsError from "@/lib/components/layout/isError";
 import UsersIcon from "~/public/assets/svg/users";
 import ArrowUpRightFromSquareIcon from "~/public/assets/svg/arrow-up-right-from-square";
 import Link from "next/link";
 import { displayDate } from "@/lib/utils/chzzk-date";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { queryKeys } from "@/lib/constants/react-query";
-import CategoryTag from "@/components/common/categoryTag";
+import CategoryTag from "@/lib/components/common/categoryTag";
 
 interface IScheduleDetailView {
   id: string;

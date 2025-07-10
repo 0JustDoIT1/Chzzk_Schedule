@@ -1,4 +1,4 @@
-import ScheduleEditView from "@/screens/schedule/scheduleEdit";
+import ScheduleEditView from "@/lib/screens/schedule/scheduleEdit";
 import React from "react";
 
 interface IScheduleEditPage {

@@ -5,8 +5,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { getDatePreservedRoute, route } from "@/lib/constants/router";
 import useCalendar from "@/lib/hook/useCalendar";
 import { dateToFormatString } from "@/lib/utils/dateFormat";
-import { BrandButton, CustomButton } from "@/components/common/button";
-import { AddScheduleLink } from "@/components/common/link";
+import { BrandButton, CustomButton } from "@/lib/components/common/button";
+import { AddScheduleLink } from "@/lib/components/common/link";
 import CalendarIcon from "~/public/assets/svg/calendar";
 import TimelineIcon from "~/public/assets/svg/timeline";
 import AngleLeftIcon from "~/public/assets/svg/angle-left";
@@ -14,7 +14,7 @@ import AngleRightIcon from "~/public/assets/svg/angle-right";
 import Link from "next/link";
 import clsx from "clsx";
 
-export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
+export default function AllCommonLayout({ children }: PropsWithChildren) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
@@ -28,12 +28,12 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
     );
 
   const calendarHref = useMemo(
-    () => getDatePreservedRoute(route.chzzkCalendar, searchParams),
+    () => getDatePreservedRoute(route.allCalendar, searchParams),
     [searchParams]
   );
 
   const timelineHref = useMemo(
-    () => getDatePreservedRoute(route.chzzkTimeline, searchParams),
+    () => getDatePreservedRoute(route.allTimeline, searchParams),
     [searchParams]
   );
 
@@ -42,9 +42,9 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
       <section className="w-full border-b border-b-textLight py-6">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
           <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
-            <p className="text-2xl">치지직 공식 일정</p>
+            <p className="text-2xl">전체 일정</p>
             <p className="text-sm text-textNormal">
-              치지직 공식 방송 일정을 한눈에 살펴보세요.
+              치지직 전체 방송 일정을 한눈에 살펴보세요.
             </p>
           </div>
           <div className="flex items-center justify-center w-full md:w-1/3">
@@ -72,7 +72,7 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
             일정 형태
           </p>
           <Link
-            className={linkClassName(route.chzzkCalendar)}
+            className={linkClassName(route.allCalendar)}
             href={calendarHref}
           >
             <div className="w-full flex justify-center md:justify-start">
@@ -81,7 +81,7 @@ export default function ChzzkCommonLayout({ children }: PropsWithChildren) {
             </div>
           </Link>
           <Link
-            className={linkClassName(route.chzzkTimeline)}
+            className={linkClassName(route.allTimeline)}
             href={timelineHref}
           >
             <div className="w-full flex justify-center md:justify-start">

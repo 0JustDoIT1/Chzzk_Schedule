@@ -1,8 +1,8 @@
 "use client";
 
 import { getAllStreamerList } from "@/api/streamer-api";
-import IsError from "@/components/layout/isError";
-import IsLoading from "@/components/layout/isLoading";
+import IsError from "@/lib/components/layout/isError";
+import IsLoading from "@/lib/components/layout/isLoading";
 import { queryKeys } from "@/lib/constants/react-query";
 import { getRoute, route } from "@/lib/constants/router";
 import { getInitials } from "@/lib/utils/chzzk-utils";

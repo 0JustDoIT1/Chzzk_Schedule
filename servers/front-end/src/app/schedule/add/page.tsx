@@ -1,4 +1,4 @@
-import ScheduleAddView from "@/screens/schedule/scheduleAdd";
+import ScheduleAddView from "@/lib/screens/schedule/scheduleAdd";
 import React from "react";
 
 const ScheduleAddPage = async () => {

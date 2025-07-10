@@ -1,4 +1,4 @@
-import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
+import ScheduleDetailView from "@/lib/screens/schedule/scheduleDetail";
 
 interface IDetailIdPage {
   params: { id: string };

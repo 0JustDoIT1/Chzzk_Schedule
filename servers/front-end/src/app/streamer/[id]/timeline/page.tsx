@@ -6,7 +6,7 @@ import {
   getToday,
 } from "@/lib/utils/dateFormat";
 import { TMonthSchedule } from "@/schemas/schedule.schema";
-import TimelineView from "@/screens/timelineView";
+import TimelineView from "@/lib/screens/timelineView";
 import { QueryClient } from "@tanstack/react-query";
 
 interface IStreamerTimelinePage {

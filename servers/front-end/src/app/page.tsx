@@ -1,4 +1,4 @@
-import MainView from "@/screens/main";
+import MainView from "@/lib/screens/main";
 
 const MainPage = async () => {
   return <MainView />;

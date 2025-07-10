@@ -1,5 +1,5 @@
-import Modal from "@/components/common/modal";
-import ScheduleDetailView from "@/screens/schedule/scheduleDetail";
+import Modal from "@/lib/components/common/modal";
+import ScheduleDetailView from "@/lib/screens/schedule/scheduleDetail";
 
 interface IDetailIdModalPage {
   params: { id: string };

@@ -1,26 +1,34 @@
 "use client";
 
 import useCalendar from "@/lib/hook/useCalendar";
-import React from "react";
-import CustomDayline from "@/components/timeline/dayline";
-import { queryKeys } from "@/lib/constants/react-query";
+import React, { useEffect } from "react";
+import CustomCalendar from "@/lib/components/calendar/calendar";
 import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/constants/react-query";
 import {
   getOfficialScheduleListByMonth,
   getScheduleListByMonth,
   getScheduleListByMonthWithId,
 } from "@/api/schedule-api";
-import IsLoading from "@/components/layout/isLoading";
-import IsError from "@/components/layout/isError";
+import IsLoading from "@/lib/components/layout/isLoading";
+import IsError from "@/lib/components/layout/isError";
 
-interface ITimelineView {
+interface ICalendarView {
   date: Date;
   id?: string;
   isOfficial?: boolean;
 }
 
-const TimelineView = ({ date, id, isOfficial }: ITimelineView) => {
-  const { today } = useCalendar();
+const CalendarView = ({ date, id, isOfficial }: ICalendarView) => {
+  const { today, weekHeader, dayArray } = useCalendar();
+
+  console.log("###", id);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scroll({ top: 0, behavior: "smooth" });
+    }
+  }, []);
 
   const fetchSchedule = (date: Date, id?: string, isOfficial?: boolean) => {
     if (isOfficial) return getOfficialScheduleListByMonth(date);
@@ -43,7 +51,19 @@ const TimelineView = ({ date, id, isOfficial }: ITimelineView) => {
   if (isLoading) return <IsLoading />;
   if (isError) return <IsError />;
 
-  return <>{isSuccess && <CustomDayline scheduleList={data} date={today} />}</>;
+  return (
+    <>
+      {isSuccess && (
+        <CustomCalendar
+          today={today}
+          weekHeader={weekHeader}
+          dayArray={dayArray}
+          isHasSchedule={true}
+          scheduleList={data}
+        />
+      )}
+    </>
+  );
 };
 
-export default TimelineView;
+export default CalendarView;
