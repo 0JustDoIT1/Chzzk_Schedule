@@ -1,4 +1,4 @@
-import { getScheduleListByMonth } from "@/api/schedule-api";
+import { getOfficialScheduleListByMonth } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import {
   dateToFormatString,
@@ -20,11 +20,11 @@ const ChzzkTimelinePage = async ({ searchParams }: IChzzkTimelinePage) => {
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery<TMonthSchedule>({
-    queryKey: queryKeys.getScheduleListByMonth(targetDate),
-    queryFn: () => getScheduleListByMonth(targetDate),
+    queryKey: queryKeys.getOfficialScheduleListByMonth(targetDate),
+    queryFn: () => getOfficialScheduleListByMonth(targetDate),
   });
 
-  return <TimelineView date={targetDate} />;
+  return <TimelineView date={targetDate} isOfficial={true} />;
 };
 
 export default ChzzkTimelinePage;
