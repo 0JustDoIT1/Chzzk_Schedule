@@ -3,9 +3,8 @@ import { getFetch } from "@/lib/fetch/get-fetch";
 import { patchFetch } from "@/lib/fetch/patch-fetch";
 import {
   IDateSchedule,
-  ISchedule,
-  TMonthSchedule,
   TScheduleSchema,
+  TMonthSchedule,
   TStreamerSchema,
 } from "@shared/types";
 import { ApiPath, buildApiPath } from "@shared/constants";
@@ -14,9 +13,9 @@ const isServer = () => typeof window === "undefined";
 
 // Create schedule
 export const createSchedule = async (
-  data: Partial<ISchedule>,
+  data: Partial<TScheduleSchema>,
   token?: string
-): Promise<ISchedule> => {
+): Promise<TScheduleSchema> => {
   const url = buildApiPath(
     ApiPath.PREFIX,
     ApiPath.SCHEDULE,
@@ -28,9 +27,9 @@ export const createSchedule = async (
 // Update schedule
 export const updateSchedule = async (
   id: string,
-  data: Partial<ISchedule>,
+  data: Partial<TScheduleSchema>,
   token?: string
-): Promise<ISchedule> => {
+): Promise<TScheduleSchema> => {
   const url = buildApiPath(
     ApiPath.PREFIX,
     ApiPath.SCHEDULE,

@@ -188,8 +188,6 @@ export class ScheduleService {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
 
-    console.log('!!!', month, id);
-
     const scheduleList = await this.scheduleModel
       .find(
         {
@@ -216,8 +214,6 @@ export class ScheduleService {
         },
       )
       .exec();
-
-    console.log('data', scheduleList);
 
     return this.editScheduleListByMonth(scheduleList, startDate, endDate);
   }

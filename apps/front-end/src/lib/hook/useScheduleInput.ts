@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import useReactHookForm from "./useReactHookForm";
 import { useToastStore } from "@/lib/providers/toast-provider";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,14 @@ import { adjustScheduleTimes } from "../utils/chzzk-date";
 import { getScheduleInitValue } from "../utils/chzzk-input";
 import { useMember } from "./useMember";
 import { handleScheduleApiError } from "../utils/error-handler";
-import { invalidateScheduleListByDate } from "../utils/react-query-utils";
+import {
+  invalidateOfficialScheduleListByMonth,
+  invalidateScheduleById,
+  invalidateScheduleLinkById,
+  invalidateScheduleListByDate,
+  invalidateScheduleListByMonth,
+  invalidateScheduleListByMonthWithId,
+} from "../utils/react-query-utils";
 import { IScheduleInput, TScheduleSchema } from "@shared/types";
 import { getStreamerNameByCategory } from "../utils/chzzk-utils";
 import { AllCategory } from "@shared/constants";
@@ -56,12 +63,12 @@ const useScheduleInput = (
   );
 
   // Reset input value
-  const resetInputValue = () => {
+  const resetInputValue = useCallback(() => {
     reset(initValue);
     clearErrors();
     resetMember();
     setIsOfficial(initValue.isOfficial ?? false);
-  };
+  }, [reset, clearErrors, resetMember, setIsOfficial, initValue]);
 
   // initData가 존재할 경우 form에 반영
   useEffect(() => {
@@ -89,7 +96,16 @@ const useScheduleInput = (
       fullDay,
       setValue,
     });
-  }, [category, fullDay, startAtDate, startAtTime, endAtDate, endAtTime]);
+  }, [
+    category,
+    fullDay,
+    startAtDate,
+    startAtTime,
+    endAtDate,
+    endAtTime,
+    setValue,
+    setMember,
+  ]);
 
   // When streamerName input has error, focus input
   useEffect(() => {
@@ -131,9 +147,18 @@ const useScheduleInput = (
 
   // create schedule
   const createScheduleMutation = useMutation({
-    mutationFn: (data: Partial<TScheduleSchema>) => createSchedule(data),
+    mutationFn: async (data: Partial<TScheduleSchema>) =>
+      await createSchedule(data),
     onSuccess: (schedule) => {
       invalidateScheduleListByDate(queryClient, schedule.startAt);
+      invalidateScheduleListByMonth(queryClient, schedule.startAt);
+      invalidateScheduleListByMonthWithId(
+        queryClient,
+        schedule.startAt,
+        schedule.streamerId
+      );
+      if (schedule.isOfficial)
+        invalidateOfficialScheduleListByMonth(queryClient, schedule.startAt);
       showToast("success", `일정을 추가했습니다.`);
       router.push(route.allCalendar);
     },
@@ -142,24 +167,30 @@ const useScheduleInput = (
 
   // update schedule
   const updateScheduleMutation = useMutation({
-    mutationFn: (data: { id: string; payload: Partial<TScheduleSchema> }) =>
-      updateSchedule(data.id, data.payload),
+    mutationFn: async (data: {
+      id: string;
+      payload: Partial<TScheduleSchema>;
+    }) => await updateSchedule(data.id, data.payload),
     onSuccess: (schedule) => {
       invalidateScheduleListByDate(queryClient, schedule.startAt);
+      invalidateScheduleListByMonth(queryClient, schedule.startAt);
+      invalidateScheduleListByMonthWithId(
+        queryClient,
+        schedule.startAt,
+        schedule.streamerId
+      );
+      invalidateScheduleById(queryClient, schedule._id);
+      invalidateScheduleLinkById(queryClient, schedule._id);
+      if (schedule.isOfficial)
+        invalidateOfficialScheduleListByMonth(queryClient, schedule.startAt);
       showToast("success", `일정을 수정했습니다.`);
       router.push(route.allCalendar);
     },
     onError: (error: IApiError) => handleScheduleApiError(error, showToast),
   });
 
-  // Submit event
-  const onSubmit = handleSubmit((data) => {
-    const inputData: IScheduleInput = {
-      ...data,
-      isOfficial,
-      member,
-    };
-
+  // submit data 처리
+  const prepareScheduleData = (inputData: IScheduleInput) => {
     const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
     const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
     const streamerName = getStreamerNameByCategory(
@@ -167,7 +198,7 @@ const useScheduleInput = (
       inputData.streamerName
     );
 
-    const createData: Partial<TScheduleSchema> = {
+    const data: Partial<TScheduleSchema> = {
       isOfficial: inputData.isOfficial,
       streamerName: streamerName,
       category: inputData.category as AllCategory,
@@ -179,9 +210,21 @@ const useScheduleInput = (
       contents: inputData.contents,
     };
 
-    if (!createData.member || createData.member?.length === 0)
-      delete createData.member;
-    if (!createData.contents) delete createData.contents;
+    if (!data.member || data.member?.length === 0) delete data.member;
+    if (!data.contents) delete data.contents;
+
+    return data;
+  };
+
+  // Submit event
+  const onSubmit = handleSubmit((data) => {
+    const inputData: IScheduleInput = {
+      ...data,
+      isOfficial,
+      member,
+    };
+
+    const createData = prepareScheduleData(inputData);
 
     if (initData) {
       updateScheduleMutation.mutate({
