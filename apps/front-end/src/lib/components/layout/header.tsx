@@ -9,6 +9,7 @@ import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { usePathname } from "next/navigation";
 import { menuItems } from "@/lib/constants/menu";
 import clsx from "clsx";
+import Image from "next/image";
 
 const Header = () => {
   /** save asPath state(previous, current) */
@@ -30,7 +31,14 @@ const Header = () => {
       <div className="mx-auto flex items-center justify-between px-4 md:px-8 md:container lg:max-w-6xl">
         <div className="flex items-center space-x-4 text-xl font-bold text-gray-100">
           <HeaderLink href={route.index} className="text-lg">
-            0's Life
+            <Image
+              src="/assets/images/logo-kr.png"
+              alt="0's Life 로고"
+              width={100}
+              height={50}
+              className="mr-2 w-[80px] md:w-[100px] h-auto"
+              priority
+            />
           </HeaderLink>
         </div>
         <div className="hidden items-center space-x-12 md:flex">

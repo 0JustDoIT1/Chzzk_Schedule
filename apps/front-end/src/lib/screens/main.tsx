@@ -1,9 +1,16 @@
+import Image from "next/image";
+
 const MainView = () => {
   return (
     <main className="flex flex-col items-center justify-center min-h-[calc(100vh-72px)] p-6 text-center text-white bg-brand-gradient">
-      <h1 className="mb-6 drop-shadow-xl animate-fadeInUp text-5xl md:text-7xl font-extrabold">
-        0's Life
-      </h1>
+      <Image
+        src="/assets/images/logo-eng.png"
+        alt="0's Life 로고"
+        width={400}
+        height={120}
+        className="mb-6 drop-shadow-xl animate-fadeInUp w-[220px] md:w-[400px] h-auto"
+        priority
+      />
       <h2 className="mb-8 tracking-wide animate-fadeInUp delay-[100ms] text-2xl md:text-3xl">
         치지직 방송 스케줄러
       </h2>
