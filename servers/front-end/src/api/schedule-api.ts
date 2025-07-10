@@ -8,7 +8,7 @@ import { ApiPath } from "@/lib/constants/api-path";
 import { postFetch } from "@/lib/fetch/post-fetch";
 import { getFetch } from "@/lib/fetch/get-fetch";
 import { patchFetch } from "@/lib/fetch/patch-fetch";
-import { IStreamer, TStreamerSchema } from "@/schemas/streamer.schema";
+import { TStreamerSchema } from "@/schemas/streamer.schema";
 
 const isServer = () => typeof window === "undefined";
 
@@ -56,6 +56,27 @@ export const getScheduleListByMonth = async (
   return await getFetch(
     isServer(),
     `${ApiPath.SCHEDULE_BY_MONTH}/${month.toDateString()}`
+  );
+};
+
+// Get Schedule list by Month with Object id
+export const getScheduleListByMonthWithId = async (
+  month: Date,
+  id: string
+): Promise<TMonthSchedule> => {
+  return await getFetch(
+    isServer(),
+    `${ApiPath.SCHEDULE_BY_MONTH}/${month.toDateString()}/${id}`
+  );
+};
+
+// Get Chzzk official Schedule list by Month
+export const getOfficialScheduleListByMonth = async (
+  month: Date
+): Promise<TMonthSchedule> => {
+  return await getFetch(
+    isServer(),
+    `${ApiPath.SCHEDULE_OFFICIAL_BY_MONTH}/${month.toDateString()}`
   );
 };
 

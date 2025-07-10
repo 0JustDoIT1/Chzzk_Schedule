@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Schedule, ScheduleDocument } from 'src/schemas/schedule.schema';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { StreamerService } from 'src/streamer/streamer.service';
@@ -128,7 +128,7 @@ export class ScheduleService {
     return this.editScheduleListByDate(getToday(), scheduleList);
   }
 
-  // Get schedule list by Date -> Edit schedule data
+  // Get schedule list by Date -> Edit schedule data (ScheduleDocument[] => IDateSchedule)
   editScheduleListByDate(
     date: TDayjsType,
     list: ScheduleDocument[],
@@ -150,6 +150,7 @@ export class ScheduleService {
     return result;
   }
 
+  // Get Schedule list by Month
   async getScheduleListByMonth(month: string): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
@@ -179,6 +180,84 @@ export class ScheduleService {
     return this.editScheduleListByMonth(scheduleList, startDate, endDate);
   }
 
+  // Get Schedule list by Month with Object id (스트리머별 month 스케줄)
+  async getScheduleListByMonthWithId(
+    month: string,
+    id: string,
+  ): Promise<TMonthSchedule> {
+    const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
+    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+
+    console.log('!!!', month, id);
+
+    const scheduleList = await this.scheduleModel
+      .find(
+        {
+          $and: [
+            {
+              $or: [
+                { startAt: { $gte: startDate, $lte: endDate } },
+                {
+                  startAt: { $lt: startDate },
+                  endAt: { $gte: startDate },
+                },
+              ],
+            },
+            { streamerId: new Types.ObjectId(id) },
+          ],
+        },
+        {
+          _id: 1,
+          title: 1,
+          startAt: 1,
+          endAt: 1,
+          streamerName: 1,
+          category: 1,
+        },
+      )
+      .exec();
+
+    console.log('data', scheduleList);
+
+    return this.editScheduleListByMonth(scheduleList, startDate, endDate);
+  }
+
+  // Get Chzzk official Schedule list by Month (치지직 공식 스케줄)
+  async getOfficialScheduleListByMonth(month: string): Promise<TMonthSchedule> {
+    const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
+    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+
+    const scheduleList = await this.scheduleModel
+      .find(
+        {
+          $and: [
+            {
+              $or: [
+                { startAt: { $gte: startDate, $lte: endDate } },
+                {
+                  startAt: { $lt: startDate },
+                  endAt: { $gte: startDate },
+                },
+              ],
+            },
+            { isOfficial: true },
+          ],
+        },
+        {
+          _id: 1,
+          title: 1,
+          startAt: 1,
+          endAt: 1,
+          streamerName: 1,
+          category: 1,
+        },
+      )
+      .exec();
+
+    return this.editScheduleListByMonth(scheduleList, startDate, endDate);
+  }
+
+  // Get Schedule list by Month => Edit Data (ScheduleDocument[] => TMonthSchedule)
   editScheduleListByMonth(
     scheduleList: ScheduleDocument[],
     startDate: Date,
@@ -216,8 +295,6 @@ export class ScheduleService {
           result[dayStr] = { list: [] };
         }
 
-        // current가 방송 시작일과 같은지 체크 (list, preList 구분하기 위해서)
-        const isStartDay = isSameDate(current, start);
         // current가 방송 시작일이면 list에 담고 아니라면 preList에 담기
         result[dayStr].list.push(schedule);
 

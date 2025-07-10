@@ -27,7 +27,6 @@ const TodayScreen = () => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getScheduleListByDate(date),
     queryFn: () => getScheduleListByDate(date),
-    enabled: !!date,
     placeholderData: (prev) => prev,
   });
 

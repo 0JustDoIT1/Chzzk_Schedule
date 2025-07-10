@@ -33,7 +33,6 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
   } = useQuery({
     queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id!),
-    enabled: !!id,
     placeholderData: (prev) => prev,
   });
 

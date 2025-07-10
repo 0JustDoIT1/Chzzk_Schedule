@@ -15,7 +15,6 @@ const ScheduleChannelView = ({ id }: IScheduleChannelView) => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getScheduleLinkById(id),
     queryFn: () => getScheduleLinkById(id),
-    enabled: !!id,
     placeholderData: (prev) => prev,
   });
 

@@ -4,5 +4,14 @@ export const queryKeys = {
   getScheduleById: (id: string) => ["getScheduleById", id],
   getScheduleListByDate: (date: Date) => ["getScheduleListByDate", date],
   getScheduleListByMonth: (month: Date) => ["getScheduleListByMonth", month],
+  getScheduleListByMonthWithId: (month: Date, id: string) => [
+    "getScheduleListByMonthWithId",
+    month,
+    id,
+  ],
+  getOfficialScheduleListByMonth: (month: Date) => [
+    "getOfficialScheduleListByMonth",
+    month,
+  ],
   getScheduleLinkById: (id: string) => ["getScheduleLinkById", id],
 };

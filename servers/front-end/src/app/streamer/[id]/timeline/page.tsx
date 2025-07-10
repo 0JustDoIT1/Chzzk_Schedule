@@ -10,12 +10,15 @@ import TimelineView from "@/screens/timelineView";
 import { QueryClient } from "@tanstack/react-query";
 
 interface IStreamerTimelinePage {
+  params: { id: string };
   searchParams: { date?: string };
 }
 
 const StreamerTimelinePage = async ({
+  params,
   searchParams,
 }: IStreamerTimelinePage) => {
+  const { id } = await params;
   const { date } = await searchParams;
   const dateStr = date || dateToFormatString(getToday(), "YYYY-MM-DD");
   const targetDate = dateTypeToDate(dateStr);
@@ -26,7 +29,7 @@ const StreamerTimelinePage = async ({
     queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  return <TimelineView date={targetDate} />;
+  return <TimelineView date={targetDate} id={id} />;
 };
 
 export default StreamerTimelinePage;

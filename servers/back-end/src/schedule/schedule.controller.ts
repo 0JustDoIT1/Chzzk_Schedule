@@ -51,10 +51,30 @@ export class ScheduleController {
   @ApiOperation({ summary: 'month에 맞는 스케줄 리스트 반환 API' })
   @ApiParam({ name: 'month', description: '월 (MM)' })
   @Get(ApiPath.SCHEDULE_BY_MONTH)
-  async getScheduleListByMont(
+  async getScheduleListByMonth(
     @Param('month') month: string,
   ): Promise<TMonthSchedule> {
     return await this.scheduleService.getScheduleListByMonth(month);
+  }
+
+  @ApiOperation({ summary: 'month와 Object Id에 맞는 스케줄 리스트 반환 API' })
+  @ApiParam({ name: 'month', description: '월 (MM)' })
+  @ApiParam({ name: 'id', description: '스케줄 Object Id' })
+  @Get(ApiPath.SCHEDULE_BY_MONTH_WITH_ID)
+  async getScheduleListByMonthWithId(
+    @Param('month') month: string,
+    @Param('id') id: string,
+  ): Promise<TMonthSchedule> {
+    return await this.scheduleService.getScheduleListByMonthWithId(month, id);
+  }
+
+  @ApiOperation({ summary: 'month에 맞는 치지직 공식 스케줄 리스트 반환 API' })
+  @ApiParam({ name: 'month', description: '월 (MM)' })
+  @Get(ApiPath.SCHEDULE_BY_MONTH_WITH_ID)
+  async getOfficialScheduleListByMonth(
+    @Param('month') month: string,
+  ): Promise<TMonthSchedule> {
+    return await this.scheduleService.getOfficialScheduleListByMonth(month);
   }
 
   @ApiOperation({

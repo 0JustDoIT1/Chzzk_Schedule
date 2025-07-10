@@ -29,7 +29,6 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getScheduleById(id),
     queryFn: () => getScheduleById(id),
-    enabled: !!id,
     placeholderData: (prev) => prev,
   });
 

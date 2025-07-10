@@ -36,7 +36,6 @@ export default function StreamerCommonLayout({
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: queryKeys.getStreamerById(id),
     queryFn: () => getStreamerById(id),
-    enabled: !!id,
     placeholderData: (prev) => prev,
   });
 
