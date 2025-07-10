@@ -6,7 +6,6 @@ import PlusIcon from "~/public/assets/svg/plus";
 
 interface IBrandLink {
   children: ReactNode;
-  color?: string;
   className?: string;
   href: string;
   scroll?: boolean;
@@ -14,7 +13,6 @@ interface IBrandLink {
 
 export const BrandLink = ({
   children,
-  color,
   className,
   href,
   scroll = false,

@@ -1,33 +1,33 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export class route {
+export const route = {
   // Base Route
-  static index = "/";
-  static all = route.index + "all";
-  static streamer = route.index + "streamer";
-  static today = route.index + "today";
-  static chzzk = route.index + "chzzk";
+  index: "/",
+  all: "/all",
+  streamer: "/streamer",
+  today: "/today",
+  chzzk: "/chzzk",
 
   // 해당 route는 const용 (실제 routing X)
-  static schedule = route.index + "schedule";
-  static calendar = route.index + "calendar";
-  static timeline = route.index + "timeline";
+  schedule: "/schedule",
+  calendar: "/calendar",
+  timeline: "/timeline",
 
   // 실제 사용되는 Route
-  static allCalendar = route.all + route.calendar;
-  static allTimeline = route.all + route.timeline;
+  allCalendar: "/all/calendar",
+  allTimeline: "/all/timeline",
 
-  static chzzkCalendar = route.chzzk + route.calendar;
-  static chzzkTimeline = route.chzzk + route.timeline;
+  chzzkCalendar: "/chzzk/calendar",
+  chzzkTimeline: "/chzzk/timeline",
 
-  static scheduleAdd = route.schedule + "/add";
-  static scheduleEdit = route.schedule + "/edit";
+  scheduleAdd: "/schedule/add",
+  scheduleEdit: "/schedule/edit",
 
   // Modal Route
-  static add = route.index + "add";
-  static detail = route.index + "detail";
-  static channel = route.index + "channel";
-}
+  add: "/add",
+  detail: "/detail",
+  channel: "/channel",
+} as const;
 
 export const getRoute = (basePath: string, ...segments: string[]) => {
   const trimmedBase = basePath.replace(/\/+$/, "");

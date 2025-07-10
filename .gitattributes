@@ -1,18 +1,8 @@
-# Yarn release files: always use LF line endings
-.yarn/releases/* text eol=lf
+# 모든 텍스트 파일은 LF로 체크인, 체크아웃 시 OS에 맞게 변환
+* text=auto
 
-# Optional: enforce LF for all JS/TS files (adjust as needed)
-*.js text eol=lf
+# 특정 파일을 강제로 LF 사용
 *.ts text eol=lf
-
-# Other common text files
+*.tsx text eol=lf
+*.js text eol=lf
 *.json text eol=lf
-*.md text eol=lf
-
-# Binary files - do not modify line endings
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
-*.ico binary
-*.pdf binary

@@ -1,5 +1,5 @@
 import useSearchableDropdown from "@/lib/hook/useSearchableDropdown";
-import type { StringIndexable } from "@/lib/types/indexableType";
+import type { IStringIndexable } from "@/lib/types/indexableType";
 import clsx from "clsx";
 import React from "react";
 import { RefCallBack } from "react-hook-form";
@@ -17,7 +17,7 @@ interface ISearchableDropdown<T> {
   errors: boolean;
 }
 
-const SearchableDropdown = <T extends StringIndexable>({
+const SearchableDropdown = <T extends IStringIndexable>({
   list,
   keyName,
   placeholder,

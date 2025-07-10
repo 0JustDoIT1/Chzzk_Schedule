@@ -1,4 +1,4 @@
-import { StringIndexable } from "@/lib/types/indexableType";
+import { IStringIndexable } from "@/lib/types/indexableType";
 import clsx from "clsx";
 
 interface ISearchableDropdownItem<T> {
@@ -11,7 +11,7 @@ interface ISearchableDropdownItem<T> {
   itemRef: React.RefObject<HTMLUListElement | null>;
 }
 
-const SearchableDropdownItem = <T extends StringIndexable>({
+const SearchableDropdownItem = <T extends IStringIndexable>({
   filterList,
   keyName,
   value,

@@ -1,3 +1,3 @@
-export interface StringIndexable {
+export interface IStringIndexable {
   [key: string]: any;
 }

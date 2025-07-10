@@ -3,7 +3,7 @@ import {
   chzzkCategoryOpt,
 } from "@/lib/constants/streamingCategory";
 import TiptapEditor from "../tiptap/tiptapEditor";
-import { Controller } from "react-hook-form";
+import { Controller, UseFormRegister } from "react-hook-form";
 import React from "react";
 import useScheduleInput from "@/lib/hook/useScheduleInput";
 import CheckIcon from "~/public/assets/svg/check";
@@ -16,6 +16,7 @@ import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import MemberList from "../common/memberList";
 import { IStreamer, TScheduleSchema } from "@shared/types";
 import SearchableDropdown from "../dropdown/searchableDropdown";
+import clsx from "clsx";
 
 interface IScheduleInput {
   streamerList: IStreamer[];
@@ -23,6 +24,47 @@ interface IScheduleInput {
   setIsOfficial: React.Dispatch<React.SetStateAction<boolean>>;
   initData?: TScheduleSchema;
 }
+
+interface IMemberInputSection {
+  label: string;
+  onAddMember: () => void;
+  member: string[];
+  onRemoveMember: (name: string) => void;
+  register: UseFormRegister<any>;
+}
+
+const MemberInputSection = ({
+  label,
+  onAddMember,
+  member,
+  onRemoveMember,
+  register,
+}: IMemberInputSection) => (
+  <div className="flex flex-col mb-4">
+    <label htmlFor="memberInput" className="text-sm text-textMain mb-2">
+      {label}
+    </label>
+    <div className="flex justify-between items-center">
+      <input
+        {...register("memberInput")}
+        id="memberInput"
+        className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
+        type="text"
+        placeholder="합방 멤버를 추가해 주세요."
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            onAddMember();
+          }
+        }}
+      />
+      <BrandButton className="w-16" onClick={onAddMember}>
+        추가
+      </BrandButton>
+    </div>
+    <MemberList member={member} onRemove={onRemoveMember} />
+  </div>
+);
 
 const ScheduleInput = ({
   streamerList,
@@ -38,8 +80,8 @@ const ScheduleInput = ({
     control,
     errors,
     watch,
-    onSubmit,
-    onReset,
+    handleSubmit,
+    handleReset,
     member,
     onAddMember,
     onRemoveMember,
@@ -49,10 +91,12 @@ const ScheduleInput = ({
   const category = watch("category");
   const fullDay = watch("fullDay");
 
+  const preventKeyDown = (e: React.KeyboardEvent) => e.preventDefault();
+
   return (
     <form
       className="container mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       onKeyDown={preventEnterKey}
     >
       <div>
@@ -114,11 +158,12 @@ const ScheduleInput = ({
               },
             })}
             id="category"
-            className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+            className={clsx(
+              "w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
               errors["category"]
                 ? "ring-error focus:ring-2 focus:ring-error"
                 : "ring-textLight focus:ring-brandMain"
-            }`}
+            )}
           >
             <option style={{ color: "gray" }} value="">
               방송 종류를 선택해 주세요.
@@ -143,56 +188,22 @@ const ScheduleInput = ({
         </div>
 
         {isOfficial && category && category !== "watch" && (
-          <div className="flex flex-col mb-4">
-            <label htmlFor="memberInput" className="text-sm text-textMain mb-2">
-              멤버 &#40;진행 및 게스트&#41;
-            </label>
-            <div className="flex justify-between items-center">
-              <input
-                {...register("memberInput")}
-                id="memberInput"
-                className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
-                type="text"
-                placeholder="합방 멤버를 추가해 주세요."
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    onAddMember();
-                  }
-                }}
-              />
-              <BrandButton className="w-16" onClick={onAddMember}>
-                추가
-              </BrandButton>
-            </div>
-            <MemberList member={member} onRemove={onRemoveMember} />
-          </div>
+          <MemberInputSection
+            label="멤버 (진행 및 게스트)"
+            onAddMember={onAddMember}
+            member={member}
+            onRemoveMember={onRemoveMember}
+            register={register}
+          />
         )}
         {!isOfficial && category && category !== "personal" && (
-          <div className="flex flex-col mb-4">
-            <label htmlFor="memberInput" className="text-sm text-textMain mb-2">
-              합방 멤버
-            </label>
-            <div className="flex justify-between items-center">
-              <input
-                {...register("memberInput")}
-                id="memberInput"
-                className="w-[calc(100%-72px)] rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none ring-textLight focus:ring-brandMain hover:bg-textHover"
-                type="text"
-                placeholder="합방 멤버를 추가해 주세요."
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    onAddMember();
-                  }
-                }}
-              />
-              <BrandButton className="w-16" onClick={onAddMember}>
-                추가
-              </BrandButton>
-            </div>
-            <MemberList member={member} onRemove={onRemoveMember} />
-          </div>
+          <MemberInputSection
+            label="합방 멤버"
+            onAddMember={onAddMember}
+            member={member}
+            onRemoveMember={onRemoveMember}
+            register={register}
+          />
         )}
         <div className="flex flex-col mb-4">
           <label htmlFor="title" className="text-sm text-textMain mb-2">
@@ -203,11 +214,12 @@ const ScheduleInput = ({
               required: { value: true, message: "일정 제목을 입력해 주세요." },
             })}
             id="title"
-            className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+            className={clsx(
+              "w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
               errors["title"]
                 ? "ring-error focus:ring-2 focus:ring-error"
                 : "ring-textLight focus:ring-brandMain"
-            }`}
+            )}
             type="text"
             placeholder="제목을 입력해 주세요."
           />
@@ -249,13 +261,14 @@ const ScheduleInput = ({
                 },
               })}
               id="startAtDate"
-              className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs ring-textLight outline-none hover:bg-textHover ${
+              className={clsx(
+                "w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
                 errors["startAtDate"]
                   ? "ring-error focus:ring-2 focus:ring-error"
                   : "ring-textLight focus:ring-brandMain"
-              }`}
+              )}
               type="date"
-              onKeyDown={(e) => e.preventDefault()}
+              onKeyDown={preventKeyDown}
             />
             <input
               {...register("startAtTime", {
@@ -265,13 +278,15 @@ const ScheduleInput = ({
                 },
               })}
               id="startAtTime"
-              className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+              className={clsx(
+                "w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
                 errors["startAtTime"]
                   ? "ring-error focus:ring-2 focus:ring-error"
-                  : "ring-textLight focus:ring-brandMain"
-              } disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
+                  : "ring-textLight focus:ring-brandMain",
+                "disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon"
+              )}
               type="time"
-              onKeyDown={(e) => e.preventDefault()}
+              onKeyDown={preventKeyDown}
               disabled={fullDay}
             />
           </div>
@@ -295,13 +310,15 @@ const ScheduleInput = ({
                 },
               })}
               id="endAtDate"
-              className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+              className={clsx(
+                "w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
                 errors["endAtDate"]
                   ? "ring-error focus:ring-2 focus:ring-error"
-                  : "ring-textLight focus:ring-brandMain"
-              } disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
+                  : "ring-textLight focus:ring-brandMain",
+                "disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon"
+              )}
               type="date"
-              onKeyDown={(e) => e.preventDefault()}
+              onKeyDown={preventKeyDown}
               disabled={fullDay}
             />
             <input
@@ -312,13 +329,15 @@ const ScheduleInput = ({
                 },
               })}
               id="endAtTime"
-              className={`w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover ${
+              className={clsx(
+                "w-1/2 rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
                 errors["endAtTime"]
                   ? "ring-error focus:ring-2 focus:ring-error"
-                  : "ring-textLight focus:ring-brandMain"
-              } disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon`}
+                  : "ring-textLight focus:ring-brandMain",
+                "disabled:ring-textIcon disabled:bg-textSuperLight disabled:text-textIcon"
+              )}
               type="time"
-              onKeyDown={(e) => e.preventDefault()}
+              onKeyDown={preventKeyDown}
               disabled={fullDay}
             />
           </div>
@@ -350,7 +369,7 @@ const ScheduleInput = ({
         <BrandButton
           type="button"
           className="w-auto min-w-20"
-          onClick={() => onReset()}
+          onClick={handleReset}
         >
           초기화
         </BrandButton>

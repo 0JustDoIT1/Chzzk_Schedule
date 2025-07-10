@@ -1,9 +1,9 @@
-import { dateTypeToDate } from "./dateFormat";
-
 // export const sorting = (array: any[], sort: number, option?: string) => {
 //   return array.sort((a, b) => {
 //     let newA;
 //     let newB;
+
+import { dateTypeToDate } from "@shared/utils";
 
 //     if (option) {
 //       if (option === "startAt") {

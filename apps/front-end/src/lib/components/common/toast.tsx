@@ -8,12 +8,28 @@ import InfoCircleIcon from "~/public/assets/svg/info-circle";
 import WarningCircleIcon from "~/public/assets/svg/warning-circle";
 import Portal from "./portal";
 import { useToastStore } from "@/lib/providers/toast-provider";
-import type { IToastItem } from "@/lib/types/toastType";
+import type { IToastIcon, IToastItem } from "@/lib/types/toastType";
+import clsx from "clsx";
+
+const ToastIcon = ({ type }: IToastIcon) => {
+  switch (type) {
+    case "success":
+      return <CheckCircleIcon className="text-green-600 w-5 h-5 mr-3" />;
+    case "info":
+      return <InfoCircleIcon className="text-blue-600 w-5 h-5 mr-3" />;
+    case "warning":
+      return <WarningCircleIcon className="text-yellow-600 w-5 h-5 mr-3" />;
+    case "error":
+      return <ErrorCircleIcon className="text-red-600 w-5 h-5 mr-3" />;
+    default:
+      return null;
+  }
+};
 
 const ToastItem = ({ id, type, message, shown }: IToastItem) => {
   const hideToast = useToastStore((state) => state.hideToast);
 
-  const toastColor = {
+  const toastColor: Record<string, string> = {
     success: "bg-green-200 text-green-800",
     info: "bg-blue-200 text-blue-800",
     warning: "bg-orange-200 text-yellow-800",
@@ -21,35 +37,25 @@ const ToastItem = ({ id, type, message, shown }: IToastItem) => {
     default: "bg-textMain",
   };
 
-  const ToastIcon = () => {
-    switch (type) {
-      case "success":
-        return <CheckCircleIcon className="text-green-600 w-5 h-5 mr-3" />;
-      case "info":
-        return <InfoCircleIcon className="text-blue-600 w-5 h-5 mr-3" />;
-      case "warning":
-        return <WarningCircleIcon className="text-yellow-600 w-5 h-5 mr-3" />;
-      case "error":
-        return <ErrorCircleIcon className="text-red-600 w-5 h-5 mr-3" />;
-      default:
-        return null;
-    }
-  };
+  const bgColor = toastColor[type] ?? toastColor.default;
 
   return (
     <div
-      className={`flex items-center justify-between w-full min-w-64 max-w-[400px] px-4 py-4 rounded-md shadow-lg ${
-        toastColor[type]
-      } ${shown ? "animate-fadeIn" : "animate-fadeOut"}`}
+      className={clsx(
+        "flex items-center justify-between w-full min-w-64 max-w-[400px] px-4 py-4 rounded-md shadow-lg",
+        bgColor,
+        shown ? "animate-fadeIn" : "animate-fadeOut"
+      )}
     >
       <div className="flex items-center">
-        <ToastIcon />
+        <ToastIcon type={type} />
         <p className="text-sm font-normal">{message}</p>
       </div>
       <button
         type="button"
         className="ml-4 text-textNormal rounded-lg inline-flex items-center justify-center"
         onClick={() => hideToast(id)}
+        aria-label="토스트 메세지 닫기"
       >
         <CloseIcon className="w-4 h-4 mb-1" />
       </button>
@@ -60,7 +66,7 @@ const ToastItem = ({ id, type, message, shown }: IToastItem) => {
 const ToastList = () => {
   const toastList = useToastStore((state) => state.toastList);
 
-  if (toastList.length === 0) return null;
+  if (toastList?.length) return null;
 
   return (
     <Portal>

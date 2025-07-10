@@ -7,6 +7,8 @@ import { CustomButton } from "../common/button";
 import { route } from "@/lib/constants/router";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { usePathname } from "next/navigation";
+import { menuItems } from "@/lib/constants/menu";
+import clsx from "clsx";
 
 const Header = () => {
   /** save asPath state(previous, current) */
@@ -21,9 +23,7 @@ const Header = () => {
   /** handle header menu */
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const handleMenu = () => setIsOpen((prev) => !prev);
 
   return (
     <nav className="sticky top-0 z-50 bg-textMain/90 p-4 text-white backdrop-blur-md">
@@ -34,40 +34,35 @@ const Header = () => {
           </HeaderLink>
         </div>
         <div className="hidden items-center space-x-12 md:flex">
-          <HeaderLink href={route.today} className="text-sm">
-            오늘
-          </HeaderLink>
-          <HeaderLink href={route.allCalendar} className="text-sm">
-            전체
-          </HeaderLink>
-          <HeaderLink href={route.streamer} className="text-sm">
-            스트리머별
-          </HeaderLink>
-          <HeaderLink href={route.chzzkCalendar} className="text-sm">
-            공식방송
-          </HeaderLink>
+          {menuItems.map((menu) => (
+            <HeaderLink key={menu.href} href={menu.href} className="text-sm">
+              {menu.label}
+            </HeaderLink>
+          ))}
         </div>
-        <CustomButton className="md:hidden" onClick={handleMenu}>
+        <CustomButton
+          className="md:hidden"
+          onClick={handleMenu}
+          aria-label="메뉴 열기/닫기"
+        >
           <MenuIcon className="w-6 h-6 text-white" />
         </CustomButton>
       </div>
       <div
-        className={`space-y-4 md:hidden transition-all duration-500 ease-in-out overflow-hidden ${
-          isOpen ? "h-52" : "h-0"
-        }`}
+        className={clsx(
+          "space-y-4 md:hidden transition-[max-height] duration-500 ease-in-out overflow-hidden",
+          isOpen ? "max-h-96" : "max-h-0"
+        )}
       >
-        <HeaderLink href={route.today} className="text-sm w-full">
-          오늘
-        </HeaderLink>
-        <HeaderLink href={route.allCalendar} className="text-sm w-full">
-          전체
-        </HeaderLink>
-        <HeaderLink href={route.streamer} className="text-sm w-full">
-          스트리머별
-        </HeaderLink>
-        <HeaderLink href={route.chzzkCalendar} className="text-sm w-full">
-          공식방송
-        </HeaderLink>
+        {menuItems.map((menu) => (
+          <HeaderLink
+            key={menu.href}
+            href={menu.href}
+            className="w-full text-sm"
+          >
+            {menu.label}
+          </HeaderLink>
+        ))}
       </div>
     </nav>
   );

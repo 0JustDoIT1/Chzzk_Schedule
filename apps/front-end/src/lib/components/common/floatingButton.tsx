@@ -8,7 +8,12 @@ import PlusIcon from "~/public/assets/svg/plus";
 export const FloatingButton = () => {
   const pathName = usePathname();
 
-  if (pathName === route.index) return null;
+  if (
+    pathName === route.index ||
+    pathName === route.scheduleAdd ||
+    pathName === route.scheduleEdit
+  )
+    return null;
 
   return (
     <div className="fixed bottom-8 right-8 md:bottom-12 md:right-16">

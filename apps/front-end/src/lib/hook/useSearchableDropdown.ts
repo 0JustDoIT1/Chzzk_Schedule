@@ -7,9 +7,9 @@ import {
   useRef,
   useState,
 } from "react";
-import type { StringIndexable } from "@/lib/types/indexableType";
+import type { IStringIndexable } from "@/lib/types/indexableType";
 
-const useSearchableDropdown = <T extends StringIndexable>(
+const useSearchableDropdown = <T extends IStringIndexable>(
   list: T[],
   keyName: string,
   value: string,
