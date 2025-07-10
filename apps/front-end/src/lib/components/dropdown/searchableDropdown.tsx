@@ -1,9 +1,11 @@
 import useSearchableDropdown from "@/lib/hook/useSearchableDropdown";
 import type { StringIndexable } from "@/lib/types/indexableType";
+import clsx from "clsx";
 import React from "react";
 import { RefCallBack } from "react-hook-form";
 import ChevronDownIcon from "~/public/assets/svg/chevron-down";
 import ChevronUpIcon from "~/public/assets/svg/chevron-up";
+import SearchableDropdownItem from "./searchableDropdownItem";
 
 interface ISearchableDropdown<T> {
   list: T[];
@@ -35,7 +37,6 @@ const SearchableDropdown = <T extends StringIndexable>({
     setSelectIndex,
     toggleDropdown,
     onKeyPress,
-    setKeyboardScroll,
     selectItem,
     displayValue,
   } = useSearchableDropdown(list, keyName, value, onChange);
@@ -44,20 +45,19 @@ const SearchableDropdown = <T extends StringIndexable>({
     <div className="relative cursor-default">
       <input
         id={keyName}
-        className={`w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover 
-            ${
-              errors
-                ? "ring-error focus:ring-2 focus:ring-error"
-                : "ring-textLight focus:ring-brandMain"
-            }
-        `}
+        className={clsx(
+          "w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
+          errors
+            ? "ring-error focus:ring-2 focus:ring-error"
+            : "ring-textLight focus:ring-brandMain"
+        )}
         name={keyName}
         ref={(e) => {
           inputRef.current = e;
           ref?.(e);
         }}
         type="text"
-        value={displayValue()}
+        value={displayValue}
         placeholder={placeholder}
         onChange={(e) => {
           setQuery(e.target.value);
@@ -75,45 +75,15 @@ const SearchableDropdown = <T extends StringIndexable>({
       )}
 
       {isOpen && filterList.length > 0 && (
-        <ul
-          ref={itemRef}
-          className="absolute start-0 z-10 w-full max-h-64 overflow-y-auto box-border rounded-md bg-white text-sm ring-1 shadow-lg ring-textLight "
-        >
-          {filterList.map((item, index) => {
-            let background = "";
-            let hover = "";
-
-            if (value === item[keyName]) {
-              hover = "hover:bg-brandLight";
-              background = "bg-brandSuperLight";
-              if (index === selectIndex) {
-                background = "bg-brandLight";
-              }
-            } else {
-              hover = "hover:bg-textBlur";
-              background = "bg-white";
-              if (index === selectIndex) {
-                background = "bg-textBlur";
-              }
-            }
-            setTimeout(() => {
-              setKeyboardScroll();
-            }, 100);
-
-            return (
-              <li
-                key={item._id}
-                className={`p-2 box-border cursor-pointer truncate ${background} ${hover}`}
-                onClick={() => {
-                  selectItem(item);
-                  onChange(item[keyName]);
-                }}
-              >
-                {item[keyName]}
-              </li>
-            );
-          })}
-        </ul>
+        <SearchableDropdownItem
+          filterList={filterList}
+          keyName={keyName}
+          value={value}
+          selectIndex={selectIndex}
+          selectItem={selectItem}
+          onChange={onChange}
+          itemRef={itemRef}
+        />
       )}
     </div>
   );

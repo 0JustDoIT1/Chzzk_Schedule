@@ -4,7 +4,6 @@ import {
 } from "@/lib/constants/streamingCategory";
 import TiptapEditor from "../tiptap/tiptapEditor";
 import { Controller } from "react-hook-form";
-import SearchableDropdown from "../common/searchableDropdown";
 import React from "react";
 import useScheduleInput from "@/lib/hook/useScheduleInput";
 import CheckIcon from "~/public/assets/svg/check";
@@ -16,6 +15,7 @@ import { goBackRoute, route } from "@/lib/constants/router";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import MemberList from "../common/memberList";
 import { IStreamer, TScheduleSchema } from "@shared/types";
+import SearchableDropdown from "../dropdown/searchableDropdown";
 
 interface IScheduleInput {
   streamerList: IStreamer[];
