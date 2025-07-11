@@ -325,8 +325,12 @@ export class ScheduleService {
 
     if (schedule.member) {
       for (const member of schedule.member) {
-        const streamer = await this.streamerService.getStreamerByName(member);
-        result.push(streamer);
+        try {
+          const streamer = await this.streamerService.getStreamerByName(member);
+          result.push(streamer);
+        } catch {
+          continue;
+        }
       }
     }
 
