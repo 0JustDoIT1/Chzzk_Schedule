@@ -1,4 +1,4 @@
-import { AllCategory } from "@shared/constants";
+import { AllCategory, OfficialName } from "@shared/constants";
 
 export const getInitials = (name: string) => {
   const str = name;
@@ -43,9 +43,9 @@ export const getStreamerNameByCategory = (
 ) => {
   switch (category) {
     case AllCategory.OFFICIAL:
-      return "치지직 공식";
+      return OfficialName.OFFICIAL;
     case AllCategory.WATCH:
-      return "치지직 같이보기";
+      return OfficialName.WATCH;
     default:
       if (!streamerName) {
         throw new Error("개인/콘텐츠 일정에는 스트리머가 필수입니다.");

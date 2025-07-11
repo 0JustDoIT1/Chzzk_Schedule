@@ -18,3 +18,8 @@ export enum AllCategory {
   OFFICIAL = "official",
   WATCH = "watch",
 }
+
+export enum OfficialName {
+  OFFICIAL = "치지직 공식",
+  WATCH = "치지직 같이보기",
+}
