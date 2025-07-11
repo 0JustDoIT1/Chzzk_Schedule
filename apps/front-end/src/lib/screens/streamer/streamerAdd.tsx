@@ -61,7 +61,8 @@ const StreamerAddView = () => {
   const [tag, setTag] = useState<string[]>([]);
 
   const onKeyDownAddTag = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.code === "Enter") {
+    if (e.key === "Enter") {
+      e.preventDefault();
       onAddTag();
     }
   };

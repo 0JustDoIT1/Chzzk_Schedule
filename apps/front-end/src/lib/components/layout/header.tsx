@@ -12,17 +12,16 @@ import clsx from "clsx";
 import Image from "next/image";
 
 const Header = () => {
+  const pathName = usePathname();
+
   /** save asPath state(previous, current) */
   const setAsPathData = useAsPathStore((state) => state.setAsPathData);
-
-  const pathName = usePathname();
+  /** handle header menu */
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setAsPathData(pathName);
   }, [pathName, setAsPathData]);
-
-  /** handle header menu */
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleMenu = () => setIsOpen((prev) => !prev);
 
