@@ -7,8 +7,8 @@ const MainView = () => {
         src="/assets/images/logo-eng.png"
         alt="0's Life 로고"
         width={400}
-        height={120}
-        className="mb-6 drop-shadow-xl animate-fadeInUp w-[220px] md:w-[400px] h-auto"
+        height={200}
+        className="mb-6 drop-shadow-xl animate-fadeInUp w-[220px] h-[110px] md:w-[400px] md:h-[200px]"
         priority
       />
       <h2 className="mb-8 tracking-wide animate-fadeInUp delay-[100ms] text-2xl md:text-3xl">

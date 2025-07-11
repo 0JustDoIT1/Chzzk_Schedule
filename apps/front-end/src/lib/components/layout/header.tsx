@@ -36,7 +36,7 @@ const Header = () => {
               alt="0's Life 로고"
               width={100}
               height={50}
-              className="mr-2 w-[80px] md:w-[100px] h-auto"
+              className="mr-2 w-[80px] h-[40px] md:w-[100px] md:h-[50px]"
               priority
             />
           </HeaderLink>
