@@ -51,6 +51,88 @@ export class ScheduleService {
     return await this.scheduleModel.create(createData);
   }
 
+  // async create(scheduleData: CreateScheduleDto): Promise<ScheduleDocument> {
+  //   // 트랜잭션 시작을 위한 세션 생성
+  //   // session을 넘긴 모든 DB 쓰기 작업은 하나의 트랜잭션으로 묶임
+  //   // 작업이 모두 성공하면 커밋, 실패하면 롤백
+  //   const session = await this.scheduleModel.db.startSession();
+  //   // 트랜잭션 실행
+  //   session.startTransaction();
+
+  //   try {
+  //     const streamer = await this.streamerService.getStreamerByName(
+  //       scheduleData.streamerName,
+  //     );
+
+  //     // validate schedule already exist
+  //     await this.validateDuplicateSchedule(
+  //       streamer.name,
+  //       scheduleData.title,
+  //       scheduleData.startAt,
+  //     );
+
+  //     const createData: Schedule = {
+  //       ...scheduleData,
+  //       streamerId: streamer._id,
+  //       chzzkLink: streamer.chzzkLink,
+  //     };
+
+  //     // 트랜잭션 세션을 포함한 상태로 일정 생성
+  //     // DB에 실제 저장 X
+  //     const [createdMain] = await this.scheduleModel.create([createData], {
+  //       session,
+  //     });
+
+  //     if (scheduleData.isOfficial && scheduleData.member?.length > 0) {
+  //       for (const memberName of scheduleData.member) {
+  //         // 본인인 경우 건너뜀
+  //         if (memberName === streamer.name) continue;
+
+  //         let member: StreamerDocument;
+
+  //         try {
+  //           member = await this.streamerService.getStreamerByName(memberName);
+  //         } catch (error) {
+  //           continue;
+  //         }
+
+  //         // validate schedule already exist
+  //         await this.validateDuplicateSchedule(
+  //           member.name,
+  //           scheduleData.title,
+  //           scheduleData.startAt,
+  //         );
+
+  //         const memberSchedule: Schedule = {
+  //           ...scheduleData,
+  //           streamerId: member._id,
+  //           streamerName: member.name,
+  //           chzzkLink: member.chzzkLink,
+  //           // 자신은 멤버에서 제거
+  //           member: scheduleData.member.filter((name) => name !== member.name),
+  //         };
+
+  //         // 트랜잭션 세션을 포함한 상태로 일정 생성
+  //         // DB에 실제 저장 X
+  //         await this.scheduleModel.create([memberSchedule], { session });
+  //       }
+  //     }
+
+  //     // 모든 일정이 생성되면 트랜잭션 커밋 (DB에 실제 저장)
+  //     await session.commitTransaction();
+  //     // 트랜잭션 종료
+  //     session.endSession();
+
+  //     return createdMain;
+  //   } catch (error) {
+  //     // 트랜잭션 롤백
+  //     await session.abortTransaction();
+  //     // 트랜잭션 종료
+  //     session.endSession();
+  //     throw error;
+  //   }
+  // }
+
   // Update schedule
   async updateSchedule(
     id: string,
