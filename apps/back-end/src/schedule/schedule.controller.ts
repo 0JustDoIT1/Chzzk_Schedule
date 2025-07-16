@@ -50,36 +50,36 @@ export class ScheduleController {
   }
 
   @ApiOperation({ summary: 'date에 맞는 월 스케줄 리스트 반환 API' })
-  @ApiParam({ name: 'date', description: '날짜 (YYYY-MM-DD)' })
+  @ApiParam({ name: 'month', description: '날짜 (YYYY-MM-DD)' })
   @Get(ApiPath.SCHEDULE_BY_MONTH)
   async getScheduleListByMonth(
-    @Param('date') date: string,
+    @Param('month') month: string,
   ): Promise<TMonthSchedule> {
-    return await this.scheduleService.getScheduleListByMonth(date);
+    return await this.scheduleService.getScheduleListByMonth(month);
   }
 
   @ApiOperation({
     summary: 'date와 Object Id에 맞는 월 스케줄 리스트 반환 API',
   })
-  @ApiParam({ name: 'date', description: '날짜 (YYYY-MM-DD)' })
+  @ApiParam({ name: 'month', description: '날짜 (YYYY-MM-DD)' })
   @ApiParam({ name: 'id', description: '스케줄 Object Id' })
   @Get(ApiPath.SCHEDULE_BY_MONTH_WITH_ID)
   async getScheduleListByMonthWithId(
-    @Param('date') date: string,
+    @Param('month') month: string,
     @Param('id') id: string,
   ): Promise<TMonthSchedule> {
-    return await this.scheduleService.getScheduleListByMonthWithId(date, id);
+    return await this.scheduleService.getScheduleListByMonthWithId(month, id);
   }
 
   @ApiOperation({
     summary: 'date에 맞는 치지직 공식 월 스케줄 리스트 반환 API',
   })
-  @ApiParam({ name: 'date', description: '날짜 (YYYY-MM-DD)' })
+  @ApiParam({ name: 'month', description: '날짜 (YYYY-MM-DD)' })
   @Get(ApiPath.SCHEDULE_OFFICIAL_BY_MONTH)
   async getOfficialScheduleListByMonth(
-    @Param('date') date: string,
+    @Param('month') month: string,
   ): Promise<TMonthSchedule> {
-    return await this.scheduleService.getOfficialScheduleListByMonth(date);
+    return await this.scheduleService.getOfficialScheduleListByMonth(month);
   }
 
   @ApiOperation({
