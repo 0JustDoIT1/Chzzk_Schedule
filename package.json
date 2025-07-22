@@ -2,15 +2,11 @@
   "name": "chzzk-schedule",
   "private": true,
   "scripts": {
-    "dev:front": "yarn workspace front-end run dev",
-    "dev:back": "yarn workspace back-end run start:dev",
-    "dev": "concurrently \"yarn dev:front\" \"yarn dev:back\"",
-    "build:constants": "yarn workspace @shared/constants build",
-    "build:types": "yarn workspace @shared/types build",
-    "build:utils": "yarn workspace @shared/utils build",
-    "build:shared": "yarn build:constants && yarn build:types && yarn build:utils",
-    "add:front": "yarn workspace front-end add @shared/constants && yarn workspace front-end add @shared/types && yarn workspace front-end add @shared/utils",
-    "add:back": "yarn workspace back-end add @shared/constants && yarn workspace back-end add @shared/types && yarn workspace back-end add @shared/utils"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "start:prod": "turbo start:prod"
   },
   "workspaces": [
     "apps/*",
@@ -19,6 +15,7 @@
   "packageManager": "yarn@4.9.2",
   "devDependencies": {
     "concurrently": "^9.2.0",
+    "turbo": "^2.5.5",
     "typescript": "^5.8.3"
   }
 }

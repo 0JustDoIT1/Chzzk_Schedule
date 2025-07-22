@@ -15,5 +15,5 @@
       "@shared/utils/*": ["*"]
     }
   },
-  "include": ["*.ts"]
+  "include": ["src"]
 }
