@@ -20,8 +20,6 @@ const AllTimelinePage = async ({ searchParams }: IAllTimelinePage) => {
     queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  console.log("###", targetDate);
-
   return <TimelineView date={targetDate} />;
 };
 
