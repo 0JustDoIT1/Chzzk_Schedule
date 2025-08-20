@@ -6,7 +6,7 @@ import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
 interface IStreamerCalendarPage {
-  params: { id: string };
+  params: Promise<{ id: string }>;
   searchParams: { date?: string };
 }
 

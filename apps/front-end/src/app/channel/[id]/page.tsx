@@ -2,7 +2,7 @@ import Modal from "@/lib/components/common/modal";
 import ScheduleLinkView from "@/lib/screens/schedule/scheduleChannel";
 
 interface IChannelPage {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const ChannelPage = async ({ params }: IChannelPage) => {

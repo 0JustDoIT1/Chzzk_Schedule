@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 
 interface IChzzkLayout {
   children: ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ChzzkLayout({ children, params }: IChzzkLayout) {

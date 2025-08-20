@@ -8,7 +8,7 @@ import {
 
 interface IChannelModalLayout {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ChannelModalLayout({

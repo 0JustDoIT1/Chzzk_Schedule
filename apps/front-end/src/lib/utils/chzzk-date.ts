@@ -1,10 +1,14 @@
-import dayjs from "dayjs";
 import { TScheduleSchema } from "@shared/types";
-import { dateToFormatString, isSameDate, TDayjsType } from "@shared/utils";
+import {
+  dateToFormatString,
+  isSameDate,
+  TDayjsConfigType,
+  TDayjsType,
+} from "@shared/utils";
 
 // 타임라인 안에 날짜 비교 후 format 변환
 export const getScheduleDateString = (
-  date: dayjs.ConfigType,
+  date: TDayjsConfigType,
   today: TDayjsType
 ) =>
   isSameDate(date, today)

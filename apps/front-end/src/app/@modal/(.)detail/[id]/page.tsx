@@ -2,7 +2,7 @@ import Modal from "@/lib/components/common/modal";
 import ScheduleDetailView from "@/lib/screens/schedule/scheduleDetail";
 
 interface IDetailIdModalPage {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const DetailIdModalPage = async ({ params }: IDetailIdModalPage) => {

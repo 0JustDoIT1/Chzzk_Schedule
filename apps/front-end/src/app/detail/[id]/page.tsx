@@ -1,7 +1,7 @@
 import ScheduleDetailView from "@/lib/screens/schedule/scheduleDetail";
 
 interface IDetailIdPage {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const DetailIdPage = async ({ params }: IDetailIdPage) => {

@@ -13,6 +13,7 @@ dayjs.extend(isBetween);
 dayjs.tz.setDefault("Asia/Seoul");
 
 export type TDayjsType = dayjs.Dayjs;
+export type TDayjsConfigType = dayjs.ConfigType;
 
 // 오늘 날짜 구하기
 export const getToday = () => {

@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "declarationMap": true,
     "emitDeclarationOnly": false,
     "outDir": "dist",
+    "rootDir": "src",
     "composite": true,
     "module": "CommonJS",
-    "target": "ESNext",
+    "target": "ES2020",
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@shared/utils/*": ["*"]
-    }
+    "strict": true
   },
   "include": ["src"]
 }

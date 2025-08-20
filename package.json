@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:shared": "yarn turbo run build --filter='./shared/*' --force",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test",
