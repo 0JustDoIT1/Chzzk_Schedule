@@ -18,6 +18,15 @@ export const invalidateStreamerById = (
   });
 };
 
+export const invalidateStreamerByName = (
+  queryClient: QueryClient,
+  name: string
+) => {
+  queryClient.invalidateQueries({
+    queryKey: queryKeys.getStreamerByName(name),
+  });
+};
+
 // schedule-query-utils
 export const invalidateScheduleById = (
   queryClient: QueryClient,
@@ -62,6 +71,19 @@ export const invalidateScheduleListByMonthWithId = (
 
   queryClient.invalidateQueries({
     queryKey: queryKeys.getScheduleListByMonthWithId(date, id),
+  });
+};
+
+export const invalidateScheduleListByMonthWithName = (
+  queryClient: QueryClient,
+  startAt: Date,
+  name: string
+) => {
+  const dateStr = dateToFormatString(startAt, "YYYY-MM-DD");
+  const date = dateTypeToDate(dateStr);
+
+  queryClient.invalidateQueries({
+    queryKey: queryKeys.getScheduleListByMonthWithName(date, name),
   });
 };
 

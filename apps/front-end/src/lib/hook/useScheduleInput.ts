@@ -17,6 +17,7 @@ import {
   invalidateScheduleListByDate,
   invalidateScheduleListByMonth,
   invalidateScheduleListByMonthWithId,
+  invalidateScheduleListByMonthWithName,
 } from "../utils/react-query-utils";
 import { IScheduleInput, TScheduleSchema } from "@shared/types";
 import { getStreamerNameByCategory } from "../utils/chzzk-utils";
@@ -156,6 +157,11 @@ const useScheduleInput = (
         queryClient,
         schedule.startAt,
         schedule.streamerId
+      );
+      invalidateScheduleListByMonthWithName(
+        queryClient,
+        schedule.startAt,
+        schedule.streamerName
       );
       if (schedule.isOfficial)
         invalidateOfficialScheduleListByMonth(queryClient, schedule.startAt);

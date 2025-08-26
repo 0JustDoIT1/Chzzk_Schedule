@@ -96,10 +96,10 @@ const StreamerCategoryView = () => {
                     <div className="flex flex-wrap items-center gap-2">
                       {streamerList[initial].map((streamer) => (
                         <Link
-                          key={streamer._id}
+                          key={streamer.name}
                           href={getRoute(
                             route.streamer,
-                            streamer._id,
+                            streamer.name,
                             route.calendar
                           )}
                           className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-textLight shadow-sm rounded-lg hover:bg-brandMainHover"

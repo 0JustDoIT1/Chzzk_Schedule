@@ -14,19 +14,19 @@ import Link from "next/link";
 import clsx from "clsx";
 import { queryKeys } from "@/lib/constants/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { getStreamerById } from "@/api/streamer-api";
+import { getStreamerByName } from "@/api/streamer-api";
 import IsLoading from "@/lib/components/layout/isLoading";
 import IsError from "@/lib/components/layout/isError";
 import { dateToFormatString } from "@shared/utils";
 
 interface IStreamerCommonLayout {
   children: ReactNode;
-  id: string;
+  name: string;
 }
 
 export default function StreamerCommonLayout({
   children,
-  id,
+  name,
 }: IStreamerCommonLayout) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
@@ -34,8 +34,8 @@ export default function StreamerCommonLayout({
   const { today, setPreMonth, setNextMonth, setPresentMonth } = useCalendar();
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: queryKeys.getStreamerById(id),
-    queryFn: () => getStreamerById(id),
+    queryKey: queryKeys.getStreamerByName(name),
+    queryFn: () => getStreamerByName(name),
     placeholderData: (prev) => prev,
   });
 
@@ -52,19 +52,19 @@ export default function StreamerCommonLayout({
   const calendarHref = useMemo(
     () =>
       getDatePreservedRoute(
-        getRoute(route.streamer, id, route.calendar),
+        getRoute(route.streamer, name, route.calendar),
         searchParams
       ),
-    [id, searchParams]
+    [name, searchParams]
   );
 
   const timelineHref = useMemo(
     () =>
       getDatePreservedRoute(
-        getRoute(route.streamer, id, route.timeline),
+        getRoute(route.streamer, name, route.timeline),
         searchParams
       ),
-    [id, searchParams]
+    [name, searchParams]
   );
 
   return (

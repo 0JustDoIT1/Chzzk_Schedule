@@ -301,6 +301,44 @@ export class ScheduleService {
     return this.editScheduleListByMonth(scheduleList, startDate, endDate);
   }
 
+  // Get Schedule list by Month with Streamer Name (스트리머별 month 스케줄)
+  async getScheduleListByMonthWithName(
+    month: string,
+    name: string,
+  ): Promise<TMonthSchedule> {
+    const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
+    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+
+    const scheduleList = await this.scheduleModel
+      .find(
+        {
+          $and: [
+            {
+              $or: [
+                { startAt: { $gte: startDate, $lte: endDate } },
+                {
+                  startAt: { $lt: startDate },
+                  endAt: { $gte: startDate },
+                },
+              ],
+            },
+            { streamerName: name },
+          ],
+        },
+        {
+          _id: 1,
+          title: 1,
+          startAt: 1,
+          endAt: 1,
+          streamerName: 1,
+          category: 1,
+        },
+      )
+      .exec();
+
+    return this.editScheduleListByMonth(scheduleList, startDate, endDate);
+  }
+
   // Get Chzzk official Schedule list by Month (치지직 공식 스케줄)
   async getOfficialScheduleListByMonth(month: string): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01

@@ -8,18 +8,18 @@ import { queryKeys } from "@/lib/constants/react-query";
 import {
   getOfficialScheduleListByMonth,
   getScheduleListByMonth,
-  getScheduleListByMonthWithId,
+  getScheduleListByMonthWithName,
 } from "@/api/schedule-api";
 import IsLoading from "@/lib/components/layout/isLoading";
 import IsError from "@/lib/components/layout/isError";
 
 interface ICalendarView {
   date: Date;
-  id?: string;
+  name?: string;
   isOfficial?: boolean;
 }
 
-const CalendarView = ({ date, id, isOfficial }: ICalendarView) => {
+const CalendarView = ({ date, name, isOfficial }: ICalendarView) => {
   const { today, weekHeader, dayArray } = useCalendar();
 
   useEffect(() => {
@@ -28,21 +28,21 @@ const CalendarView = ({ date, id, isOfficial }: ICalendarView) => {
     }
   }, []);
 
-  const fetchSchedule = (date: Date, id?: string, isOfficial?: boolean) => {
+  const fetchSchedule = (date: Date, name?: string, isOfficial?: boolean) => {
     if (isOfficial) return getOfficialScheduleListByMonth(date);
-    if (id) return getScheduleListByMonthWithId(date, id);
+    if (name) return getScheduleListByMonthWithName(date, name);
     return getScheduleListByMonth(date);
   };
 
-  const getQueryKey = (date: Date, id?: string, isOfficial?: boolean) => {
+  const getQueryKey = (date: Date, name?: string, isOfficial?: boolean) => {
     if (isOfficial) return queryKeys.getOfficialScheduleListByMonth(date);
-    if (id) return queryKeys.getScheduleListByMonthWithId(date, id);
+    if (name) return queryKeys.getScheduleListByMonthWithName(date, name);
     return queryKeys.getScheduleListByMonth(date);
   };
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: getQueryKey(date, id, isOfficial),
-    queryFn: () => fetchSchedule(date, id, isOfficial),
+    queryKey: getQueryKey(date, name, isOfficial),
+    queryFn: () => fetchSchedule(date, name, isOfficial),
     placeholderData: (prev) => prev,
   });
 

@@ -12,10 +12,10 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   ...DEFAULT_META_TAG,
-  title: `오늘 일정`,
+  title: `오늘의 스케줄`,
   description: `오늘의 치지직 방송 스케줄을 확인해보세요.`,
   openGraph: {
-    title: `오늘 일정`,
+    title: `오늘의 스케줄`,
     description: `오늘의 치지직 방송 스케줄을 확인해보세요.`,
   },
 };

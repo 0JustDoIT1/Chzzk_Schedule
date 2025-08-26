@@ -13,7 +13,8 @@ export const ApiPath = {
   SCHEDULE_BY_ID: "id/:id",
   SCHEDULE_BY_DATE: "date/:date",
   SCHEDULE_BY_MONTH: "month/:month",
-  SCHEDULE_BY_MONTH_WITH_ID: "month/:month/:id",
+  SCHEDULE_BY_MONTH_WITH_ID: "month/:month/id/:id",
+  SCHEDULE_BY_MONTH_WITH_NAME: "month/:month/name/:name",
   SCHEDULE_OFFICIAL_BY_MONTH: "official/month/:month",
   SCHEDULE_LINK_BY_ID: "link/:id",
 } as const;
@@ -34,7 +35,8 @@ export function buildApiPath(...path: string[]) {
       // [key, val] 형태로 반복문 실행
       for (const [key, val] of Object.entries(params)) {
         // 위에 선언한 apiPath에 해당하는 key가 있으면 val로 변경
-        apiPath = apiPath.replace(`:${key}`, encodeURIComponent(String(val)));
+        // apiPath = apiPath.replace(`:${key}`, encodeURIComponent(String(val)));
+        apiPath = apiPath.replace(`:${key}`, String(val));
       }
     }
     return apiPath;

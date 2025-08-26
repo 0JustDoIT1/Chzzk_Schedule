@@ -37,3 +37,13 @@ export const getStreamerById = (id: string): Promise<TStreamerSchema> => {
   )({ id });
   return getFetch(isServer(), url);
 };
+
+// Get streamer by Object Id
+export const getStreamerByName = (name: string): Promise<TStreamerSchema> => {
+  const url = buildApiPath(
+    ApiPath.PREFIX,
+    ApiPath.STREAMER,
+    ApiPath.STREAMER_BY_NAME
+  )({ name });
+  return getFetch(isServer(), url);
+};

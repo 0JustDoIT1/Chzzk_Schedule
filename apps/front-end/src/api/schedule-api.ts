@@ -91,6 +91,21 @@ export const getScheduleListByMonthWithId = async (
   );
 };
 
+// Get Schedule list by Month with Streamer Name
+export const getScheduleListByMonthWithName = async (
+  month: Date,
+  name: string
+): Promise<TMonthSchedule> => {
+  return await getFetch(
+    isServer(),
+    buildApiPath(
+      ApiPath.PREFIX,
+      ApiPath.SCHEDULE,
+      ApiPath.SCHEDULE_BY_MONTH_WITH_NAME
+    )({ month: month.toDateString(), name })
+  );
+};
+
 // Get Chzzk official Schedule list by Month
 export const getOfficialScheduleListByMonth = async (
   month: Date

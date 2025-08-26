@@ -8,35 +8,35 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getOfficialScheduleListByMonth,
   getScheduleListByMonth,
-  getScheduleListByMonthWithId,
+  getScheduleListByMonthWithName,
 } from "@/api/schedule-api";
 import IsLoading from "@/lib/components/layout/isLoading";
 import IsError from "@/lib/components/layout/isError";
 
 interface ITimelineView {
   date: Date;
-  id?: string;
+  name?: string;
   isOfficial?: boolean;
 }
 
-const TimelineView = ({ date, id, isOfficial }: ITimelineView) => {
+const TimelineView = ({ date, name, isOfficial }: ITimelineView) => {
   const { today } = useCalendar();
 
-  const fetchSchedule = (date: Date, id?: string, isOfficial?: boolean) => {
+  const fetchSchedule = (date: Date, name?: string, isOfficial?: boolean) => {
     if (isOfficial) return getOfficialScheduleListByMonth(date);
-    if (id) return getScheduleListByMonthWithId(date, id);
+    if (name) return getScheduleListByMonthWithName(date, name);
     return getScheduleListByMonth(date);
   };
 
-  const getQueryKey = (date: Date, id?: string, isOfficial?: boolean) => {
+  const getQueryKey = (date: Date, name?: string, isOfficial?: boolean) => {
     if (isOfficial) return queryKeys.getOfficialScheduleListByMonth(date);
-    if (id) return queryKeys.getScheduleListByMonthWithId(date, id);
+    if (name) return queryKeys.getScheduleListByMonthWithName(date, name);
     return queryKeys.getScheduleListByMonth(date);
   };
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: getQueryKey(date, id, isOfficial),
-    queryFn: () => fetchSchedule(date, id, isOfficial),
+    queryKey: getQueryKey(date, name, isOfficial),
+    queryFn: () => fetchSchedule(date, name, isOfficial),
     placeholderData: (prev) => prev,
   });
 

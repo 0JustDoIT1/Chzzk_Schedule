@@ -1,31 +1,31 @@
-import { getScheduleListByMonthWithId } from "@/api/schedule-api";
+import { getScheduleListByMonth } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
-import CalendarView from "@/lib/screens/calendarView";
+import TimelineView from "@/lib/screens/timelineView";
 import { QueryClient } from "@tanstack/react-query";
 import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
-interface IStreamerCalendarPage {
-  params: Promise<{ id: string }>;
+interface IStreamerTimelinePage {
+  params: Promise<{ name: string }>;
   searchParams: { date?: string };
 }
 
-const StreamerCalendarPage = async ({
+const StreamerTimelinePage = async ({
   params,
   searchParams,
-}: IStreamerCalendarPage) => {
-  const { id } = await params;
+}: IStreamerTimelinePage) => {
+  const { name } = await params;
   const { date } = await searchParams;
   const dateStr = date || dateToFormatString(getToday(), "YYYY-MM-DD");
   const targetDate = dateTypeToDate(dateStr);
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery<TMonthSchedule>({
-    queryKey: queryKeys.getScheduleListByMonthWithId(targetDate, id),
-    queryFn: () => getScheduleListByMonthWithId(targetDate, id),
+    queryKey: queryKeys.getScheduleListByMonth(targetDate),
+    queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  return <CalendarView date={targetDate} id={id} />;
+  return <TimelineView date={targetDate} name={name} />;
 };
 
-export default StreamerCalendarPage;
+export default StreamerTimelinePage;

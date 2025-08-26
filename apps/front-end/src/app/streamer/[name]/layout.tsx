@@ -1,4 +1,4 @@
-import { getStreamerById } from "@/api/streamer-api";
+import { getStreamerByName } from "@/api/streamer-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import StreamerCommonLayout from "@/lib/screens/layout/streamerLayout";
 import {
@@ -10,20 +10,21 @@ import { ReactNode } from "react";
 
 interface IChzzkLayout {
   children: ReactNode;
-  params: Promise<{ id: string }>;
+  params: Promise<{ name: string }>;
 }
 
 export default async function ChzzkLayout({ children, params }: IChzzkLayout) {
-  const { id } = await params;
+  const { name } = await params;
+
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.getStreamerById(id),
-    queryFn: () => getStreamerById(id),
+    queryKey: queryKeys.getStreamerByName(name),
+    queryFn: () => getStreamerByName(name),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <StreamerCommonLayout id={id}>{children}</StreamerCommonLayout>;
+      <StreamerCommonLayout name={name}>{children}</StreamerCommonLayout>;
     </HydrationBoundary>
   );
 }
