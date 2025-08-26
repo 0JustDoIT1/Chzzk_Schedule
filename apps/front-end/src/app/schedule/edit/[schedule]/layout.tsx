@@ -16,11 +16,11 @@ interface IScheduleEditLayout {
 
 export const metadata: Metadata = {
   ...DEFAULT_META_TAG,
-  title: `일정 수정`,
-  description: `해당 일정을 수정해보세요.`,
+  title: `스케줄 수정`,
+  description: `해당 스케줄을 수정해보세요.`,
   openGraph: {
-    title: `일정 수정`,
-    description: `해당 일정을 수정해보세요.`,
+    title: `스케줄 수정`,
+    description: `해당 스케줄을 수정해보세요.`,
   },
 };
 

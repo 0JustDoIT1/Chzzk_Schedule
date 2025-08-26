@@ -10,11 +10,11 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   ...DEFAULT_META_TAG,
-  title: `일정 추가`,
-  description: `원하는 스트리머의 일정을 추가해보세요.`,
+  title: `스케줄 추가`,
+  description: `원하는 스트리머의 스케줄을 추가해보세요.`,
   openGraph: {
-    title: `일정 추가`,
-    description: `원하는 스트리머의 일정을 추가해보세요.`,
+    title: `스케줄 추가`,
+    description: `원하는 스트리머의 스케줄을 추가해보세요.`,
   },
 };
 
