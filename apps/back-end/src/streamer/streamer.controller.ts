@@ -38,6 +38,8 @@ export class StreamerController {
   async getStreamerByName(
     @Param('name') name: string,
   ): Promise<StreamerDocument> {
-    return await this.streamerService.getStreamerByName(name);
+    const decodedName = decodeURIComponent(name);
+
+    return await this.streamerService.getStreamerByName(decodedName);
   }
 }

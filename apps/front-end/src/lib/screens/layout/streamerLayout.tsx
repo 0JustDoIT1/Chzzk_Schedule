@@ -12,11 +12,6 @@ import AngleLeftIcon from "~/public/assets/svg/angle-left";
 import AngleRightIcon from "~/public/assets/svg/angle-right";
 import Link from "next/link";
 import clsx from "clsx";
-import { queryKeys } from "@/lib/constants/react-query";
-import { useQuery } from "@tanstack/react-query";
-import { getStreamerByName } from "@/api/streamer-api";
-import IsLoading from "@/lib/components/layout/isLoading";
-import IsError from "@/lib/components/layout/isError";
 import { dateToFormatString } from "@shared/utils";
 
 interface IStreamerCommonLayout {
@@ -32,15 +27,6 @@ export default function StreamerCommonLayout({
   const searchParams = useSearchParams();
 
   const { today, setPreMonth, setNextMonth, setPresentMonth } = useCalendar();
-
-  const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: queryKeys.getStreamerByName(name),
-    queryFn: () => getStreamerByName(name),
-    placeholderData: (prev) => prev,
-  });
-
-  if (isLoading) return <IsLoading />;
-  if (isError) return <IsError />;
 
   const linkClassName = (path: string) =>
     clsx(
@@ -70,33 +56,31 @@ export default function StreamerCommonLayout({
   return (
     <>
       <section className="w-full border-b border-b-textLight py-6">
-        {isSuccess && (
-          <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
-            <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
-              <p className="text-2xl">{data.name} 일정</p>
-              <p className="text-sm text-textNormal">
-                {data.name} 방송 일정을 한눈에 살펴보세요.
-              </p>
-            </div>
-            <div className="flex items-center justify-center w-full md:w-1/3">
-              <CustomButton onClick={setPreMonth}>
-                <AngleLeftIcon className="w-6 h-6 text-textMain" />
-              </CustomButton>
-              <p className="mx-2 mt-1">
-                {dateToFormatString(today, "YYYY년 MM월")}
-              </p>
-              <CustomButton onClick={setNextMonth}>
-                <AngleRightIcon className="w-6 h-6 text-textMain" />
-              </CustomButton>
-            </div>
-            <div className="flex justify-center w-full md:w-1/3 md:justify-end">
-              <BrandButton className="mr-2 w-16" onClick={setPresentMonth}>
-                오늘
-              </BrandButton>
-              <AddScheduleLink className="w-full max-w-64 md:w-auto" />
-            </div>
+        <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
+          <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
+            <p className="text-2xl">{name} 일정</p>
+            <p className="text-sm text-textNormal">
+              {name} 방송 일정을 한눈에 살펴보세요.
+            </p>
           </div>
-        )}
+          <div className="flex items-center justify-center w-full md:w-1/3">
+            <CustomButton onClick={setPreMonth}>
+              <AngleLeftIcon className="w-6 h-6 text-textMain" />
+            </CustomButton>
+            <p className="mx-2 mt-1">
+              {dateToFormatString(today, "YYYY년 MM월")}
+            </p>
+            <CustomButton onClick={setNextMonth}>
+              <AngleRightIcon className="w-6 h-6 text-textMain" />
+            </CustomButton>
+          </div>
+          <div className="flex justify-center w-full md:w-1/3 md:justify-end">
+            <BrandButton className="mr-2 w-16" onClick={setPresentMonth}>
+              오늘
+            </BrandButton>
+            <AddScheduleLink className="w-full max-w-64 md:w-auto" />
+          </div>
+        </div>
       </section>
       <main className="w-full md:container mx-auto flex flex-col items-start justify-start md:px-8 md:flex-row lg:max-w-6xl">
         <aside className="w-full h-full flex flex-row justify-center gap-2 py-6 px-2 border-b border-b-textSuperLight md:flex-col md:justify-start md:w-44 md:border-b-0">
