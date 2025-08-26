@@ -16,7 +16,7 @@ export const FloatingButton = () => {
     return null;
 
   return (
-    <div className="fixed bottom-8 right-8 md:bottom-12 md:right-16">
+    <div className="fixed bottom-8 right-8 z-40 md:bottom-12 md:right-16">
       <Link
         className="flex items-center bg-brandMain text-white py-3 px-4 rounded-full shadow-lg hover:bg-brandDark"
         href={route.add}

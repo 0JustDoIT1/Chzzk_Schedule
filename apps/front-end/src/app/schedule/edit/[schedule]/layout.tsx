@@ -1,16 +1,28 @@
 import { getScheduleById } from "@/api/schedule-api";
 import { getAllStreamerList } from "@/api/streamer-api";
+import { DEFAULT_META_TAG } from "@/lib/constants/metaTag";
 import { queryKeys } from "@/lib/constants/react-query";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 
 interface IScheduleEditLayout {
   children: React.ReactNode;
   params: { schedule: string };
 }
+
+export const metadata: Metadata = {
+  ...DEFAULT_META_TAG,
+  title: `일정 수정`,
+  description: `해당 일정을 수정해보세요.`,
+  openGraph: {
+    title: `일정 수정`,
+    description: `해당 일정을 수정해보세요.`,
+  },
+};
 
 export default async function ScheduleEditLayout({
   children,
