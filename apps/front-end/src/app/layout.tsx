@@ -5,6 +5,7 @@ import Header from "@/lib/components/layout/header";
 import { ReactNode } from "react";
 import { FloatingButton } from "@/lib/components/common/floatingButton";
 import RootProvider from "@/lib/providers";
+import { DEFAULT_META_TAG } from "@/lib/constants/metaTag";
 
 const gmarket = localFont({
   src: [
@@ -26,10 +27,7 @@ const gmarket = localFont({
   ],
 });
 
-export const metadata: Metadata = {
-  title: "0군의 삶",
-  description: "Create your Chzzk Schedule",
-};
+export const metadata: Metadata = DEFAULT_META_TAG;
 
 const RootLayout = ({
   children,
