@@ -37,6 +37,7 @@ export class CreateScheduleDto {
   @ApiProperty({ description: '방송 멤버', required: false })
   @IsOptional()
   @IsArray()
+  @IsString({ each: true })
   readonly member: string[];
 
   @ApiProperty({ description: '방송 종일 체크 여부' })

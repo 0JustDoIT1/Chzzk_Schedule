@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { StreamerModule } from './streamer/streamer.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { SubmissionModule } from './submission/submission.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     }),
     StreamerModule,
     ScheduleModule,
+    SubmissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

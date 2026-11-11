@@ -15,5 +15,6 @@ import { ScheduleValidate } from './schedule.validate';
   ],
   controllers: [ScheduleController],
   providers: [ScheduleService, ScheduleValidate],
+  exports: [ScheduleService],
 })
 export class ScheduleModule {}

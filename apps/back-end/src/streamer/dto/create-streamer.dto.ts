@@ -29,5 +29,6 @@ export class CreateStreamerDto {
   })
   @IsOptional()
   @IsArray()
+  @IsString({ each: true })
   readonly tag: string[];
 }

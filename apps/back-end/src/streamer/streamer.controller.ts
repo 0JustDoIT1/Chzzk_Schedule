@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { StreamerService } from './streamer.service';
 import { CreateStreamerDto } from './dto/create-streamer.dto';
 import { StreamerDocument } from 'src/schemas/streamer.schema';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ApiPath } from '@shared/constants';
+import { AdminWriteGuard } from 'src/lib/guards/admin-write.guard';
 
 @ApiTags('Streamer')
 @Controller(ApiPath.STREAMER)
@@ -12,6 +13,7 @@ export class StreamerController {
 
   @ApiOperation({ summary: '스트리머 추가 API' })
   @Post(ApiPath.STREAMER_ADD)
+  @UseGuards(AdminWriteGuard)
   @ApiBody({ description: '스트리머 데이터', type: CreateStreamerDto })
   async create(
     @Body() streamerData: CreateStreamerDto,

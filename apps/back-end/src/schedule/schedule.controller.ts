@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ScheduleDocument } from 'src/schemas/schedule.schema';
@@ -6,6 +6,7 @@ import { IDateSchedule, TMonthSchedule } from 'src/lib/types/schedule.type';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { StreamerDocument } from 'src/schemas/streamer.schema';
 import { ApiPath } from '@shared/constants';
+import { AdminWriteGuard } from 'src/lib/guards/admin-write.guard';
 
 @ApiTags('Schedule')
 @Controller(ApiPath.SCHEDULE)
@@ -14,6 +15,7 @@ export class ScheduleController {
 
   @ApiOperation({ summary: '스케줄 추가 API' })
   @Post(ApiPath.SCHEDULE_ADD)
+  @UseGuards(AdminWriteGuard)
   @ApiBody({ description: '스케줄 데이터', type: CreateScheduleDto })
   async create(
     @Body() scheduleData: CreateScheduleDto,
@@ -26,6 +28,7 @@ export class ScheduleController {
   // 전체 데이터를 항상 받아오기 때문에 create dto 사용
   @ApiBody({ description: '수정할 스케줄 데이터', type: CreateScheduleDto })
   @Patch(ApiPath.SCHEDULE_UPDATE)
+  @UseGuards(AdminWriteGuard)
   async updateSchedule(
     @Param('id') id: string,
     @Body() scheduleData: CreateScheduleDto,
