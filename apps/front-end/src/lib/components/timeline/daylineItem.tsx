@@ -7,7 +7,7 @@ import CategoryTag from "../common/categoryTag";
 import Link from "next/link";
 import { SESSION_STORAGE_KEY } from "@/lib/constants/sessionStorage";
 import { TScheduleSchema } from "@shared/types";
-import { dateToFormatString } from "@shared/utils";
+import { displayDate } from "@/lib/utils/chzzk-date";
 
 interface TodayStreamingLinkProps {
   scheduleId: string;
@@ -50,12 +50,12 @@ const DaylineItem = ({ item, isToday }: IDaylineItem) => {
       >
         <h3 className="flex items-center mb-2 text-lg font-normal text-textMain">
           <CategoryTag category={item.category} />
-          <span className="ml-1">{item.title}</span>
+          <span className="ml-1">{item.status === "cancelled" ? `[취소] ${item.title}` : item.title}</span>
         </h3>
         <div className="flex items-center mb-1 text-sm font-normal leading-none text-textNormal">
           <CalendarIcon className="mr-1 w-4 h-4 text-textIcon" />
           <span>
-            {dateToFormatString(item.startAt, "YYYY년 MM월 DD일 HH:mm")}
+            {displayDate(item)}
           </span>
         </div>
         <div className="flex items-center mb-1 text-sm font-normal text-textNormal">
@@ -63,7 +63,7 @@ const DaylineItem = ({ item, isToday }: IDaylineItem) => {
           <span>{item.streamerName}</span>
         </div>
       </Link>
-      {isToday && <TodayStreamingLink scheduleId={item._id} />}
+      {isToday && item.status !== "cancelled" && <TodayStreamingLink scheduleId={item._id} />}
     </div>
   );
 };

@@ -25,6 +25,7 @@ const fieldLabel: Record<string, string> = {
   isOfficial: "공식 분류", streamerName: "주최자", category: "방송 종류",
   title: "제목", member: "참여자", fullDay: "종일 여부",
   startAt: "시작 시간", endAt: "종료 시간", contents: "내용",
+  startTimeKnown: "시작 시간 확정", endTimeKnown: "종료 시간 확정", status: "일정 상태",
 };
 
 const safeSource = (url?: string) => Boolean(url && /^https?:\/\//i.test(url));
@@ -54,7 +55,7 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
           </div>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xl mr-2">
-              <span>{data.title}</span>
+              <span>{data.status === "cancelled" ? `[취소] ${data.title}` : data.title}</span>
             </h3>
             <Link target="_blank" href={data.chzzkLink}>
               <ArrowUpRightFromSquareIcon className="w-6 h-6 text-brandMain" />

@@ -68,7 +68,7 @@ const DayScheduleItem = ({
       className={linkClassName}
       href={getRoute(route.detail, schedule._id)}
     >
-      {schedule.title}
+      {schedule.status === "cancelled" ? `[취소] ${schedule.title}` : schedule.title}
     </Link>
   );
 };

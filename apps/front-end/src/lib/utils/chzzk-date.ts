@@ -18,9 +18,12 @@ export const getScheduleDateString = (
 // 일시에 따라 표현 방식 변경
 export const displayDate = (data: TScheduleSchema) => {
   const startAtDate = dateToFormatString(data.startAt, "YYYY-MM-DD");
+  if (data.fullDay) return `${startAtDate} 종일`;
+  if (data.startTimeKnown === false) return `${startAtDate} 시간 미정${data.endTimeKnown === false ? " · 종료 미정" : ""}`;
+  if (data.endTimeKnown === false) return `${startAtDate} ${dateToFormatString(data.startAt, "HH:mm")} · 종료 미정`;
   const startAtTime = dateToFormatString(data.startAt, "HH:mm");
-  const endAtDate = dateToFormatString(data.startAt, "YYYY-MM-DD");
-  const endAtTime = dateToFormatString(data.startAt, "HH:mm");
+  const endAtDate = dateToFormatString(data.endAt, "YYYY-MM-DD");
+  const endAtTime = dateToFormatString(data.endAt, "HH:mm");
 
   let result = startAtDate;
   if (startAtDate === endAtDate) {
@@ -43,6 +46,8 @@ export const adjustScheduleTimes = ({
   endAtDate,
   endAtTime,
   fullDay,
+  startTimeKnown,
+  endTimeKnown,
   setValue,
 }: {
   startAtDate: string;
@@ -50,6 +55,8 @@ export const adjustScheduleTimes = ({
   endAtDate: string;
   endAtTime: string;
   fullDay: boolean;
+  startTimeKnown?: boolean;
+  endTimeKnown?: boolean;
   setValue: (name: string, value: any, options?: any) => void;
 }) => {
   if (fullDay) {
@@ -57,6 +64,8 @@ export const adjustScheduleTimes = ({
     setValue("startAtTime", "00:00", { shouldValidate: true });
     setValue("endAtTime", "23:59", { shouldValidate: true });
   }
+
+  if (startTimeKnown === false || endTimeKnown === false) return;
 
   if (startAtDate === endAtDate && startAtTime > endAtTime) {
     setValue("startAtTime", endAtTime);

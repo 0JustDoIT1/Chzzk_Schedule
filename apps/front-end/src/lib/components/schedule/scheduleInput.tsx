@@ -92,6 +92,8 @@ const ScheduleInput = ({
 
   const category = watch("category");
   const fullDay = watch("fullDay");
+  const startTimeKnown = watch("startTimeKnown");
+  const endTimeKnown = watch("endTimeKnown");
 
   const preventKeyDown = (e: React.KeyboardEvent) => e.preventDefault();
 
@@ -258,6 +260,7 @@ const ScheduleInput = ({
               종일
             </label>
           </div>
+          {!fullDay && <label className="mb-2 flex items-center gap-2 text-sm"><input type="checkbox" {...register("startTimeKnown")} />시작 시간 확정</label>}
           <div className="flex gap-2">
             <input
               {...register("startAtDate", {
@@ -279,7 +282,7 @@ const ScheduleInput = ({
             <input
               {...register("startAtTime", {
                 required: {
-                  value: true,
+                  value: startTimeKnown !== false,
                   message: "시작 일시를 입력해 주세요.",
                 },
               })}
@@ -293,7 +296,7 @@ const ScheduleInput = ({
               )}
               type="time"
               onKeyDown={preventKeyDown}
-              disabled={fullDay}
+              disabled={fullDay || startTimeKnown === false}
             />
           </div>
           {(errors.startAtDate || errors.startAtTime) && (
@@ -307,11 +310,12 @@ const ScheduleInput = ({
           <label htmlFor="endAtDate" className="text-sm text-textMain mb-2">
             <span className="text-brandMain">&#42;</span> 종료 일시
           </label>
+          {!fullDay && <label className="mb-2 flex items-center gap-2 text-sm"><input type="checkbox" {...register("endTimeKnown")} />종료 시간 확정</label>}
           <div className="flex gap-2">
             <input
               {...register("endAtDate", {
                 required: {
-                  value: true,
+                  value: endTimeKnown !== false,
                   message: "종료 일시를 입력해 주세요.",
                 },
               })}
@@ -325,12 +329,12 @@ const ScheduleInput = ({
               )}
               type="date"
               onKeyDown={preventKeyDown}
-              disabled={fullDay}
+              disabled={fullDay || endTimeKnown === false}
             />
             <input
               {...register("endAtTime", {
                 required: {
-                  value: true,
+                  value: endTimeKnown !== false,
                   message: "종료 일시를 입력해 주세요.",
                 },
               })}
@@ -344,7 +348,7 @@ const ScheduleInput = ({
               )}
               type="time"
               onKeyDown={preventKeyDown}
-              disabled={fullDay}
+              disabled={fullDay || endTimeKnown === false}
             />
           </div>
           {(errors.endAtDate || errors.endAtTime) && (

@@ -2,7 +2,7 @@ import CalendarIcon from "~/public/assets/svg/calendar";
 import UserIcon from "~/public/assets/svg/user";
 import { BrandLink } from "../common/link";
 import { getRoute, route } from "@/lib/constants/router";
-import { getScheduleDateString } from "@/lib/utils/chzzk-date";
+import { displayDate } from "@/lib/utils/chzzk-date";
 import CategoryTag from "../common/categoryTag";
 import { TScheduleSchema } from "@shared/types";
 import { TDayjsType } from "@shared/utils";
@@ -18,11 +18,11 @@ const TimelineItem = ({ schedule, today }: ITimelineItem) => {
       <div className="p-2">
         <h3 className="flex items-center mb-2 text-lg font-normal text-textMain">
           <CategoryTag category={schedule.category} />
-          <span className="ml-1">{schedule.title}</span>
+          <span className="ml-1">{schedule.status === "cancelled" ? `[취소] ${schedule.title}` : schedule.title}</span>
         </h3>
         <div className="flex items-center mb-1 text-sm font-normal leading-none text-textNormal">
           <CalendarIcon className="mr-1 w-4 h-4 text-textIcon" />
-          <span>{getScheduleDateString(schedule.startAt, today)}</span>
+          <span>{displayDate(schedule)}</span>
         </div>
         <div className="flex items-center mb-1 text-sm font-normal text-textNormal">
           <UserIcon className="mr-1 w-4 h-4 text-textIcon" />

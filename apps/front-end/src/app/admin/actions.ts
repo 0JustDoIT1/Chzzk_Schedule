@@ -77,6 +77,7 @@ export async function review(formData: FormData) {
       const category = String(formData.get("category") ?? "");
       payload.category = category;
       payload.isOfficial = category === "official" || category === "watch";
+      payload.status = String(formData.get("status") ?? "scheduled");
     } else if (kind === "streamer") {
       payload.isOfficial = formData.get("isOfficial") === "on";
     } else {

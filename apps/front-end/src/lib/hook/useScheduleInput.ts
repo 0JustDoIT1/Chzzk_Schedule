@@ -21,7 +21,6 @@ import {
 import { IScheduleInput, TScheduleSchema } from "@shared/types";
 import { getStreamerNameByCategory } from "../utils/chzzk-utils";
 import { AllCategory } from "@shared/constants";
-import { dateTypeToDate } from "@shared/utils";
 
 const useScheduleInput = (
   isOfficial: boolean,
@@ -51,6 +50,8 @@ const useScheduleInput = (
 
   const category = watch("category");
   const fullDay = watch("fullDay");
+  const startTimeKnown = watch("startTimeKnown");
+  const endTimeKnown = watch("endTimeKnown");
   const startAtDate = watch("startAtDate");
   const startAtTime = watch("startAtTime");
   const endAtDate = watch("endAtDate");
@@ -95,11 +96,15 @@ const useScheduleInput = (
       endAtDate,
       endAtTime,
       fullDay,
+      startTimeKnown,
+      endTimeKnown,
       setValue,
     });
   }, [
     category,
     fullDay,
+    startTimeKnown,
+    endTimeKnown,
     startAtDate,
     startAtTime,
     endAtDate,
@@ -183,8 +188,8 @@ const useScheduleInput = (
 
   // submit data 처리
   const prepareScheduleData = (inputData: IScheduleInput) => {
-    const startAt = `${inputData.startAtDate} ${inputData.startAtTime}`;
-    const endAt = `${inputData.endAtDate} ${inputData.endAtTime}`;
+    const startAt = `${inputData.startAtDate} ${inputData.startTimeKnown === false ? "00:00" : inputData.startAtTime}`;
+    const endAt = inputData.endTimeKnown === false ? startAt : `${inputData.endAtDate} ${inputData.endAtTime}`;
     const streamerName = getStreamerNameByCategory(
       inputData.category as AllCategory,
       inputData.streamerName
@@ -197,8 +202,11 @@ const useScheduleInput = (
       title: inputData.title,
       member: inputData.member,
       fullDay: inputData.fullDay,
-      startAt: dateTypeToDate(startAt),
-      endAt: dateTypeToDate(endAt),
+      status: initData?.status ?? "scheduled",
+      startTimeKnown: inputData.fullDay ? true : inputData.startTimeKnown !== false,
+      endTimeKnown: inputData.fullDay ? true : inputData.endTimeKnown !== false,
+      startAt: new Date(`${startAt.replace(" ", "T")}:00+09:00`),
+      endAt: new Date(`${endAt.replace(" ", "T")}:00+09:00`),
       contents: inputData.contents,
     };
 

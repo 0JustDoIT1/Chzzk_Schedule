@@ -12,8 +12,8 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
   const currentHour = dateToFormatString(today, "HH");
 
   const sortedScheduleEntries = Object.entries(schedule).sort(([a], [b]) => {
-    if (a === "미정") return -1;
-    if (b === "미정") return 1;
+    if (a === "미정") return 1;
+    if (b === "미정") return -1;
     return parseInt(a) - parseInt(b);
   });
 
