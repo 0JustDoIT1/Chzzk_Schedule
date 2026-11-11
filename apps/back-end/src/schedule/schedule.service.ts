@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Schedule, ScheduleDocument } from 'src/schemas/schedule.schema';
@@ -29,109 +29,19 @@ export class ScheduleService {
     private scheduleValidate: ScheduleValidate,
   ) {}
 
-  // Create schedule
-  // async create(scheduleData: CreateScheduleDto): Promise<ScheduleDocument> {
-  //   const streamer = await this.streamerService.getStreamerByName(
-  //     scheduleData.streamerName,
-  //   );
-
-  //   // validate schedule already exist
-  //   await this.validateDuplicateSchedule(
-  //     streamer.name,
-  //     scheduleData.title,
-  //     scheduleData.startAt,
-  //   );
-
-  //   const createData: Schedule = {
-  //     ...scheduleData,
-  //     streamerId: streamer._id,
-  //     chzzkLink: streamer.chzzkLink,
-  //   };
-
-  //   // Create schedule
-  //   return await this.scheduleModel.create(createData);
-  // }
-
   async create(scheduleData: CreateScheduleDto): Promise<ScheduleDocument> {
-    // 트랜잭션 시작을 위한 세션 생성
-    // session을 넘긴 모든 DB 쓰기 작업은 하나의 트랜잭션으로 묶임
-    // 작업이 모두 성공하면 커밋, 실패하면 롤백
-    const session = await this.scheduleModel.db.startSession();
-    // 트랜잭션 실행
-    session.startTransaction();
+    const streamer = await this.streamerService.getStreamerByName(scheduleData.streamerName);
+    const members = await this.resolveMembers(streamer.name, scheduleData.member);
+    await this.validateDuplicateSchedule(streamer.name, scheduleData.title, scheduleData.startAt);
 
-    try {
-      const streamer = await this.streamerService.getStreamerByName(
-        scheduleData.streamerName,
-      );
-
-      // validate schedule already exist
-      await this.validateDuplicateSchedule(
-        streamer.name,
-        scheduleData.title,
-        scheduleData.startAt,
-      );
-
-      const createData: Schedule = {
-        ...scheduleData,
-        streamerId: streamer._id,
-        chzzkLink: streamer.chzzkLink,
-      };
-
-      // 트랜잭션 세션을 포함한 상태로 일정 생성
-      // DB에 실제 저장 X
-      const [createdMain] = await this.scheduleModel.create([createData], {
-        session,
-      });
-
-      if (scheduleData.isOfficial && scheduleData.member?.length > 0) {
-        for (const memberName of scheduleData.member) {
-          // 본인인 경우 건너뜀
-          if (memberName === streamer.name) continue;
-
-          let member: StreamerDocument;
-
-          try {
-            member = await this.streamerService.getStreamerByName(memberName);
-          } catch (error) {
-            continue;
-          }
-
-          // validate schedule already exist
-          await this.validateDuplicateSchedule(
-            member.name,
-            scheduleData.title,
-            scheduleData.startAt,
-          );
-
-          const memberSchedule: Schedule = {
-            ...scheduleData,
-            streamerId: member._id,
-            streamerName: member.name,
-            chzzkLink: member.chzzkLink,
-            // 자신은 멤버에서 제거
-            member: scheduleData.member.filter((name) => name !== member.name),
-          };
-
-          // 트랜잭션 세션을 포함한 상태로 일정 생성
-          // DB에 실제 저장 X
-          await this.scheduleModel.create([memberSchedule], { session });
-        }
-      }
-
-      // 모든 일정이 생성되면 트랜잭션 커밋 (DB에 실제 저장)
-      await session.commitTransaction();
-      // 트랜잭션 종료
-      session.endSession();
-
-      return createdMain;
-    } catch (error) {
-      // 트랜잭션 롤백
-      await session.abortTransaction();
-      // 트랜잭션 종료
-      session.endSession();
-      throw error;
-    }
+    const createData: Schedule = {
+      ...scheduleData,
+      streamerId: streamer._id,
+      chzzkLink: streamer.chzzkLink,
+      member: members.map((member) => member.name),
+      memberIds: members.map((member) => member._id),
+    };
+    return this.scheduleModel.create(createData);
   }
 
   // Update schedule
@@ -146,6 +56,22 @@ export class ScheduleService {
     const streamer = await this.streamerService.getStreamerByName(
       scheduleData.streamerName,
     );
+    const members = await this.resolveMembers(streamer.name, scheduleData.member);
+
+    // Legacy participant copies must be reconciled before a single-document edit.
+    const legacyCopy = await this.scheduleModel.findOne({
+      _id: { $ne: id },
+      title: existSchedule.title,
+      startAt: existSchedule.startAt,
+      streamerId: { $ne: existSchedule.streamerId },
+      $or: [
+        { streamerName: { $in: existSchedule.member ?? [] } },
+        { member: existSchedule.streamerName },
+      ],
+    }).exec();
+    if (legacyCopy) {
+      throw new ConflictException('기존 합방 복제 일정은 정리 후 수정할 수 있습니다.');
+    }
 
     // validate schedule already exist
     await this.validateDuplicateSchedule(
@@ -159,6 +85,8 @@ export class ScheduleService {
       ...scheduleData,
       streamerId: streamer._id,
       chzzkLink: streamer.chzzkLink,
+      member: members.map((member) => member.name),
+      memberIds: members.map((member) => member._id),
     };
 
     const updated = await this.scheduleModel
@@ -284,7 +212,7 @@ export class ScheduleService {
                 },
               ],
             },
-            { streamerId: new Types.ObjectId(id) },
+            { $or: [{ streamerId: new Types.ObjectId(id) }, { memberIds: new Types.ObjectId(id) }] },
           ],
         },
         {
@@ -322,7 +250,7 @@ export class ScheduleService {
                 },
               ],
             },
-            { streamerName: name },
+            { $or: [{ streamerName: name }, { member: name }] },
           ],
         },
         {
@@ -470,26 +398,17 @@ export class ScheduleService {
     startAt: Date,
     excludeId?: string,
   ) {
-    // 스트리머 없을 경우는 getStreamerByName에서 이미 exception 처리
-    // 해당 스트리머의 이름과 시작날짜로 겹치는 일정이 존재하는지 확인
-    const existByDate = await this.scheduleModel
-      .findOne({
-        _id: { $ne: excludeId },
-        streamer: streamerName,
-        startAt: startAt,
-      })
-      .exec();
-    // Validate schedule
-    this.scheduleValidate.throwIfScheduleExists(existByDate);
+    const duplicate = await this.scheduleModel.findOne({
+      _id: { $ne: excludeId },
+      title,
+      startAt,
+      $or: [{ streamerName }, { member: streamerName }],
+    }).exec();
+    this.scheduleValidate.throwIfScheduleExists(duplicate);
+  }
 
-    // 해당 스케줄 제목으로 이미 스케줄이 존재하는지 확인
-    const existByTitle = await this.scheduleModel
-      .findOne({
-        _id: { $ne: excludeId },
-        title: title,
-      })
-      .exec();
-    // Validate schedule
-    this.scheduleValidate.throwIfScheduleExists(existByTitle);
+  private async resolveMembers(mainName: string, memberNames?: string[]): Promise<StreamerDocument[]> {
+    const uniqueNames = [...new Set((memberNames ?? []).filter((name) => name !== mainName))];
+    return Promise.all(uniqueNames.map((name) => this.streamerService.getStreamerByName(name)));
   }
 }

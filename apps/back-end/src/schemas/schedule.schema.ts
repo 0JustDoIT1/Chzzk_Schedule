@@ -27,6 +27,9 @@ export class Schedule {
   @Prop({ required: false, type: () => [String] })
   member?: string[];
 
+  @Prop({ required: false, type: [Types.ObjectId], ref: 'Streamer', default: [] })
+  memberIds?: Types.ObjectId[];
+
   @Prop({ required: true, type: Boolean })
   fullDay: boolean;
 
@@ -41,3 +44,7 @@ export class Schedule {
 }
 
 export const ScheduleSchema = SchemaFactory.createForClass(Schedule);
+ScheduleSchema.index({ streamerId: 1, startAt: 1 });
+ScheduleSchema.index({ memberIds: 1, startAt: 1 });
+ScheduleSchema.index({ streamerName: 1, startAt: 1 });
+ScheduleSchema.index({ member: 1, startAt: 1 });

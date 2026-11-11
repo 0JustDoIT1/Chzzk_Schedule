@@ -9,6 +9,7 @@ export interface ISchedule {
   category: AllCategory;
   title: string;
   member?: string[];
+  memberIds?: string[];
   fullDay: boolean;
   startAt: Date;
   endAt: Date;
