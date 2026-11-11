@@ -45,6 +45,21 @@ export class CreateScheduleDto {
   @IsBoolean()
   readonly fullDay: boolean;
 
+  @ApiProperty({ description: '시작 시각 확정 여부', required: false })
+  @IsOptional()
+  @IsBoolean()
+  readonly startTimeKnown?: boolean;
+
+  @ApiProperty({ description: '종료 시각 확정 여부', required: false })
+  @IsOptional()
+  @IsBoolean()
+  readonly endTimeKnown?: boolean;
+
+  @ApiProperty({ description: '일정 상태', enum: ['scheduled', 'cancelled'], required: false })
+  @IsOptional()
+  @IsEnum(['scheduled', 'cancelled'])
+  readonly status?: 'scheduled' | 'cancelled';
+
   @ApiProperty({ description: '방송 시작 일시' })
   @IsNotEmpty()
   @IsDateString()

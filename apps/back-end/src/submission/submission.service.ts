@@ -118,6 +118,9 @@ export class SubmissionService {
       throw new BadRequestException('공식 출처 확인이 필요합니다.');
     }
     if (kind !== 'streamer') {
+      if (kind === 'schedule' && payload.status === 'cancelled') {
+        throw new BadRequestException('취소는 게시된 일정의 수정으로 처리해 주세요.');
+      }
       const officialCategory = payload.category === AllCategory.OFFICIAL || payload.category === AllCategory.WATCH;
       if (isOfficial !== officialCategory) {
         throw new BadRequestException('공식 여부와 방송 종류가 일치하지 않습니다.');

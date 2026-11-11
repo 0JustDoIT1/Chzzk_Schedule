@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Schedule, ScheduleDocument, ScheduleRevision } from 'src/schemas/schedule.schema';
@@ -14,7 +14,6 @@ import {
   getDayjs,
   getEndDate,
   getStartDate,
-  getToday,
   isBeforeDate,
   isSameDate,
   TDayjsType,
@@ -29,7 +28,7 @@ export interface PublicationEvidence {
 
 const trackedFields = [
   'isOfficial', 'streamerName', 'category', 'title', 'member',
-  'fullDay', 'startAt', 'endAt', 'contents',
+  'fullDay', 'startTimeKnown', 'endTimeKnown', 'status', 'startAt', 'endAt', 'contents',
 ] as const;
 
 const sameTrackedValue = (field: typeof trackedFields[number], before: unknown, after: unknown) => {
@@ -37,6 +36,25 @@ const sameTrackedValue = (field: typeof trackedFields[number], before: unknown, 
     return new Date(before as string | Date).getTime() === new Date(after as string | Date).getTime();
   }
   return JSON.stringify(before) === JSON.stringify(after);
+};
+
+const validateScheduleTime = (data: CreateScheduleDto) => {
+  const start = new Date(data.startAt).getTime();
+  const end = new Date(data.endAt).getTime();
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) {
+    throw new BadRequestException('일정 시작·종료 시각을 확인해 주세요.');
+  }
+  if (data.fullDay && (data.startTimeKnown === false || data.endTimeKnown === false)) {
+    throw new BadRequestException('종일 일정에 시간 미정을 함께 지정할 수 없습니다.');
+  }
+  if (data.endTimeKnown === false && end !== start) {
+    throw new BadRequestException('종료 미정 일정의 종료 기준은 시작 시각과 같아야 합니다.');
+  }
+  if (data.startTimeKnown === false && new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  }).format(new Date(start)) !== '00:00') {
+    throw new BadRequestException('시작 시간 미정 일정의 날짜 기준은 한국 시간 00:00이어야 합니다.');
+  }
 };
 
 @Injectable()
@@ -48,6 +66,7 @@ export class ScheduleService {
   ) {}
 
   async create(scheduleData: CreateScheduleDto, evidence?: PublicationEvidence): Promise<ScheduleDocument> {
+    validateScheduleTime(scheduleData);
     const streamer = await this.streamerService.getStreamerByName(scheduleData.streamerName);
     const members = await this.resolveMembers(streamer.name, scheduleData.member);
     await this.validateDuplicateSchedule(streamer.name, scheduleData.title, scheduleData.startAt);
@@ -72,6 +91,7 @@ export class ScheduleService {
     scheduleData: CreateScheduleDto,
     evidence?: PublicationEvidence,
   ): Promise<ScheduleDocument> {
+    validateScheduleTime(scheduleData);
     const existSchedule = await this.scheduleModel.findById(id).exec();
     // Validate schedule
     this.scheduleValidate.throwIfScheduleNotFound(existSchedule);
@@ -146,8 +166,10 @@ export class ScheduleService {
 
   // Get schedule list by Date
   async getScheduleListByDate(date: string): Promise<IDateSchedule> {
-    const startDate = dateTypeToDate(date);
-    const endDate = dateTypeToDate(addDate(date, 1, 'd'));
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+    const startDate = new Date(`${date}T00:00:00+09:00`);
+    if (!Number.isFinite(startDate.getTime())) throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+    const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
 
     const scheduleList = await this.scheduleModel
       .find(
@@ -167,11 +189,15 @@ export class ScheduleService {
           endAt: 1,
           streamerName: 1,
           category: 1,
+          fullDay: 1,
+          startTimeKnown: 1,
+          endTimeKnown: 1,
+          status: 1,
         },
       )
       .exec();
 
-    return this.editScheduleListByDate(getToday(), scheduleList);
+    return this.editScheduleListByDate(getDayjs(date), scheduleList);
   }
 
   // Get schedule list by Date -> Edit schedule data (ScheduleDocument[] => IDateSchedule)
@@ -184,7 +210,7 @@ export class ScheduleService {
     list.forEach((item) => {
       const isSame = isSameDate(item.startAt, date);
 
-      const timeKey = isSame ? dateToFormatString(item.startAt, 'HH') : '미정';
+      const timeKey = isSame && item.startTimeKnown !== false ? dateToFormatString(item.startAt, 'HH') : '미정';
 
       if (!result[timeKey]) {
         result[timeKey] = [];
@@ -219,6 +245,7 @@ export class ScheduleService {
           endAt: 1,
           streamerName: 1,
           category: 1,
+          status: 1,
         },
       )
       .exec();
@@ -257,6 +284,7 @@ export class ScheduleService {
           endAt: 1,
           streamerName: 1,
           category: 1,
+          status: 1,
         },
       )
       .exec();
@@ -295,6 +323,7 @@ export class ScheduleService {
           endAt: 1,
           streamerName: 1,
           category: 1,
+          status: 1,
         },
       )
       .exec();
@@ -335,6 +364,7 @@ export class ScheduleService {
           endAt: 1,
           streamerName: 1,
           category: 1,
+          status: 1,
         },
       )
       .exec();

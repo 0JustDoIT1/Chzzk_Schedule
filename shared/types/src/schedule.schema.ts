@@ -11,6 +11,9 @@ export interface ISchedule {
   member?: string[];
   memberIds?: string[];
   fullDay: boolean;
+  startTimeKnown?: boolean;
+  endTimeKnown?: boolean;
+  status?: "scheduled" | "cancelled";
   startAt: Date;
   endAt: Date;
   contents?: string;
@@ -32,6 +35,8 @@ export interface IScheduleInput {
   memberInput: string;
   member?: string[];
   fullDay: boolean;
+  startTimeKnown?: boolean;
+  endTimeKnown?: boolean;
   startAtDate: string;
   startAtTime: string;
   endAtDate: string;

@@ -53,6 +53,15 @@ export class Schedule {
   @Prop({ required: true, type: Boolean })
   fullDay: boolean;
 
+  @Prop({ type: Boolean, default: true })
+  startTimeKnown?: boolean;
+
+  @Prop({ type: Boolean, default: true })
+  endTimeKnown?: boolean;
+
+  @Prop({ type: String, enum: ['scheduled', 'cancelled'], default: 'scheduled' })
+  status?: 'scheduled' | 'cancelled';
+
   @Prop({ required: true, type: Date })
   startAt: Date;
 

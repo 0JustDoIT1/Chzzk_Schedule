@@ -139,6 +139,48 @@ run('Submission with isolated Mongo database', () => {
     expect(JSON.stringify(memberAfterEdit.body)).toContain(published[0]._id);
 
     await request(app.getHttpServer()).post('/v1/submissions/schedule').send({
+      schedule: {
+        isOfficial: false, streamerName: name, category: 'together', title: editedTitle,
+        member: [memberName], fullDay: false, status: 'cancelled',
+        startAt: '2026-11-13T12:00:00+09:00', endAt: '2026-11-13T13:00:00+09:00',
+      },
+      sourceUrl: `https://chzzk.naver.com/${name}`,
+      targetScheduleId: published[0]._id,
+    }).expect(201);
+    const pendingCancellation = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    const cancellation = pendingCancellation.body.find((item: { kind: string; payload: { status?: string } }) => item.kind === 'schedule-edit' && item.payload.status === 'cancelled');
+    await request(app.getHttpServer()).patch(`/v1/submissions/${cancellation._id}/approve`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ payload: cancellation.payload, sourceUrl: cancellation.sourceUrl, officialConfirmed: false, changeNote: '방송 취소 공지' })
+      .expect(200);
+    const cancelled = await request(app.getHttpServer()).get(`/v1/schedule/id/${published[0]._id}`).expect(200);
+    expect(cancelled.body.status).toBe('cancelled');
+    expect(cancelled.body.revisionHistory[2].changedFields).toContain('status');
+    const cancelledMonth = await request(app.getHttpServer()).get('/v1/schedule/month/2026-11-13').expect(200);
+    expect(JSON.stringify(cancelledMonth.body)).toContain('cancelled');
+
+    const unknownTitle = `${title}-unknown`;
+    await request(app.getHttpServer()).post('/v1/submissions/schedule').send({
+      schedule: {
+        isOfficial: false, streamerName: name, category: 'personal', title: unknownTitle,
+        fullDay: false, startTimeKnown: false, endTimeKnown: false,
+        startAt: '2026-11-15T00:00:00+09:00', endAt: '2026-11-15T00:00:00+09:00',
+      },
+      sourceUrl: `https://chzzk.naver.com/${name}`,
+    }).expect(201);
+    const pendingUnknown = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    const unknown = pendingUnknown.body.find((item: { payload: { title?: string } }) => item.payload.title === unknownTitle);
+    await request(app.getHttpServer()).patch(`/v1/submissions/${unknown._id}/approve`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ payload: unknown.payload, sourceUrl: unknown.sourceUrl, officialConfirmed: false })
+      .expect(200);
+    const unknownDay = await request(app.getHttpServer()).get('/v1/schedule/date/2026-11-15').expect(200);
+    expect(JSON.stringify(unknownDay.body)).toContain(unknownTitle);
+    expect(JSON.stringify(unknownDay.body)).toContain('startTimeKnown');
+
+    await request(app.getHttpServer()).post('/v1/submissions/schedule').send({
       schedule: { isOfficial: true, streamerName: name, category: 'official', title: 'forged', fullDay: false,
         startAt: '2026-11-14T12:00:00+09:00', endAt: '2026-11-14T13:00:00+09:00' },
       sourceUrl: `https://chzzk.naver.com/${name}`,
