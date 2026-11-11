@@ -18,6 +18,9 @@ export const createStreamer = (
   return postFetch(isServer(), url, data, token);
 };
 
+export const submitStreamer = (streamer: IStreamer, sourceUrl: string): Promise<{ id: string; status: string }> =>
+  postFetch(isServer(), 'v1/submissions/streamer', { streamer, sourceUrl });
+
 // Get all streamer list API
 export const getAllStreamerList = (): Promise<TStreamerSchema[]> => {
   const url = buildApiPath(

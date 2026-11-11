@@ -8,10 +8,11 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 interface IScheduleEditLayout {
   children: React.ReactNode;
-  params: { schedule: string };
+  params: Promise<{ schedule: string }>;
 }
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default async function ScheduleEditLayout({
   children,
   params,
 }: IScheduleEditLayout) {
+  notFound();
   const { schedule } = await params;
 
   const queryClient = new QueryClient();

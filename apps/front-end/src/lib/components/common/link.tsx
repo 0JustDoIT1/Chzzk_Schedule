@@ -1,7 +1,7 @@
-import { route } from "@/lib/constants/router";
 import clsx from "clsx";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { route } from "@/lib/constants/router";
 import PlusIcon from "~/public/assets/svg/plus";
 
 interface IBrandLink {
@@ -46,10 +46,7 @@ export const HeaderLink = ({ children, className, href }: IBrandLink) => {
 };
 
 export const AddScheduleLink = ({ className }: { className: string }) => {
-  return (
-    <BrandLink href={route.scheduleAdd} className={clsx("", className)}>
-      <PlusIcon className="w-4 h-4 text-textMain" />
-      일정 추가
-    </BrandLink>
-  );
+  return <BrandLink href={route.scheduleAdd} className={className}>
+    <PlusIcon className="w-4 h-4 text-textMain" />일정 제보
+  </BrandLink>;
 };

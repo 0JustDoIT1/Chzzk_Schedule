@@ -17,9 +17,8 @@ const MainView = () => {
         치지직 방송 스케줄러
       </h2>
       <div className="max-w-3xl bg-white bg-opacity-25 backdrop-blur-lg rounded-xl p-8 shadow-2xl animate-fadeInUp delay-[200ms]">
-        0's Life는 치지직 스트리머들의 방송일정을 한눈에 모아보는
-        웹사이트입니다. 누구나 방송일정을 만들고 수정하고 공유할 수 있으니, 많은
-        참여 부탁드립니다.
+        0&apos;s Life는 치지직 스트리머들의 방송일정을 한눈에 모아보는
+        웹사이트입니다. 방송 일정을 제보하면 검수 후 게시됩니다.
       </div>
     </main>
   );

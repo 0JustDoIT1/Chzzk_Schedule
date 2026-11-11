@@ -3,8 +3,7 @@
 import { useRouter } from "next/navigation";
 import CalendarTimeIcon from "~/public/assets/svg/calendar-time";
 import UserIcon from "~/public/assets/svg/user";
-import { BrandLink } from "../../components/common/link";
-import { getRoute, goBackRoute, route } from "@/lib/constants/router";
+import { goBackRoute, route } from "@/lib/constants/router";
 import { BrandButton } from "@/lib/components/common/button";
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleById } from "@/api/schedule-api";
@@ -94,13 +93,6 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
             </div>
           )}
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <BrandLink
-              href={getRoute(route.scheduleEdit, data._id)}
-              className="w-auto min-w-20"
-              scroll={false}
-            >
-              일정 수정
-            </BrandLink>
             <BrandButton
               type="button"
               color="green"

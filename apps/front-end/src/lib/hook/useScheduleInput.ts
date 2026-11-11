@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useReactHookForm from "./useReactHookForm";
 import { useToastStore } from "@/lib/providers/toast-provider";
 import { useRouter } from "next/navigation";
-import { createSchedule, updateSchedule } from "@/api/schedule-api";
+import { submitSchedule, updateSchedule } from "@/api/schedule-api";
 import { IApiError } from "../types/error-response";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { route } from "../constants/router";
@@ -17,7 +17,6 @@ import {
   invalidateScheduleListByDate,
   invalidateScheduleListByMonth,
   invalidateScheduleListByMonthWithId,
-  invalidateScheduleListByMonthWithName,
 } from "../utils/react-query-utils";
 import { IScheduleInput, TScheduleSchema } from "@shared/types";
 import { getStreamerNameByCategory } from "../utils/chzzk-utils";
@@ -30,6 +29,7 @@ const useScheduleInput = (
   initData?: TScheduleSchema // optional 초기값
 ) => {
   const router = useRouter();
+  const [sourceUrl, setSourceUrl] = useState("");
   const showToast = useToastStore((state) => state.showToast);
 
   const initValue: Partial<IScheduleInput> = useMemo(
@@ -149,24 +149,10 @@ const useScheduleInput = (
   // create schedule
   const createScheduleMutation = useMutation({
     mutationFn: async (data: Partial<TScheduleSchema>) =>
-      await createSchedule(data),
-    onSuccess: (schedule) => {
-      invalidateScheduleListByDate(queryClient, schedule.startAt);
-      invalidateScheduleListByMonth(queryClient, schedule.startAt);
-      invalidateScheduleListByMonthWithId(
-        queryClient,
-        schedule.startAt,
-        schedule.streamerId
-      );
-      invalidateScheduleListByMonthWithName(
-        queryClient,
-        schedule.startAt,
-        schedule.streamerName
-      );
-      if (schedule.isOfficial)
-        invalidateOfficialScheduleListByMonth(queryClient, schedule.startAt);
-      showToast("success", `일정을 추가했습니다.`);
-      router.push(route.allCalendar);
+      await submitSchedule(data, sourceUrl),
+    onSuccess: (receipt) => {
+      showToast("success", "제보가 접수되었습니다. 검수 후 게시됩니다.");
+      router.push(`/submissions/${receipt.id}`);
     },
     onError: (error: IApiError) => handleScheduleApiError(error, showToast),
   });
@@ -224,6 +210,10 @@ const useScheduleInput = (
 
   // Submit event
   const onSubmit = handleSubmit((data) => {
+    if (!initData && !sourceUrl) {
+      showToast("error", "출처 링크를 입력해 주세요.");
+      return;
+    }
     const inputData: IScheduleInput = {
       ...data,
       isOfficial,
@@ -255,6 +245,8 @@ const useScheduleInput = (
     onAddMember,
     onRemoveMember,
     onFocusTiptapLabel,
+    sourceUrl,
+    setSourceUrl,
   };
 };
 

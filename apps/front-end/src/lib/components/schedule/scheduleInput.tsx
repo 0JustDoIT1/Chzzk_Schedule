@@ -86,6 +86,8 @@ const ScheduleInput = ({
     onAddMember,
     onRemoveMember,
     onFocusTiptapLabel,
+    sourceUrl,
+    setSourceUrl,
   } = useScheduleInput(isOfficial, setIsOfficial, initData);
 
   const category = watch("category");
@@ -100,6 +102,10 @@ const ScheduleInput = ({
       onKeyDown={preventEnterKey}
     >
       <div>
+        {!initData && <div className="flex flex-col mb-4">
+          <label htmlFor="sourceUrl" className="text-sm text-textMain mb-2">일정 출처 링크 *</label>
+          <input id="sourceUrl" type="url" required value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-md bg-white p-2 text-sm ring-1 ring-textLight" placeholder="https://..." />
+        </div>}
         {!isOfficial && (
           <div className="flex flex-col mb-4">
             <label

@@ -9,26 +9,23 @@ import { BrandButton } from "@/lib/components/common/button";
 import { useToastStore } from "@/lib/providers/toast-provider";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { preventEnterKey } from "@/lib/utils/keyEvent";
-import { createStreamer } from "@/api/streamer-api";
+import { submitStreamer } from "@/api/streamer-api";
 import { IApiError } from "@/lib/types/error-response";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { goBackRoute, route } from "@/lib/constants/router";
 import { IStreamer } from "@shared/types";
-import { invalidateAllStreamerList } from "@/lib/utils/react-query-utils";
 
 const StreamerAddView = () => {
   const router = useRouter();
   const showToast = useToastStore((state) => state.showToast);
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
 
-  const queryClient = useQueryClient();
 
   const createStreamerMutation = useMutation({
-    mutationFn: async (data: IStreamer) => await createStreamer(data),
-    onSuccess: (streamer) => {
-      showToast("success", `${streamer.name}을(를) 추가했습니다.`);
-      invalidateAllStreamerList(queryClient);
-      goBackRoute(router, previousAsPath, route.allCalendar);
+    mutationFn: async (data: { streamer: IStreamer; sourceUrl: string }) => await submitStreamer(data.streamer, data.sourceUrl),
+    onSuccess: (receipt) => {
+      showToast("success", "제보가 접수되었습니다. 검수 후 게시됩니다.");
+      router.push(`/submissions/${receipt.id}`);
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {
@@ -57,19 +54,14 @@ const StreamerAddView = () => {
     handleSubmit,
   } = useReactHookForm(initValue);
 
-  const [isOfficial, setIsOfficial] = useState<boolean>(false);
   const [tag, setTag] = useState<string[]>([]);
+  const [sourceUrl, setSourceUrl] = useState("");
 
   const onKeyDownAddTag = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       onAddTag();
     }
-  };
-
-  const onChangeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setIsOfficial(checked);
   };
 
   const onAddTag = () => {
@@ -97,11 +89,11 @@ const StreamerAddView = () => {
     const result: IStreamer = {
       ...data,
       tag,
-      isOfficial,
+      isOfficial: false,
     };
     if (tag.length === 0) delete result.tag;
 
-    createStreamerMutation.mutate(result);
+    createStreamerMutation.mutate({ streamer: result, sourceUrl });
   });
 
   return (
@@ -126,20 +118,6 @@ const StreamerAddView = () => {
               요청을 확인한 후, 문제가 없으면 추가됩니다.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center w-full md:w-1/3 md:items-end">
-            <label className="inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={isOfficial}
-                onChange={onChangeToggle}
-              />
-              <div className="relative w-11 h-6 bg-textSuperLight peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-textLight after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandMain peer-focus:ring-2 peer-focus:ring-double peer-focus:ring-brandLight"></div>
-              <span className="mx-3 text-sm text-textMain mt-[2px]">
-                치지직 공식
-              </span>
-            </label>
-          </div>
         </div>
       </section>
       <main className="w-full p-4">
@@ -149,6 +127,10 @@ const StreamerAddView = () => {
           onKeyDown={preventEnterKey}
         >
           <div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="sourceUrl" className="text-sm text-textMain mb-2">출처 링크 *</label>
+              <input id="sourceUrl" type="url" required value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-md bg-white p-2 text-sm ring-1 ring-textLight" placeholder="https://..." />
+            </div>
             <div className="flex flex-col mb-4">
               <label htmlFor="name" className="text-sm text-textMain mb-2">
                 <span className="text-brandMain">&#42;</span> 닉네임
