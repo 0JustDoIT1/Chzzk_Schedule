@@ -86,6 +86,7 @@ export async function review(formData: FormData) {
       payload,
       sourceUrl: String(formData.get("sourceUrl") ?? ""),
       officialConfirmed: formData.get("officialConfirmed") === "on",
+      changeNote: String(formData.get("changeNote") ?? ""),
     };
   } else {
     body = { reason: String(formData.get("reason") ?? "") };

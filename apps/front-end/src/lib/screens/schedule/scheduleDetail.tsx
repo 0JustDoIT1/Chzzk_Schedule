@@ -21,6 +21,14 @@ interface IScheduleDetailView {
   id: string;
 }
 
+const fieldLabel: Record<string, string> = {
+  isOfficial: "공식 분류", streamerName: "주최자", category: "방송 종류",
+  title: "제목", member: "참여자", fullDay: "종일 여부",
+  startAt: "시작 시간", endAt: "종료 시간", contents: "내용",
+};
+
+const safeSource = (url?: string) => Boolean(url && /^https?:\/\//i.test(url));
+
 const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
@@ -80,6 +88,22 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
                 })}
               </div>
             )}
+          </div>
+          <div className="mb-6 rounded-lg border border-textLight p-4 text-sm text-textNormal">
+            <p className="mb-2 font-medium text-textMain">일정 출처</p>
+            {safeSource(data.sourceUrl)
+              ? <a href={data.sourceUrl} target="_blank" rel="noreferrer" className="break-all text-brandMain underline">원문 확인</a>
+              : <p>등록 출처가 기록되지 않은 일정입니다.</p>}
+            {data.revisionHistory && data.revisionHistory.length > 0 && <div className="mt-4">
+              <p className="mb-2 font-medium text-textMain">게시·변경 이력</p>
+              <ol className="space-y-3">
+                {[...data.revisionHistory].reverse().map((revision) => <li key={revision.version} className="border-t border-textLight pt-2">
+                  <p>{new Date(revision.reviewedAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })} · {revision.note}</p>
+                  {revision.changedFields.length > 0 && <p>변경 항목: {revision.changedFields.map((field) => fieldLabel[field] ?? field).join(", ")}</p>}
+                  {safeSource(revision.sourceUrl) && <a href={revision.sourceUrl} target="_blank" rel="noreferrer" className="text-brandMain underline">변경 근거</a>}
+                </li>)}
+              </ol>
+            </div>}
           </div>
           {data.contents && (
             <div className="relative mb-4">

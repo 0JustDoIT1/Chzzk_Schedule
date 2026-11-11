@@ -50,6 +50,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <label className="flex w-full flex-col gap-1">확인한 출처 URL
           <input name="sourceUrl" type="url" required defaultValue={submission.sourceUrl} className="rounded border p-2" />
         </label>
+        {submission.kind !== "streamer" && <label className="flex w-full flex-col gap-1">{submission.kind === "schedule-edit" ? "변경 요약 *" : "게시 메모"}
+          <input name="changeNote" type="text" required={submission.kind === "schedule-edit"} maxLength={300} placeholder="예: 방송 시작 시간을 변경했습니다" className="rounded border p-2" />
+        </label>}
         <label className="flex w-full items-center gap-2"><input type="checkbox" name="officialConfirmed" />공식으로 게시하는 경우, 치지직 직접 주최·공식 채널 공지를 확인했습니다.</label>
         <button name="action" value="approve" className="rounded bg-green-700 px-4 py-2 text-white">수정한 내용으로 게시</button>
         <input name="reason" aria-label="반려 사유" placeholder="반려 사유" maxLength={500} className="rounded border p-2" />
