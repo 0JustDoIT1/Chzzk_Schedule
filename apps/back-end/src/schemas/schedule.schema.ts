@@ -4,6 +4,26 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type ScheduleDocument = HydratedDocument<Schedule>;
 
+@Schema({ _id: false })
+export class ScheduleRevision {
+  @Prop({ required: true, type: Number })
+  version: number;
+
+  @Prop({ required: true, type: String })
+  sourceUrl: string;
+
+  @Prop({ required: true, type: Date })
+  reviewedAt: Date;
+
+  @Prop({ required: true, type: String })
+  note: string;
+
+  @Prop({ type: [String], default: [] })
+  changedFields: string[];
+}
+
+export const ScheduleRevisionSchema = SchemaFactory.createForClass(ScheduleRevision);
+
 @Schema({ collection: 'schedule', timestamps: true })
 export class Schedule {
   @Prop({ required: true, type: Boolean })
@@ -41,6 +61,12 @@ export class Schedule {
 
   @Prop({ required: false, type: String })
   contents?: string;
+
+  @Prop({ required: false, type: String })
+  sourceUrl?: string;
+
+  @Prop({ type: [ScheduleRevisionSchema], default: [] })
+  revisionHistory?: ScheduleRevision[];
 }
 
 export const ScheduleSchema = SchemaFactory.createForClass(Schedule);

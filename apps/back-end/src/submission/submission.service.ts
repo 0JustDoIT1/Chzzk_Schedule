@@ -8,6 +8,7 @@ import { Submission, SubmissionDocument, SubmissionKind } from './submission.sch
 import { StreamerSubmissionDto, ScheduleSubmissionDto, ApproveSubmissionDto } from './submission.dto';
 import { StreamerService } from '../streamer/streamer.service';
 import { ScheduleService } from '../schedule/schedule.service';
+import type { PublicationEvidence } from '../schedule/schedule.service';
 import { CreateScheduleDto } from '../schedule/dto/create-schedule.dto';
 import { CreateStreamerDto } from '../streamer/dto/create-streamer.dto';
 import { AllCategory, OfficialName } from '@shared/constants';
@@ -69,6 +70,12 @@ export class SubmissionService {
 
     try {
       const payload = this.validatePublication(submission.kind, input);
+      const reviewedAt = new Date();
+      const note = input.changeNote?.trim() || (submission.kind === 'schedule' ? '최초 게시' : '');
+      if (submission.kind === 'schedule-edit' && !note) {
+        throw new BadRequestException('수정 내용을 요약해 주세요.');
+      }
+      const evidence: PublicationEvidence = { sourceUrl: input.sourceUrl, note, reviewedAt };
       if (submission.kind === 'streamer') {
         await this.streamers.create(payload as any);
       } else {
@@ -78,17 +85,17 @@ export class SubmissionService {
           schedule.contents = schedule.contents.replace(/<[^>]*>/g, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
         if (submission.kind === 'schedule') {
-          await this.schedules.create(schedule as any);
+          await this.schedules.create(schedule as any, evidence);
         } else {
           if (!submission.targetScheduleId) throw new BadRequestException('Missing target schedule');
-          await this.schedules.updateSchedule(submission.targetScheduleId.toString(), schedule as any);
+          await this.schedules.updateSchedule(submission.targetScheduleId.toString(), schedule as any, evidence);
         }
       }
 
       submission.status = 'approved';
       submission.payload = payload;
       submission.sourceUrl = input.sourceUrl;
-      submission.reviewedAt = new Date();
+      submission.reviewedAt = reviewedAt;
       await submission.save();
       return { id: submission.id as string, status: submission.status };
     } catch (error) {

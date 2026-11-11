@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Schedule, ScheduleDocument } from 'src/schemas/schedule.schema';
+import { Schedule, ScheduleDocument, ScheduleRevision } from 'src/schemas/schedule.schema';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { StreamerService } from 'src/streamer/streamer.service';
 import { ScheduleValidate } from './schedule.validate';
@@ -21,6 +21,24 @@ import {
 } from '@shared/utils';
 import { OfficialName } from '@shared/constants';
 
+export interface PublicationEvidence {
+  sourceUrl: string;
+  note: string;
+  reviewedAt: Date;
+}
+
+const trackedFields = [
+  'isOfficial', 'streamerName', 'category', 'title', 'member',
+  'fullDay', 'startAt', 'endAt', 'contents',
+] as const;
+
+const sameTrackedValue = (field: typeof trackedFields[number], before: unknown, after: unknown) => {
+  if (field === 'startAt' || field === 'endAt') {
+    return new Date(before as string | Date).getTime() === new Date(after as string | Date).getTime();
+  }
+  return JSON.stringify(before) === JSON.stringify(after);
+};
+
 @Injectable()
 export class ScheduleService {
   constructor(
@@ -29,7 +47,7 @@ export class ScheduleService {
     private scheduleValidate: ScheduleValidate,
   ) {}
 
-  async create(scheduleData: CreateScheduleDto): Promise<ScheduleDocument> {
+  async create(scheduleData: CreateScheduleDto, evidence?: PublicationEvidence): Promise<ScheduleDocument> {
     const streamer = await this.streamerService.getStreamerByName(scheduleData.streamerName);
     const members = await this.resolveMembers(streamer.name, scheduleData.member);
     await this.validateDuplicateSchedule(streamer.name, scheduleData.title, scheduleData.startAt);
@@ -40,6 +58,10 @@ export class ScheduleService {
       chzzkLink: streamer.chzzkLink,
       member: members.map((member) => member.name),
       memberIds: members.map((member) => member._id),
+      ...(evidence ? {
+        sourceUrl: evidence.sourceUrl,
+        revisionHistory: [{ version: 1, sourceUrl: evidence.sourceUrl, reviewedAt: evidence.reviewedAt, note: evidence.note, changedFields: [] }],
+      } : {}),
     };
     return this.scheduleModel.create(createData);
   }
@@ -48,6 +70,7 @@ export class ScheduleService {
   async updateSchedule(
     id: string,
     scheduleData: CreateScheduleDto,
+    evidence?: PublicationEvidence,
   ): Promise<ScheduleDocument> {
     const existSchedule = await this.scheduleModel.findById(id).exec();
     // Validate schedule
@@ -89,8 +112,20 @@ export class ScheduleService {
       memberIds: members.map((member) => member._id),
     };
 
+    const revision: ScheduleRevision | undefined = evidence ? {
+      version: (existSchedule.revisionHistory?.length ?? 0) + 1,
+      sourceUrl: evidence.sourceUrl,
+      reviewedAt: evidence.reviewedAt,
+      note: evidence.note,
+      changedFields: trackedFields.filter((field) =>
+        !sameTrackedValue(field, existSchedule[field], updateData[field])),
+    } : undefined;
+
     const updated = await this.scheduleModel
-      .findByIdAndUpdate(id, updateData, {
+      .findByIdAndUpdate(id, revision ? {
+        $set: { ...updateData, sourceUrl: evidence!.sourceUrl },
+        $push: { revisionHistory: revision },
+      } : updateData, {
         new: true,
       })
       .exec();

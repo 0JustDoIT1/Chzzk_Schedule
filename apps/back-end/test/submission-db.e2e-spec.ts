@@ -103,6 +103,10 @@ run('Submission with isolated Mongo database', () => {
     expect(JSON.stringify(after.body)).toContain(title);
     const published = Object.values(after.body).flatMap((day: any) => day.list as { _id: string; title: string }[]).filter((item) => item.title === title);
     expect(published).toHaveLength(1);
+    const firstRevision = await request(app.getHttpServer()).get(`/v1/schedule/id/${published[0]._id}`).expect(200);
+    expect(firstRevision.body.sourceUrl).toBe(scheduleSubmission.sourceUrl);
+    expect(firstRevision.body.revisionHistory).toHaveLength(1);
+    expect(firstRevision.body.revisionHistory[0].version).toBe(1);
     const memberCalendar = await request(app.getHttpServer()).get(`/v1/schedule/month/2026-11-13/name/${memberName}`).expect(200);
     expect(JSON.stringify(memberCalendar.body)).toContain(published[0]._id);
     await request(app.getHttpServer()).get(`/v1/submissions/${scheduleReport.body.id}/status`)
@@ -124,8 +128,12 @@ run('Submission with isolated Mongo database', () => {
     const editId = editSubmission._id as string;
     await request(app.getHttpServer()).patch(`/v1/submissions/${editId}/approve`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ payload: editSubmission.payload, sourceUrl: editSubmission.sourceUrl, officialConfirmed: false })
+      .send({ payload: editSubmission.payload, sourceUrl: editSubmission.sourceUrl, officialConfirmed: false, changeNote: '제목 수정' })
       .expect(200);
+    const secondRevision = await request(app.getHttpServer()).get(`/v1/schedule/id/${published[0]._id}`).expect(200);
+    expect(secondRevision.body.revisionHistory).toHaveLength(2);
+    expect(secondRevision.body.revisionHistory[1].note).toBe('제목 수정');
+    expect(secondRevision.body.revisionHistory[1].changedFields).toContain('title');
     const memberAfterEdit = await request(app.getHttpServer()).get(`/v1/schedule/month/2026-11-13/name/${memberName}`).expect(200);
     expect(JSON.stringify(memberAfterEdit.body)).toContain(editedTitle);
     expect(JSON.stringify(memberAfterEdit.body)).toContain(published[0]._id);

@@ -48,7 +48,10 @@ describe('SubmissionService', () => {
     await expect(service.approve('507f1f77bcf86cd799439011', { payload, sourceUrl: report.sourceUrl, officialConfirmed: false })).rejects.toThrow('공식 출처 확인');
     expect(schedules.create).not.toHaveBeenCalled();
     await service.approve('507f1f77bcf86cd799439011', { payload, sourceUrl: report.sourceUrl, officialConfirmed: true });
-    expect(schedules.create).toHaveBeenCalledWith(expect.objectContaining({ streamerName: '치지직 공식', isOfficial: true }));
+    expect(schedules.create).toHaveBeenCalledWith(
+      expect.objectContaining({ streamerName: '치지직 공식', isOfficial: true }),
+      expect.objectContaining({ sourceUrl: report.sourceUrl, note: '최초 게시' }),
+    );
   });
 
   it('returns only status for a private receipt token', async () => {

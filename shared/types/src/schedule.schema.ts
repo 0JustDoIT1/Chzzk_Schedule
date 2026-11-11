@@ -14,6 +14,14 @@ export interface ISchedule {
   startAt: Date;
   endAt: Date;
   contents?: string;
+  sourceUrl?: string;
+  revisionHistory?: {
+    version: number;
+    sourceUrl: string;
+    reviewedAt: Date;
+    note: string;
+    changedFields: string[];
+  }[];
 }
 
 export interface IScheduleInput {
