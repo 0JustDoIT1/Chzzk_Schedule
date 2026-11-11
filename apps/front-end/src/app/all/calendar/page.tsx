@@ -6,7 +6,7 @@ import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
 interface IAllCalendarPage {
-  searchParams: { date?: string };
+  searchParams: Promise<{ date?: string }>;
 }
 
 const AllCalendarPage = async ({ searchParams }: IAllCalendarPage) => {

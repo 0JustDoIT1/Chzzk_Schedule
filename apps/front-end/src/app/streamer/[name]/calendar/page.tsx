@@ -7,7 +7,7 @@ import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
 interface IStreamerCalendarPage {
   params: Promise<{ name: string }>;
-  searchParams: { date?: string };
+  searchParams: Promise<{ date?: string }>;
 }
 
 const StreamerCalendarPage = async ({

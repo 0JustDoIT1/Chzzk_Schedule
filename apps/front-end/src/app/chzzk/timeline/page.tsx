@@ -7,7 +7,7 @@ import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
 interface IChzzkTimelinePage {
-  searchParams: { date?: string };
+  searchParams: Promise<{ date?: string }>;
 }
 
 const ChzzkTimelinePage = async ({ searchParams }: IChzzkTimelinePage) => {

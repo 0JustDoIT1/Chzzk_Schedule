@@ -7,7 +7,7 @@ import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
 interface IStreamerTimelinePage {
   params: Promise<{ name: string }>;
-  searchParams: { date?: string };
+  searchParams: Promise<{ date?: string }>;
 }
 
 const StreamerTimelinePage = async ({
