@@ -14,7 +14,7 @@ import { preventEnterKey } from "@/lib/utils/keyEvent";
 import { goBackRoute, route } from "@/lib/constants/router";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import MemberList from "../common/memberList";
-import { IStreamer, TScheduleSchema } from "@shared/types";
+import { IScheduleInput as IScheduleForm, IStreamer, TScheduleSchema } from "@shared/types";
 import SearchableDropdown from "../dropdown/searchableDropdown";
 import clsx from "clsx";
 
@@ -30,7 +30,7 @@ interface IMemberInputSection {
   onAddMember: () => void;
   member: string[];
   onRemoveMember: (name: string) => void;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<IScheduleForm>;
 }
 
 const MemberInputSection = ({
@@ -141,7 +141,7 @@ const ScheduleInput = ({
                       ref={ref}
                       value={value}
                       onChange={onChange}
-                      errors={errors["name"] ? true : false}
+                      errors={Boolean(errors.streamerName)}
                     />
                   )}
                 />
@@ -370,7 +370,7 @@ const ScheduleInput = ({
             control={control}
             name="contents"
             render={({ field: { value, onChange } }) => (
-              <TiptapEditor text={value} setText={onChange} />
+              <TiptapEditor text={value ?? ""} setText={onChange} />
             )}
           />
         </div>

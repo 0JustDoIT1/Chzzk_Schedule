@@ -1,17 +1,16 @@
-import { IStringIndexable } from "@/lib/types/indexableType";
 import clsx from "clsx";
 
-interface ISearchableDropdownItem<T> {
+interface ISearchableDropdownItem<T extends { name: string; _id?: string }> {
   filterList: T[];
-  keyName: string;
+  keyName: keyof T;
   value: string;
   selectIndex: number;
   selectItem: (item: T) => void;
-  onChange: (...event: any[]) => void;
+  onChange: (value: string) => void;
   itemRef: React.RefObject<HTMLUListElement | null>;
 }
 
-const SearchableDropdownItem = <T extends IStringIndexable>({
+const SearchableDropdownItem = <T extends { name: string; _id?: string }>({
   filterList,
   keyName,
   value,
@@ -26,7 +25,7 @@ const SearchableDropdownItem = <T extends IStringIndexable>({
       className="absolute start-0 z-10 w-full max-h-64 overflow-y-auto box-border rounded-md bg-white text-sm ring-1 shadow-lg ring-textLight "
     >
       {filterList.map((item, index) => {
-        const isSelected = value === item[keyName];
+        const isSelected = value === String(item[keyName]);
         const isHovered = index === selectIndex;
 
         const liClass = clsx("p-2 box-border cursor-pointer truncate", {
@@ -38,14 +37,14 @@ const SearchableDropdownItem = <T extends IStringIndexable>({
 
         return (
           <li
-            key={item._id}
+            key={item._id ?? item.name}
             className={liClass}
             onClick={() => {
               selectItem(item);
-              onChange(item[keyName]);
+              onChange(String(item[keyName]));
             }}
           >
-            {item[keyName]}
+            {String(item[keyName])}
           </li>
         );
       })}

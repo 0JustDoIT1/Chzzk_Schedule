@@ -5,9 +5,10 @@ import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { useRouter } from "next/navigation";
 
 export default function GlobalError({
-  error,
+  reset,
 }: {
   error: Error & { digest?: string };
+  reset: () => void;
 }) {
   const router = useRouter();
   const previousAsPath = useAsPathStore((state) => state.previousAsPath);
@@ -22,6 +23,7 @@ export default function GlobalError({
         >
           뒤로 가기
         </button>
+        <button onClick={reset}>다시 시도</button>
       </body>
     </html>
   );

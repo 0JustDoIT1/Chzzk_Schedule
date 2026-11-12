@@ -1,5 +1,4 @@
 import useSearchableDropdown from "@/lib/hook/useSearchableDropdown";
-import type { IStringIndexable } from "@/lib/types/indexableType";
 import clsx from "clsx";
 import React from "react";
 import { RefCallBack } from "react-hook-form";
@@ -7,17 +6,17 @@ import ChevronDownIcon from "~/public/assets/svg/chevron-down";
 import ChevronUpIcon from "~/public/assets/svg/chevron-up";
 import SearchableDropdownItem from "./searchableDropdownItem";
 
-interface ISearchableDropdown<T> {
+interface ISearchableDropdown<T extends { name: string; _id?: string }> {
   list: T[];
-  keyName: string;
+  keyName: keyof T;
   placeholder: string;
   ref?: RefCallBack;
   value: string;
-  onChange: (...event: any[]) => void;
+  onChange: (value: string) => void;
   errors: boolean;
 }
 
-const SearchableDropdown = <T extends IStringIndexable>({
+const SearchableDropdown = <T extends { name: string; _id?: string }>({
   list,
   keyName,
   placeholder,
@@ -44,14 +43,14 @@ const SearchableDropdown = <T extends IStringIndexable>({
   return (
     <div className="relative cursor-default">
       <input
-        id={keyName}
+        id={String(keyName)}
         className={clsx(
           "w-full rounded-md bg-white p-2 text-sm text-textMain box-border ring-1 shadow-xs outline-none hover:bg-textHover",
           errors
             ? "ring-error focus:ring-2 focus:ring-error"
             : "ring-textLight focus:ring-brandMain"
         )}
-        name={keyName}
+        name={String(keyName)}
         ref={(e) => {
           inputRef.current = e;
           ref?.(e);

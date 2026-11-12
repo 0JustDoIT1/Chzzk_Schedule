@@ -4,10 +4,11 @@ import { ISchedule, IScheduleInput } from "@shared/types";
 
 export const getScheduleInitValue = (
   initData?: ISchedule
-): Partial<IScheduleInput> => {
+): IScheduleInput => {
   if (!initData) {
     const { date, time } = setDateAndTime();
     return {
+      isOfficial: false,
       streamerName: "",
       category: "",
       title: "",
@@ -28,6 +29,7 @@ export const getScheduleInitValue = (
   const endAt = formatDateParts(initData.endAt);
 
   return {
+    isOfficial: initData.isOfficial,
     streamerName: initData.streamerName ?? "",
     category: initData.category ?? "",
     title: initData.title ?? "",

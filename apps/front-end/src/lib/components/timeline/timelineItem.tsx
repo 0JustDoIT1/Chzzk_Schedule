@@ -5,14 +5,12 @@ import { getRoute, route } from "@/lib/constants/router";
 import { displayDate } from "@/lib/utils/chzzk-date";
 import CategoryTag from "../common/categoryTag";
 import { TScheduleSchema } from "@shared/types";
-import { TDayjsType } from "@shared/utils";
 
 interface ITimelineItem {
   schedule: TScheduleSchema;
-  today: TDayjsType;
 }
 
-const TimelineItem = ({ schedule, today }: ITimelineItem) => {
+const TimelineItem = ({ schedule }: ITimelineItem) => {
   return (
     <div className="flex flex-wrap items-center justify-between mb-4 border-b border-textSuperLight">
       <div className="p-2">

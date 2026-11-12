@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
+import { DefaultValues, FieldValues, useForm } from "react-hook-form";
 
-const useReactHookForm = (initValue: any) => {
+const useReactHookForm = <T extends FieldValues>(initValue: DefaultValues<T>) => {
   const {
     register,
     control,
@@ -11,7 +11,7 @@ const useReactHookForm = (initValue: any) => {
     clearErrors,
     handleSubmit,
     formState: { errors },
-  } = useForm({ reValidateMode: "onChange", defaultValues: initValue });
+  } = useForm<T>({ reValidateMode: "onChange", defaultValues: initValue });
 
   return {
     register,

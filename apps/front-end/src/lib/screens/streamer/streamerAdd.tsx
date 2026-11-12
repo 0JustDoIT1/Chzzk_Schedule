@@ -38,10 +38,10 @@ const StreamerAddView = () => {
     },
   });
 
-  const initValue: Partial<IStreamer> = {
+  const initValue: { name: string; chzzkLink: string; tag: string } = {
     name: "",
     chzzkLink: "",
-    tag: [],
+    tag: "",
   };
 
   const {
@@ -82,7 +82,7 @@ const StreamerAddView = () => {
   const onReset = () => {
     reset();
     clearErrors();
-    setTag(initValue.tag!);
+    setTag([]);
   };
 
   const onSubmit = handleSubmit((data) => {

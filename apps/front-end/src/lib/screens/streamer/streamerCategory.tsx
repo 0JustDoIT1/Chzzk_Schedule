@@ -18,9 +18,6 @@ const StreamerCategoryView = () => {
     placeholderData: (prev) => prev,
   });
 
-  if (isLoading) return <IsLoading />;
-  if (isError) return <IsError />;
-
   const [initialList, setInitialList] = useState<string[]>([]);
   const [streamerList, setStreamerList] = useState<{
     [x: string]: TStreamerSchema[];
@@ -53,6 +50,9 @@ const StreamerCategoryView = () => {
 
     window.scroll({ top: 0, behavior: "smooth" });
   }, [data, isSuccess]);
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError />;
 
   return (
     <main>

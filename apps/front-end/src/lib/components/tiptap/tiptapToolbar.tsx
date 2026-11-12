@@ -19,7 +19,7 @@ const TiptapToolbar = ({ editor }: ToolbarProps) => {
     if (!files) return;
     const file = files[0];
 
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (e) => {
       const url = e.target?.result?.toString() || "";
       editor?.chain().focus().setImage({ src: url }).run();

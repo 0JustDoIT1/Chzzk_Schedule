@@ -57,7 +57,7 @@ export const adjustScheduleTimes = ({
   fullDay: boolean;
   startTimeKnown?: boolean;
   endTimeKnown?: boolean;
-  setValue: (name: string, value: any, options?: any) => void;
+  setValue: (name: "endAtDate" | "startAtTime" | "endAtTime" | "startAtDate", value: string, options?: { shouldValidate?: boolean }) => void;
 }) => {
   if (fullDay) {
     setValue("endAtDate", startAtDate, { shouldValidate: true });

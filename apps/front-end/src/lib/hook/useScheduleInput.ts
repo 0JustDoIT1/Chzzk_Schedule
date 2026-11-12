@@ -31,7 +31,7 @@ const useScheduleInput = (
   const [sourceUrl, setSourceUrl] = useState("");
   const showToast = useToastStore((state) => state.showToast);
 
-  const initValue: Partial<IScheduleInput> = useMemo(
+  const initValue: IScheduleInput = useMemo(
     () => getScheduleInitValue(initData),
     [initData]
   );

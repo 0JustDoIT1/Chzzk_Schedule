@@ -1,4 +1,4 @@
-import { IErrorResponse } from "../types/error-response";
+import { IApiError, IErrorResponse } from "../types/error-response";
 
 interface IDefaultFetch {
   baseUrl: string;
@@ -17,9 +17,9 @@ export const defaultFetch = async <T>({
     const errorData: IErrorResponse = await res.json();
     // throw new Error(errorData.message || "서버 오류가 발생했습니다.");
 
-    const error = new Error(errorData.message);
-    (error as any).status = res.status;
-    (error as any).errorCode = errorData.errorCode;
+    const error: IApiError = new Error(errorData.message);
+    error.status = res.status;
+    error.errorCode = errorData.errorCode;
 
     throw error;
   }

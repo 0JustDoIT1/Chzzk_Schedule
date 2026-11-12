@@ -58,7 +58,6 @@ const CustomTimeline = ({ schedule }: ICustomTimeLine) => {
                 <TimelineItem
                   key={schedule._id}
                   schedule={schedule}
-                  today={today}
                 />
               ))}
             </li>

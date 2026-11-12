@@ -10,14 +10,10 @@ import TiptapToolbar from "./tiptapToolbar";
 
 interface ITiptapEditor {
   text: string;
-  setText: (...event: any[]) => void;
+  setText: (value: string) => void;
 }
 
 const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
-  useEffect(() => {
-    if (!text) editor?.commands.clearContent();
-  }, [text]);
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -41,6 +37,10 @@ const TiptapEditor = ({ text, setText }: ITiptapEditor) => {
     },
     immediatelyRender: false,
   });
+
+  useEffect(() => {
+    if (!text) editor?.commands.clearContent();
+  }, [text, editor]);
 
   return (
     <div

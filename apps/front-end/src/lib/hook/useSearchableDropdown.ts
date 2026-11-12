@@ -7,11 +7,10 @@ import {
   useRef,
   useState,
 } from "react";
-import type { IStringIndexable } from "@/lib/types/indexableType";
 
-const useSearchableDropdown = <T extends IStringIndexable>(
+const useSearchableDropdown = <T extends { name: string; _id?: string }>(
   list: T[],
-  keyName: string,
+  keyName: keyof T,
   value: string,
   onChange: (value: string) => void
 ) => {
@@ -23,6 +22,11 @@ const useSearchableDropdown = <T extends IStringIndexable>(
   const inputRef = useRef<HTMLInputElement>(null);
   const itemRef = useRef<HTMLUListElement>(null);
 
+  const setKeyboardScroll = useCallback(() => {
+    const result = itemRef.current?.querySelector(".bg-textBlur");
+    result?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, []);
+
   // keyboard scroll
   useEffect(() => {
     if (isOpen) {
@@ -31,7 +35,7 @@ const useSearchableDropdown = <T extends IStringIndexable>(
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, selectIndex]);
+  }, [isOpen, selectIndex, setKeyboardScroll]);
 
   // toggle dropdown event with ref
   const toggleDropdown = useCallback(
@@ -58,7 +62,7 @@ const useSearchableDropdown = <T extends IStringIndexable>(
   // Get list by input query
   useEffect(() => {
     const filter = list.filter(
-      (item) => item[keyName].toLowerCase().indexOf(query.toLowerCase()) > -1
+      (item) => String(item[keyName]).toLowerCase().includes(query.toLowerCase())
     );
     setFilterList(filter);
   }, [list, keyName, query]);
@@ -73,7 +77,7 @@ const useSearchableDropdown = <T extends IStringIndexable>(
   // Select list item -> result
   const selectItem = (item: T) => {
     setQuery("");
-    onChange(item[keyName]);
+    onChange(String(item[keyName]));
     setIsOpen(false);
   };
 
@@ -106,14 +110,6 @@ const useSearchableDropdown = <T extends IStringIndexable>(
   };
 
   // keyboard scroll event
-  const setKeyboardScroll = useCallback(() => {
-    const result = itemRef.current?.querySelector(".bg-textBlur");
-    result?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-    });
-  }, []);
-
   return {
     inputRef,
     itemRef,

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/lib/components/layout/header";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { FloatingButton } from "@/lib/components/common/floatingButton";
 import RootProvider from "@/lib/providers";
 import { DEFAULT_META_TAG } from "@/lib/constants/metaTag";
@@ -41,8 +41,8 @@ const RootLayout = ({
       <body className={gmarket.className}>
         <RootProvider>
           <Header />
-          {children}
-          {modal}
+          <Suspense fallback={null}>{children}</Suspense>
+          <Suspense fallback={null}>{modal}</Suspense>
           <div id="portal" />
           <FloatingButton />
         </RootProvider>

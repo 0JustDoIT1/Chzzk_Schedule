@@ -31,11 +31,11 @@ export function sorting<T>(
   key?: keyof T
 ): T[] {
   return [...array].sort((a, b) => {
-    let valA = key ? a[key] : a;
-    let valB = key ? b[key] : b;
+    const valA = key ? a[key] : a;
+    const valB = key ? b[key] : b;
 
-    let compareA: any = valA;
-    let compareB: any = valB;
+    let compareA: unknown = valA;
+    let compareB: unknown = valB;
 
     // 날짜 문자열 처리
     if (key === "startAt" || key === "endAt") {
