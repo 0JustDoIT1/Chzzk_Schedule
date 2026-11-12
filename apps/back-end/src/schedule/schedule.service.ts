@@ -168,7 +168,10 @@ export class ScheduleService {
   async getScheduleListByDate(date: string): Promise<IDateSchedule> {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
     const startDate = new Date(`${date}T00:00:00+09:00`);
-    if (!Number.isFinite(startDate.getTime())) throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+    if (!Number.isFinite(startDate.getTime()) ||
+      new Date(startDate.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10) !== date) {
+      throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+    }
     const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
 
     const scheduleList = await this.scheduleModel
