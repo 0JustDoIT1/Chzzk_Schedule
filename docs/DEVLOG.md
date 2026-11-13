@@ -2,6 +2,7 @@
 
 ## 2026-11-13 로컬 개발 DB 준비
 
+- 로컬 Docker DB 격리 검증(2026-11-13): `RUN_DB_INTEGRATION=1 yarn.cmd test:e2e --runInBand test/submission-db.e2e-spec.ts` 1건 통과. 승인 전 비공개, 승인 후 공개, 합방 참여자 동일 ID, 수정·취소·시간 미정, 공식 분류 권한, 반려를 확인했다. `yarn.cmd test --runInBand schedule-date-boundary.spec.ts` 2건 통과. KST 자정 경계와 잘못된 날짜 거부를 확인했다. 임시 `chzzk_schedule_integration_` DB가 남지 않았음을 조회했다. 프런트 화면 자동화와 운영 데이터 복원은 수행하지 않았다.
 - 변경 파일: `compose.yaml`, `docs/LOCAL_DB.md`. 기존 Atlas 주소의 DNS 조회가 실패해 로컬 개발용 MongoDB 컨테이너와 실행 절차를 추가했다.
 - 검증: `docker compose config --quiet` 통과. Docker Desktop을 시작해 `docker compose up -d mongodb`로 컨테이너를 실행했고 상태가 `healthy`다. 로컬 `apps/back-end/.env`의 DB 주소를 변경한 뒤 백엔드 기동을 확인했다. 프런트 `/`, 백엔드 `/api`, `/v1/streamer/all`, `/v1/schedule/date/2026-11-13` 모두 HTTP 200을 반환했다.
 - 남은 위험: 새 DB는 빈 상태여서 조회 API가 빈 배열을 반환한다. 기존 Atlas 데이터와 백업의 존재 여부는 미확인이다. 운영 DB를 로컬 DB로 대체하거나 기존 복제 일정을 자동 병합하지 않는다.
