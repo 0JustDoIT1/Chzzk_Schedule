@@ -3,8 +3,8 @@
 ## 2026-11-13 로컬 개발 DB 준비
 
 - 변경 파일: `compose.yaml`, `docs/LOCAL_DB.md`. 기존 Atlas 주소의 DNS 조회가 실패해 로컬 개발용 MongoDB 컨테이너와 실행 절차를 추가했다.
-- 검증: `docker compose config --quiet` 통과. Docker Desktop 엔진이 열리지 않아 컨테이너 실행과 백엔드 연결은 확인하지 못했다.
-- 남은 위험: 새 DB는 빈 상태다. 기존 Atlas 데이터와 백업의 존재 여부는 미확인이다. 운영 DB를 로컬 DB로 대체하거나 기존 복제 일정을 자동 병합하지 않는다.
+- 검증: `docker compose config --quiet` 통과. Docker Desktop을 시작해 `docker compose up -d mongodb`로 컨테이너를 실행했고 상태가 `healthy`다. 로컬 `apps/back-end/.env`의 DB 주소를 변경한 뒤 백엔드 기동을 확인했다. 프런트 `/`, 백엔드 `/api`, `/v1/streamer/all`, `/v1/schedule/date/2026-11-13` 모두 HTTP 200을 반환했다.
+- 남은 위험: 새 DB는 빈 상태여서 조회 API가 빈 배열을 반환한다. 기존 Atlas 데이터와 백업의 존재 여부는 미확인이다. 운영 DB를 로컬 DB로 대체하거나 기존 복제 일정을 자동 병합하지 않는다.
 
 > 이 문서는 현재 상태와 실제 검증만 기록한다. 요구사항 기준은 [PRD](./PRD.md)다. 날짜는 한국 시간 기준이다.
 
