@@ -1,5 +1,10 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 달력 일정 폭 계산 수정
+- 변경 파일: `apps/front-end/src/lib/components/calendar/calendarScheduleOverlay.tsx`, `docs/DEVLOG.md`. 달력 막대의 폭을 경과 시간의 24시간 단위가 아니라 KST 날짜 수로 계산한다. 종료가 정확히 자정이면 전날까지로 계산하고, 앞 주에서 이어지는 일정은 현재 주의 첫 표시 날짜부터 폭을 잰다.
+- 검증: 프런트 `yarn.cmd build` 통과. 격리 샘플 DB를 연결한 로컬 API에서 11월 29일 자정 종료 일정은 29일에만, 자정을 넘어가는 일정은 29·30일에, 시간 미정 일정은 30일에 조회됨을 확인했다. 서버를 종료하고 샘플 DB를 삭제했다. 기존 React Hook 의존성 경고 2건과 `metadataBase` 경고는 남아 있다.
+- 남은 위험: 브라우저 도구가 로컬 컴퓨터 연결 오류로 열리지 않아 달력 막대의 실제 화면 검증은 수행하지 못했다.
+
 ## 2026-11-16 D-03 월별 경계 격리 DB 검증
 - 변경 파일: `apps/back-end/test/schedule-month-boundary-db.e2e-spec.ts`, `docs/DEVLOG.md`. 월 시작 자정 종료 제외, 월말 자정 종료의 전날 배치, 종료 미정의 시작 날짜 배치를 전체·스트리머 ID·참여자 이름·공식 월별 API에서 검증한다.
 - 검증: 로컬 Docker MongoDB의 임시 `chzzk_schedule_integration_` DB로 `RUN_DB_INTEGRATION=1 yarn.cmd test:e2e --runInBand test/schedule-month-boundary-db.e2e-spec.ts` 1건 통과. `yarn.cmd tsc --noEmit -p tsconfig.json` 통과. 테스트 종료 뒤 임시 DB 목록이 빈 배열임을 확인했다.

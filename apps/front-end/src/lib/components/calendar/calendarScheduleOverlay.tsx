@@ -15,7 +15,7 @@ import {
 } from "@/lib/utils/calendarUtils";
 import { categoryStyleMap } from "@/lib/constants/streamingCategory";
 import { TMonthSchedule, TScheduleSchema } from "@shared/types";
-import { dateToFormatString, getDateDiff, TDayjsType } from "@shared/utils";
+import { dateToFormatString, getDateDiff, getStartDate, TDayjsType } from "@shared/utils";
 
 interface IDayScheduleItemProps {
   schedule: TScheduleSchema;
@@ -124,12 +124,13 @@ const CalendarScheduleOverlay = ({
 
           // 이미 렌더링된 일정(긴 일정)이 아니라면 새로 그릴 렌더링 배열에 포함
           if (!isScheduleAlreadyRenderedInWeek(schedule, currentWeek, dayStr)) {
-            // 일정 기간 계산
-            const diff = getDateDiff(schedule.endAt, schedule.startAt, "d");
-            // 며칠짜리 span인지 계산
-            // why? diff+1 (ex. 월-수 => diff만은 2일이지만 span은 3일이어야 함)
-            // 주를 넘지 않게 처리하기 위해서 7 - 날짜index를 통해 최소값 비교
-            const span = Math.min(diff + 1, 7 - dayIdx);
+            // A midnight end belongs to the preceding day. Compare calendar
+            // dates from this cell so a schedule crossing a week also fits.
+            const startTime = new Date(schedule.startAt).getTime();
+            const endTime = new Date(schedule.endAt).getTime();
+            const lastIncluded = new Date(endTime > startTime ? endTime - 1 : endTime);
+            const diff = getDateDiff(getStartDate(lastIncluded, "d"), getStartDate(day, "d"), "d");
+            const span = Math.min(Math.max(diff + 1, 1), 7 - dayIdx);
 
             // 현재 일정이 차지할 grid의 row 결정
             // span이 되는 모든 column이 비어있어야 함
