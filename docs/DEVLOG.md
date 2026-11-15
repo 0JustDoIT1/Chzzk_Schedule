@@ -1,5 +1,10 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 D-06 데이터 접근 점검
+- 변경 파일: `docs/D06-legacy-schedule-plan.md`, `docs/DEVLOG.md`. 기존 일정 후보 조사를 재개하기 위한 접근 상태와 다음 조사 조건을 기록했다.
+- 검증: Git 작업 폴더가 깨끗한 상태에서 시작했다. 현재 백엔드 `.env`는 로컬 DB를 가리킨다(주소의 호스트만 확인). 저장소에서 백업·덤프 파일을 찾지 못했고, `docker compose ps --format json`은 Docker 데몬 미실행으로 실패했다. 운영 DB나 일정 데이터는 조회·변경하지 않았다.
+- 남은 위험: 운영 DB의 읽기 전용 접속 정보 또는 백업 위치가 없어 기존 일정의 건수·복제 후보·출처를 확인할 수 없다. 원본 선정과 이전 범위는 계속 미결정이다.
+
 ## 2026-11-13 로컬 개발 DB 준비
 
 - 로컬 Docker DB 격리 검증(2026-11-13): `RUN_DB_INTEGRATION=1 yarn.cmd test:e2e --runInBand test/submission-db.e2e-spec.ts` 1건 통과. 승인 전 비공개, 승인 후 공개, 합방 참여자 동일 ID, 수정·취소·시간 미정, 공식 분류 권한, 반려를 확인했다. `yarn.cmd test --runInBand schedule-date-boundary.spec.ts` 2건 통과. KST 자정 경계와 잘못된 날짜 거부를 확인했다. 임시 `chzzk_schedule_integration_` DB가 남지 않았음을 조회했다. 프런트 화면 자동화와 운영 데이터 복원은 수행하지 않았다.
