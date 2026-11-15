@@ -189,6 +189,22 @@
     {
       "name": "양아지",
       "channelId": "3e825479d71ead63b76de0d6f6b5dc83"
+    },
+    {
+      "name": "두뭉",
+      "channelId": "6f1ae352c78027acf1bd92589fc44128"
+    },
+    {
+      "name": "바테",
+      "channelId": "182fdb958165fa6ad4d4ec1e9e4da3c0"
+    },
+    {
+      "name": "꽁아",
+      "channelId": "a2ca7c452c731c2e871ab1c1ecbd90c5"
+    },
+    {
+      "name": "키유",
+      "channelId": "a3ceb9179d99be8d1e63b3e911fcd16b"
     }
   ]
 }

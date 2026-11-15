@@ -30,7 +30,16 @@ async function main() {
       }
     }
     const missing = starterStreamers.filter((item) => !existing.some((saved) => saved.name === item.name));
-    if (process.argv.includes('--apply') && missing.length) await collection.insertMany(missing);
+    if (process.argv.includes('--apply')) {
+      if (missing.length) await collection.insertMany(missing);
+      await client.db(dbName).collection('streamer_candidate').bulkWrite(
+        verified.channels.map(({ name, channelId }) => ({ updateOne: {
+          filter: { title: name },
+          update: { $set: { status: 'channel-verified', channelId, verifiedSource: verified.source,
+            verifiedAt: verified.retrievedAt } },
+        } })),
+      );
+    }
     process.stdout.write(JSON.stringify({ existing: existing.length, missing: missing.length,
       inserted: process.argv.includes('--apply') ? missing.length : 0, names: missing.map((item) => item.name) }) + '\n');
   } finally {

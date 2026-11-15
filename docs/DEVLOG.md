@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 후보 채널 추가 확인
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 공개 페이지에 표시된 이름과 채널 ID를 후보 제목과 대조해 두뭉·바테·꽁아·키유 4명을 로컬 스트리머 목록에 추가했다. 시드 적용 시 제목이 정확히 일치하는 후보에 `channel-verified`와 채널 ID·출처를 기록하도록 했다.
+- 검증: 로컬 DB에 4건을 추가한 뒤 재실행 시 추가 0건. `streamer` 51건, `streamer_candidate` 1,659건 중 `channel-verified` 36건, 일정 0건을 확인했다. 운영 DB는 변경하지 않았다.
+- 남은 위험: 후보 1,623건은 채널 ID를 확인하지 못했다. [치지직 공식 채널 API](https://chzzk.gitbook.io/chzzk/chzzk-api/channel)는 채널 ID 조회를 제공하지만 이름 검색은 제공하지 않아 후보 이름만으로 전체를 검증할 수 없다. 공개 랭킹의 채널명은 변경될 수 있다.
+
 ## 2026-11-16 나무위키 분류 전체 후보 수집
 - 변경 파일: `apps/back-end/data/namu-chzzk-streamer-candidates.json`, `apps/back-end/data/namu-chzzk-subcategories.json`, `apps/back-end/data/namu-chzzk-subcategory-titles.json`, `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/scripts/import-namu-streamer-candidates.js`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 원본 나무위키는 열리지 않아 [나무모에 미러의 치지직 스트리머 분류](https://www.namu.moe/w/분류:치지직%20스트리머)와 파트너·챌린저·프로게이머 하위 분류를 읽었다. 첫 번째 사용자 링크의 `치지직#s-17`은 스트리머 명단이 아니라 외부 링크 절이다. 분류의 문서 제목과 하위 분류 제목을 합쳐 중복 없는 후보 1,659개를 수집했다. 미러는 원문에 [CC BY-NC-SA 2.0 KR](https://creativecommons.org/licenses/by-nc-sa/2.0/kr/) 표시를 한다. 이 저장소의 JSON은 문서 제목만 추출·중복 제거한 것이다.
 - 데이터 구분: 후보 제목은 채널 ID나 현재 활동 여부를 보증하지 않는다. 로컬 `streamer_candidate`에만 `unverified`로 저장하고 공개 조회에서는 제외한다. [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 현재 이름·채널 링크를 대조한 47명만 로컬 `streamer`에 등록했다. 공식 방송 분류나 예정 일정은 생성하지 않았다.
