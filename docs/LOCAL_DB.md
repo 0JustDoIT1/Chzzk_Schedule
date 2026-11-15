@@ -13,10 +13,11 @@ DB_Name=Chzzk
 
 새로 만든 로컬 DB는 처음에 빈 상태다. 기존 Atlas 데이터가 자동으로 이동하지 않는다. 기존 데이터나 백업을 찾으면 별도 백업을 먼저 확보하고, 격리된 DB에 복원해 문서 수와 ID를 확인한 다음 가져온다. 기존 복제 일정은 자동 병합하지 않는다. 이 로컬 DB를 운영 DB나 격리 테스트 DB로 사용하지 않는다.
 
-개발용 기본 스트리머 7명은 `apps/back-end`에서 다음 명령으로 추가할 수 있다. 같은 이름·채널 링크는 다시 추가하지 않으며, 충돌이 있으면 중단한다. `--apply`를 빼면 변경 없이 추가 예정 목록만 확인한다. 이 목록은 로컬 개발용이며 예정 일정을 생성하지 않는다.
+개발용 기본 스트리머 47명과 나무위키 분류 문서 제목 후보 1,659개는 `apps/back-end`에서 다음 명령으로 추가할 수 있다. 이름과 치지직 채널 링크를 대조한 47명만 공개 스트리머 컬렉션에 들어간다. 나머지는 공개 API가 읽지 않는 `streamer_candidate` 컬렉션에 `unverified` 상태로 보관한다. `--apply`를 빼면 변경 없이 추가 예정 건수를 확인한다. 재실행은 중복을 추가하지 않는다. 이 목록은 로컬 개발용이며 예정 일정을 생성하지 않는다.
 
 ```powershell
 $env:DB_URI='mongodb://127.0.0.1:27017'
 $env:DB_Name='Chzzk'
 node scripts/seed-starter-streamers.js --apply
+node scripts/import-namu-streamer-candidates.js --apply
 ```

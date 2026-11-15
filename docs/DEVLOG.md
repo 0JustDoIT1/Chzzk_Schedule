@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 나무위키 분류 전체 후보 수집
+- 변경 파일: `apps/back-end/data/namu-chzzk-streamer-candidates.json`, `apps/back-end/data/namu-chzzk-subcategories.json`, `apps/back-end/data/namu-chzzk-subcategory-titles.json`, `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/scripts/import-namu-streamer-candidates.js`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 원본 나무위키는 열리지 않아 [나무모에 미러의 치지직 스트리머 분류](https://www.namu.moe/w/분류:치지직%20스트리머)와 파트너·챌린저·프로게이머 하위 분류를 읽었다. 첫 번째 사용자 링크의 `치지직#s-17`은 스트리머 명단이 아니라 외부 링크 절이다. 분류의 문서 제목과 하위 분류 제목을 합쳐 중복 없는 후보 1,659개를 수집했다. 미러는 원문에 [CC BY-NC-SA 2.0 KR](https://creativecommons.org/licenses/by-nc-sa/2.0/kr/) 표시를 한다. 이 저장소의 JSON은 문서 제목만 추출·중복 제거한 것이다.
+- 데이터 구분: 후보 제목은 채널 ID나 현재 활동 여부를 보증하지 않는다. 로컬 `streamer_candidate`에만 `unverified`로 저장하고 공개 조회에서는 제외한다. [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 현재 이름·채널 링크를 대조한 47명만 로컬 `streamer`에 등록했다. 공식 방송 분류나 예정 일정은 생성하지 않았다.
+- 검증: 두 스크립트 `node --check` 통과. 적용 후 재실행 추가 0건. 로컬 DB 조회 결과 후보 1,659건 모두 `unverified`, 공개 스트리머 47건, 일정 0건. 운영 DB는 변경하지 않았다.
+- 남은 위험: 미러의 일부 하위 분류는 갱신 시점이 서로 다르고 위키 문서 제목은 방송명과 다를 수 있다. 후보를 공개 데이터로 옮기려면 각 치지직 채널 링크와 이름을 확인해야 한다. 기존 Atlas 일정의 복원 문제는 해결되지 않았다.
+
 ## 2026-11-16 로컬 기본 스트리머 목록
 - 변경 파일: `apps/back-end/scripts/seed-starter-streamers.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 사용자가 제공한 나무위키 두 페이지는 브라우징 도구에서 열리지 않았다. 대신 [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 스트리머 이름과 각 상세 페이지의 치지직 채널 링크를 대조해 7명(한동숙, 랄로, 침착맨, 탬탬버린, 아야츠노 유니, 풍월량, 다주)의 로컬 개발용 시작 목록을 만들었다. 이는 공식 방송 분류나 예정 일정의 근거가 아니다.
 - 검증: `node --check scripts/seed-starter-streamers.js` 통과. 변경 전 미리보기 7건, 로컬 `Chzzk` DB에 7건 추가, 재실행 추가 0건. 조회 결과 `streamer` 7건, `schedule` 0건이다. 운영 DB는 변경하지 않았다.
