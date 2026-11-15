@@ -1,5 +1,10 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 로컬 기본 스트리머 목록
+- 변경 파일: `apps/back-end/scripts/seed-starter-streamers.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 사용자가 제공한 나무위키 두 페이지는 브라우징 도구에서 열리지 않았다. 대신 [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 스트리머 이름과 각 상세 페이지의 치지직 채널 링크를 대조해 7명(한동숙, 랄로, 침착맨, 탬탬버린, 아야츠노 유니, 풍월량, 다주)의 로컬 개발용 시작 목록을 만들었다. 이는 공식 방송 분류나 예정 일정의 근거가 아니다.
+- 검증: `node --check scripts/seed-starter-streamers.js` 통과. 변경 전 미리보기 7건, 로컬 `Chzzk` DB에 7건 추가, 재실행 추가 0건. 조회 결과 `streamer` 7건, `schedule` 0건이다. 운영 DB는 변경하지 않았다.
+- 남은 위험: 나무위키의 해당 목록과 직접 대조하지 못했다. 채널명 변경·목록 누락 가능성이 있어 이 목록을 운영 데이터로 옮기기 전 최신 채널 정보를 다시 확인해야 한다.
+
 ## 2026-11-16 전체 테스트 게이트와 프런트 Hook 경고 정리
 - 변경 파일: `apps/front-end/src/lib/hook/useCalendar.ts`, `apps/front-end/src/lib/hook/useMember.ts`, `apps/front-end/src/lib/hook/useScheduleInput.ts`, `docs/DEVLOG.md`. 달력의 파생 날짜 계산을 해당 effect 안으로 옮기고, 회원 목록 초기화 함수를 안정화해 Hook 의존성 경고를 해소했다.
 - 검증: 백엔드 `yarn.cmd test --runInBand` 3개 스위트·11건 통과. 격리 로컬 MongoDB에서 `RUN_DB_INTEGRATION=1 yarn.cmd test:e2e --runInBand` 3개 스위트·5건 통과. 임시 통합 DB 목록은 비어 있다. 프런트 `yarn.cmd build` 통과했고 기존 Hook 의존성 경고 2건은 사라졌다.

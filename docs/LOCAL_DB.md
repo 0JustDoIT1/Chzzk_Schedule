@@ -11,4 +11,12 @@ DB_Name=Chzzk
 
 이후 `yarn.cmd dev`를 실행하고 `http://localhost:3000`에서 화면을 확인한다. `docker compose ps`로 DB 상태를, `docker compose logs mongodb`로 DB 로그를 확인할 수 있다. `docker compose stop mongodb`는 데이터를 보존한다. `docker compose down --volumes`는 볼륨과 로컬 데이터를 삭제하므로 사용하지 않는다.
 
-새 로컬 DB는 빈 상태다. 기존 Atlas 데이터가 자동으로 이동하지 않는다. 기존 데이터나 백업을 찾으면 별도 백업을 먼저 확보하고, 격리된 DB에 복원해 문서 수와 ID를 확인한 다음 가져온다. 기존 복제 일정은 자동 병합하지 않는다. 이 로컬 DB를 운영 DB나 격리 테스트 DB로 사용하지 않는다.
+새로 만든 로컬 DB는 처음에 빈 상태다. 기존 Atlas 데이터가 자동으로 이동하지 않는다. 기존 데이터나 백업을 찾으면 별도 백업을 먼저 확보하고, 격리된 DB에 복원해 문서 수와 ID를 확인한 다음 가져온다. 기존 복제 일정은 자동 병합하지 않는다. 이 로컬 DB를 운영 DB나 격리 테스트 DB로 사용하지 않는다.
+
+개발용 기본 스트리머 7명은 `apps/back-end`에서 다음 명령으로 추가할 수 있다. 같은 이름·채널 링크는 다시 추가하지 않으며, 충돌이 있으면 중단한다. `--apply`를 빼면 변경 없이 추가 예정 목록만 확인한다. 이 목록은 로컬 개발용이며 예정 일정을 생성하지 않는다.
+
+```powershell
+$env:DB_URI='mongodb://127.0.0.1:27017'
+$env:DB_Name='Chzzk'
+node scripts/seed-starter-streamers.js --apply
+```
