@@ -23,15 +23,6 @@ const useCalendar = () => {
   const calendarRows = 7;
   const calendarColumns = 6;
 
-  const daysInMonth = today.daysInMonth();
-  const startDayOfMonth = getStartDate(today, "M");
-
-  const preMonth = today.subtract(1, "M");
-  const endDayOfPreMonth = preMonth.endOf("M");
-
-  const nextMonth = today.add(1, "M");
-  const startDayOfNextMonth = nextMonth.startOf("M");
-
   // Set today by url query
   useEffect(() => {
     if (!dateParam) return;
@@ -41,6 +32,10 @@ const useCalendar = () => {
 
   // Set calendar by today state
   useEffect(() => {
+    const daysInMonth = today.daysInMonth();
+    const startDayOfMonth = getStartDate(today, "M");
+    const endDayOfPreMonth = today.subtract(1, "M").endOf("M");
+    const startDayOfNextMonth = today.add(1, "M").startOf("M");
     const days = Array.from({ length: daysInMonth }, (_, index) =>
       addDate(startDayOfMonth, index, "day")
     );

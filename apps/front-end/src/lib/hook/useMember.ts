@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { TToastType } from "../types/toastType";
 
 export const useMember = (
@@ -23,7 +23,7 @@ export const useMember = (
   const removeMember = (name: string) =>
     setMember((prev) => prev.filter((m) => m !== name));
 
-  const resetMember = () => setMember(initial);
+  const resetMember = useCallback(() => setMember(initial), [initial]);
 
   return { member, setMember, addMember, removeMember, resetMember };
 };

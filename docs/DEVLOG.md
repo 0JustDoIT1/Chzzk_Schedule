@@ -1,5 +1,10 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 전체 테스트 게이트와 프런트 Hook 경고 정리
+- 변경 파일: `apps/front-end/src/lib/hook/useCalendar.ts`, `apps/front-end/src/lib/hook/useMember.ts`, `apps/front-end/src/lib/hook/useScheduleInput.ts`, `docs/DEVLOG.md`. 달력의 파생 날짜 계산을 해당 effect 안으로 옮기고, 회원 목록 초기화 함수를 안정화해 Hook 의존성 경고를 해소했다.
+- 검증: 백엔드 `yarn.cmd test --runInBand` 3개 스위트·11건 통과. 격리 로컬 MongoDB에서 `RUN_DB_INTEGRATION=1 yarn.cmd test:e2e --runInBand` 3개 스위트·5건 통과. 임시 통합 DB 목록은 비어 있다. 프런트 `yarn.cmd build` 통과했고 기존 Hook 의존성 경고 2건은 사라졌다.
+- 남은 위험: 프런트 빌드에 `metadataBase` 미설정과 오래된 Browserslist 데이터 경고가 남아 있다. 브라우저 실화면 검증과 운영 데이터 검증은 아직 수행하지 않았다. 과거 검증 실패 기록은 당시 결과로 아래에 남겨 둔다.
+
 ## 2026-11-16 달력 일정 폭 계산 수정
 - 변경 파일: `apps/front-end/src/lib/components/calendar/calendarScheduleOverlay.tsx`, `docs/DEVLOG.md`. 달력 막대의 폭을 경과 시간의 24시간 단위가 아니라 KST 날짜 수로 계산한다. 종료가 정확히 자정이면 전날까지로 계산하고, 앞 주에서 이어지는 일정은 현재 주의 첫 표시 날짜부터 폭을 잰다.
 - 검증: 프런트 `yarn.cmd build` 통과. 격리 샘플 DB를 연결한 로컬 API에서 11월 29일 자정 종료 일정은 29일에만, 자정을 넘어가는 일정은 29·30일에, 시간 미정 일정은 30일에 조회됨을 확인했다. 서버를 종료하고 샘플 DB를 삭제했다. 기존 React Hook 의존성 경고 2건과 `metadataBase` 경고는 남아 있다.

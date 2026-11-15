@@ -58,8 +58,9 @@ const useScheduleInput = (
   const endAtTime = watch("endAtTime");
   const streamerName = watch("streamerName");
 
+  const initialMembers = useMemo(() => initData?.member ?? [], [initData]);
   const { member, setMember, addMember, removeMember, resetMember } = useMember(
-    initData?.member ?? [],
+    initialMembers,
     showToast,
     streamerName
   );
@@ -75,7 +76,7 @@ const useScheduleInput = (
   // initData가 존재할 경우 form에 반영
   useEffect(() => {
     resetInputValue();
-  }, [initValue]);
+  }, [resetInputValue]);
 
   // // Reset input value when change isOfficial
   // useEffect(() => {
