@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 D-03 월별 경계 격리 DB 검증
+- 변경 파일: `apps/back-end/test/schedule-month-boundary-db.e2e-spec.ts`, `docs/DEVLOG.md`. 월 시작 자정 종료 제외, 월말 자정 종료의 전날 배치, 종료 미정의 시작 날짜 배치를 전체·스트리머 ID·참여자 이름·공식 월별 API에서 검증한다.
+- 검증: 로컬 Docker MongoDB의 임시 `chzzk_schedule_integration_` DB로 `RUN_DB_INTEGRATION=1 yarn.cmd test:e2e --runInBand test/schedule-month-boundary-db.e2e-spec.ts` 1건 통과. `yarn.cmd tsc --noEmit -p tsconfig.json` 통과. 테스트 종료 뒤 임시 DB 목록이 빈 배열임을 확인했다.
+- 테스트 정리: 초기 시험 실행에서 앱 종료 전 DB를 삭제해 인덱스 생성으로 임시 DB 세 개가 다시 생겼다. 종료 순서를 고쳐 재실행하고, 그 세 DB를 확인 후 삭제했다. 로컬 `Chzzk` DB는 변경하지 않았다.
+- 남은 위험: 실제 프런트 화면과 운영 데이터에서의 회귀 검증은 아직 수행하지 않았다.
+
 ## 2026-11-16 D-03 월별 날짜 경계 수정
 - 변경 파일: `apps/back-end/src/schedule/schedule.service.ts`, `apps/back-end/src/schedule/schedule-date-boundary.spec.ts`, `docs/DEVLOG.md`. 월별 전체·스트리머별·공식 조회를 다음 달 시작 직전까지의 반열린 구간으로 맞췄다. 종료 시각이 KST 자정인 일정은 전날까지만 배치하고, 시작·종료 기준값이 같은 종료 미정 일정은 시작 날짜에 남긴다.
 - 검증: `yarn.cmd test --runInBand schedule-date-boundary.spec.ts` 3건 통과, `yarn.cmd tsc --noEmit -p tsconfig.build.json` 통과.
