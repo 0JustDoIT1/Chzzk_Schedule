@@ -12,7 +12,6 @@ import {
   dateToFormatString,
   dateTypeToDate,
   getDayjs,
-  getEndDate,
   getStartDate,
   isBeforeDate,
   isSameDate,
@@ -228,16 +227,16 @@ export class ScheduleService {
   // Get Schedule list by Month
   async getScheduleListByMonth(month: string): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
-    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+    const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
     const scheduleList = await this.scheduleModel
       .find(
         {
           $or: [
-            { startAt: { $gte: startDate, $lte: endDate } },
+            { startAt: { $gte: startDate, $lt: endDate } },
             {
               startAt: { $lt: startDate },
-              endAt: { $gte: startDate },
+              endAt: { $gt: startDate },
             },
           ],
         },
@@ -262,7 +261,7 @@ export class ScheduleService {
     id: string,
   ): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
-    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+    const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
     const scheduleList = await this.scheduleModel
       .find(
@@ -270,10 +269,10 @@ export class ScheduleService {
           $and: [
             {
               $or: [
-                { startAt: { $gte: startDate, $lte: endDate } },
+                { startAt: { $gte: startDate, $lt: endDate } },
                 {
                   startAt: { $lt: startDate },
-                  endAt: { $gte: startDate },
+                  endAt: { $gt: startDate },
                 },
               ],
             },
@@ -301,7 +300,7 @@ export class ScheduleService {
     name: string,
   ): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
-    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+    const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
     const scheduleList = await this.scheduleModel
       .find(
@@ -309,10 +308,10 @@ export class ScheduleService {
           $and: [
             {
               $or: [
-                { startAt: { $gte: startDate, $lte: endDate } },
+                { startAt: { $gte: startDate, $lt: endDate } },
                 {
                   startAt: { $lt: startDate },
-                  endAt: { $gte: startDate },
+                  endAt: { $gt: startDate },
                 },
               ],
             },
@@ -337,7 +336,7 @@ export class ScheduleService {
   // Get Chzzk official Schedule list by Month (치지직 공식 스케줄)
   async getOfficialScheduleListByMonth(month: string): Promise<TMonthSchedule> {
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
-    const endDate = dateTypeToDate(getEndDate(startDate, 'M')); // e.g. 2025-03-31 23:59
+    const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
     const scheduleList = await this.scheduleModel
       .find(
@@ -345,10 +344,10 @@ export class ScheduleService {
           $and: [
             {
               $or: [
-                { startAt: { $gte: startDate, $lte: endDate } },
+                { startAt: { $gte: startDate, $lt: endDate } },
                 {
                   startAt: { $lt: startDate },
-                  endAt: { $gte: startDate },
+                  endAt: { $gt: startDate },
                 },
               ],
             },
@@ -385,12 +384,17 @@ export class ScheduleService {
 
     // 해당 월의 시작일과 종료일
     const startLimit = getDayjs(startDate);
-    const endLimit = getDayjs(endDate);
+    const endLimit = getDayjs(new Date(endDate.getTime() - 1));
 
     for (const schedule of scheduleList) {
       // 현재 스케줄 시작일과 종료일
       const start = getDayjs(schedule.startAt);
-      const end = getDayjs(schedule.endAt);
+      // An exact midnight end belongs to the preceding day. Unknown ends use
+      // the same instant as the start and still belong to the start day.
+      const lastIncluded = schedule.endAt.getTime() > schedule.startAt.getTime()
+        ? new Date(schedule.endAt.getTime() - 1)
+        : schedule.endAt;
+      const end = getDayjs(lastIncluded);
 
       // 기준일 (초기값은 스케줄의 시작일)
       let current = start.clone();

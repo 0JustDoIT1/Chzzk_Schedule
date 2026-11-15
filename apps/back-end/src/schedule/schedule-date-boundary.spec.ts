@@ -34,4 +34,21 @@ describe('ScheduleService KST date boundary', () => {
     await expect(service.getScheduleListByDate('2026-02-30')).rejects.toBeInstanceOf(BadRequestException);
     expect(model.find).not.toHaveBeenCalled();
   });
+
+  it('places exact midnight ends only on the preceding calendar day', () => {
+    const monthEntries = [
+      { _id: 'overnight', startAt: new Date('2026-11-12T14:00:00Z'), endAt: new Date('2026-11-12T15:00:00Z') },
+      { _id: 'unknown-end', startAt: new Date('2026-11-12T15:00:00Z'), endAt: new Date('2026-11-12T15:00:00Z') },
+      { _id: 'month-end', startAt: new Date('2026-11-30T14:00:00Z'), endAt: new Date('2026-11-30T15:00:00Z') },
+    ];
+    const result = service.editScheduleListByMonth(
+      monthEntries as never,
+      new Date('2026-10-31T15:00:00Z'),
+      new Date('2026-11-30T15:00:00Z'),
+    );
+    expect(result['2026-11-12'].list.map((entry) => entry._id)).toEqual(['overnight']);
+    expect(result['2026-11-13'].list.map((entry) => entry._id)).toEqual(['unknown-end']);
+    expect(result['2026-11-30'].list.map((entry) => entry._id)).toEqual(['month-end']);
+    expect(result['2026-12-01']).toBeUndefined();
+  });
 });

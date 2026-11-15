@@ -1,5 +1,10 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 D-03 월별 날짜 경계 수정
+- 변경 파일: `apps/back-end/src/schedule/schedule.service.ts`, `apps/back-end/src/schedule/schedule-date-boundary.spec.ts`, `docs/DEVLOG.md`. 월별 전체·스트리머별·공식 조회를 다음 달 시작 직전까지의 반열린 구간으로 맞췄다. 종료 시각이 KST 자정인 일정은 전날까지만 배치하고, 시작·종료 기준값이 같은 종료 미정 일정은 시작 날짜에 남긴다.
+- 검증: `yarn.cmd test --runInBand schedule-date-boundary.spec.ts` 3건 통과, `yarn.cmd tsc --noEmit -p tsconfig.build.json` 통과.
+- 남은 위험: 실제 화면 자동화와 운영 데이터 기반 회귀 검증은 수행하지 않았다. 로컬 DB는 빈 상태이며 운영 DB 데이터는 확인하지 못했다.
+
 ## 2026-11-16 D-06 데이터 접근 점검
 - 변경 파일: `docs/D06-legacy-schedule-plan.md`, `docs/DEVLOG.md`. 기존 일정 후보 조사를 재개하기 위한 접근 상태와 다음 조사 조건을 기록했다.
 - 검증: Git 작업 폴더가 깨끗한 상태에서 시작했다. 현재 백엔드 `.env`는 로컬 DB를 가리킨다(주소의 호스트만 확인). 저장소에서 백업·덤프 파일을 찾지 못했다. Docker Desktop을 시작해 기존 볼륨의 `Chzzk` DB를 읽기 전용으로 확인했으며 `streamer`, `submissions`, `schedule`은 각각 0건이다. 운영 DB는 조회하지 않았고 데이터 변경도 하지 않았다.
