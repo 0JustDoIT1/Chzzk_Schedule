@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-17 농심 Rb·플러리 채널 연결
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [농심 레드포스 발로란트 팀 방송 안내](https://x.com/nsr_valorant)와 [NS Rb 채널 기록](https://auro.live/creator/chzzk/67c0edbb3127f93271c552d1dc1e5341)으로 `NS Rb`의 ID를 확인했다. [플러리 방송 기록](https://inbangmo.com/viewership/streamer/chzzk/fe558c6d1b8ef3206ac0bc0419f3f564)에서 채널 ID를 확인했다. 본명 연결은 [구상민 문서](https://www.namu.moe/w/구상민(프로게이머))와 [조현수 인터뷰](https://times.seoultech.ac.kr/reports?category=34&idx=19511)를 대조했다.
+- 검증: 후보 감사 결과 연결 320건(이름 일치 229, 문서 구분자 제거 44, 검토한 별칭 47), 대기 1,339건. 로컬 공개 스트리머 2명과 후보 연결 2건을 추가했다. 공식 편성 배너의 다른 방송은 채널을 특정하지 못해 일정 시드를 추가하지 않았다. 운영 DB와 배포 환경은 변경하지 않았다.
+- 남은 위험: 채널 연결이 미래 방송을 뜻하지 않는다. 미연결 파트너 후보 13명은 별칭과 채널 ID의 추가 대조가 필요하다. 되돌릴 때는 이번 2개 채널 ID의 로컬 스트리머 문서와 후보 연결을 개별 검토 후 제거하고 해당 시드 항목을 복원한다.
+
 ## 2026-11-17 한화생명·브리온 파트너 채널 연결
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `apps/back-end/scripts/audit-namu-streamer-candidates.js`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 파트너 쇼케이스](https://chzzk.naver.com/partner)와 [브리온 팀 링크 모음](https://litt.ly/brionaf)의 채널 주소를 대조해 한화생명 4명과 브리온 5명을 시드에 추가했다. 선수 본명 9건은 [한화생명 선수단 보도](https://www.kfm.co.kr/news/2026101270503)와 [브리온 선수단 보도](https://www.kukinews.com/article/print/kuk202603260021)를 대조해 후보 별칭에 연결했다. 개별 채널 확인일을 후보 검증일에 기록하도록 시드를 수정했다.
