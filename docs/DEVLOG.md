@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 활동명 불일치 후보 4명 추가
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 위키 후보의 본명 표기와 방송명을 대조했다. 서현석=소우릎, 김배인=와디드, 정노철=노페, 장현재=던으로 연결했다. [치지직 파트너 페이지](https://chzzk.naver.com/partner)와 [세모랭크 랭킹](https://www.semorank.kr/ranking/chzzk)에서 소우릎의 방송명·채널 ID를, [인방모 와디드](https://inbangmo.com/viewership/streamer/chzzk/bad6d7da33aec001343a51b85a70fcdb)·[노페](https://inbangmo.com/viewership/streamer/chzzk/f20881fce506174330ecb58342c4c70d)의 최근 방송과 ID를, [Cygames 공지](https://shadowverse-wb.com/cht/news/detail/?id=01KZWTFSSMQHP1CHS6JR12A3PG)의 던 채널 링크를 확인했다.
+- 검증: 시드 JSON의 이름·채널 ID 각각 302개가 모두 고유하다. 로컬 DB 적용 전 추가 예정 4건, 적용 결과 4건, 재실행 추가 0건. 로컬 DB `streamer` 303건(별도 PUBG MOBILE Esports KR 포함), `streamer_candidate` 1,659건, `schedule` 11건을 확인했다. `git diff --check` 통과. 운영 DB는 변경하지 않았다.
+- 남은 위험: 본명과 방송명 연결은 위키·외부 공개 자료에 의존한다. 채널 검증과 현재 파트너 자격 검증은 다르며, 예정 일정은 생성하지 않았다.
+
 ## 2026-11-16 파트너 활동명 채널 대조
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 나무위키 파트너 후보의 본명 표기와 방송 활동명을 대조했다. 박의진=운타라, 배준식=뱅, 강형우=캡틴잭, 이성진=큐베, 이창석=갱맘, 김건우=Zeka로 확인하고 [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 현재 채널명·ID를 다시 수집해 6개 채널을 로컬 시드에 추가했다. 본명 대응은 [나무모에 미러의 이성진 문서](https://www.namu.moe/w/이성진(프로게이머)?from=CuVee) 등 각 인물 문서를 참고했다. 이미 등록된 활동명 채널은 중복 추가하지 않았다.

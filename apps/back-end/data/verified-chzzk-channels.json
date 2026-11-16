@@ -1200,6 +1200,25 @@
     {
       "name": "HLE Zeka",
       "channelId": "a121dab6835c0613dd5f8ef5acd1f155"
+    },
+    {
+      "name": "소우릎",
+      "channelId": "fc00d47a77ed2d1156cd5997eba30310"
+    },
+    {
+      "name": "와디드 Wadid",
+      "channelId": "bad6d7da33aec001343a51b85a70fcdb",
+      "source": "https://inbangmo.com/viewership/streamer/chzzk/bad6d7da33aec001343a51b85a70fcdb"
+    },
+    {
+      "name": "노페",
+      "channelId": "f20881fce506174330ecb58342c4c70d",
+      "source": "https://inbangmo.com/viewership/streamer/chzzk/f20881fce506174330ecb58342c4c70d"
+    },
+    {
+      "name": "던",
+      "channelId": "dc740d5bb5680666b6bf2ebc58a8203f",
+      "source": "https://shadowverse-wb.com/cht/news/detail/?id=01KZWTFSSMQHP1CHS6JR12A3PG"
     }
   ]
 }
