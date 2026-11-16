@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 보이는 라디오볼 예정 방송 추가
+
+- 변경 파일: `apps/back-end/scripts/seed-november-2026-featured-broadcasts.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 홈](https://chzzk.naver.com/)의 11월 20일 13시 삼성 이승민 출연 안내를 로컬 일정에 추가했다. [보이는 라디오볼 채널 기록](https://auro.live/creator/chzzk/96d54ad9945bd57c0bd1e7b3342f5985)으로 이름과 채널 ID를 대조했다. 종료 시각은 미정이며 `isOfficial: false`로 저장했다.
+- 검증: 적용 전 채널·일정 각각 1건 추가 예정, 적용 후 재실행 추가 0건. 로컬 공개 스트리머 314명, 일정 25건. 운영 DB는 변경하지 않았다.
+- 남은 위험: 치지직 홈의 홍보 편성이 바뀔 수 있다. 치지직컵의 ‘치지직게임’ 바로가기 ID는 아직 확인하지 못해 기존 11건의 채널 연결은 변경하지 않았다.
+
 ## 2026-11-16 치지직 홈의 예정 방송 2건 추가
 
 - 변경 파일: `apps/back-end/scripts/seed-november-2026-featured-broadcasts.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 홈](https://chzzk.naver.com/)에 시작 시각이 표시된 11월 18일 18시 `워독스 삼국개전 2기`와 22시 `생방송 음악이 좋다 EP.03`을 로컬 일정에 추가했다. 첫 방송은 [대회 안내](https://inbangmo.com/live-events/samguk-gaejeon-2)에서 주최자 개복어를, 둘째 방송은 [우키팝 채널의 이전 회차 기록](https://inbangmo.com/viewership/streamer/chzzk/e137dc6f45461108f4e22d205f639218)에서 방송 채널을 대조했다. 두 건 모두 `isOfficial: false`이며 종료 시각은 미정이다. 우키팝 채널 1건도 로컬 스트리머 목록에 추가했다.

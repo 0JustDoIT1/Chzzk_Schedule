@@ -1,4 +1,4 @@
-// One-time local seed for two upcoming broadcasts advertised on the CHZZK home page.
+// One-time local seed for upcoming broadcasts advertised on the CHZZK home page.
 // Run with local DB_URI and DB_Name=Chzzk; pass --apply to write.
 const { MongoClient } = require('mongodb');
 
@@ -16,6 +16,12 @@ const events = [
     title: '생방송 음악이 좋다 EP.03 김간지X우키팝의 음악계 소식',
     startAt: '2026-11-18T22:00:00+09:00', category: 'content',
     channelSource: 'https://inbangmo.com/viewership/streamer/chzzk/e137dc6f45461108f4e22d205f639218',
+  },
+  {
+    name: '보이는 라디오볼', channelId: '96d54ad9945bd57c0bd1e7b3342f5985',
+    title: '보이는 라디오볼 | 삼성 이승민 초대석',
+    startAt: '2026-11-20T13:00:00+09:00', category: 'content',
+    channelSource: 'https://auro.live/creator/chzzk/96d54ad9945bd57c0bd1e7b3342f5985',
   },
 ];
 
