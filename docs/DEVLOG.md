@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 프로게이머 본명 후보 2명 추가
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 위키 후보의 최인석(프로게이머)=인섹, 최재원(프로게이머)=크랭크를 대조하고 [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 각 방송명과 채널 ID를 확인해 로컬 시드에 추가했다. 이미 등록된 피닉스박 등은 중복 추가하지 않았다.
+- 검증: 시드 적용 전 추가 예정 2건, 적용 결과 2건, 재실행 추가 0건. 로컬 DB `streamer` 305건(별도 PUBG MOBILE Esports KR 포함), `streamer_candidate` 1,659건, `schedule` 11건을 확인했다. `git diff --check` 통과. 운영 DB는 변경하지 않았다.
+- 남은 위험: 본명과 활동명 연결은 위키 문서에 의존한다. 현재 파트너 자격과 미래 일정은 이 채널 확인만으로 확정하지 않았다.
+
 ## 2026-11-16 활동명 불일치 후보 4명 추가
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 위키 후보의 본명 표기와 방송명을 대조했다. 서현석=소우릎, 김배인=와디드, 정노철=노페, 장현재=던으로 연결했다. [치지직 파트너 페이지](https://chzzk.naver.com/partner)와 [세모랭크 랭킹](https://www.semorank.kr/ranking/chzzk)에서 소우릎의 방송명·채널 ID를, [인방모 와디드](https://inbangmo.com/viewership/streamer/chzzk/bad6d7da33aec001343a51b85a70fcdb)·[노페](https://inbangmo.com/viewership/streamer/chzzk/f20881fce506174330ecb58342c4c70d)의 최근 방송과 ID를, [Cygames 공지](https://shadowverse-wb.com/cht/news/detail/?id=01KZWTFSSMQHP1CHS6JR12A3PG)의 던 채널 링크를 확인했다.
