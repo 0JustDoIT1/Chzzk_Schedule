@@ -27,7 +27,8 @@ focus_ids = [None, '4de764d9dad3b25602284be6db3ac647',
              '4e10683fd32d6fb6d38924cb9bf483a3',
              '6a09c296e5e12ad5ed67e053f8cc98d5',
              '0ebd72e9b5d1c25b6746add4f5653dc8',
-             'a3ceb9179d99be8d1e63b3e911fcd16b']
+             'a3ceb9179d99be8d1e63b3e911fcd16b',
+             'ec2b611d28ad529208b3bfe0265062de']
 pattern = re.compile(r'\\"rank\\":(\d+),\\"channelName\\":\\"([^\\"]+)\\",\\"channelId\\":\\"([a-f0-9]{32})\\"')
 found = {}
 for focus in focus_ids:
@@ -47,6 +48,21 @@ for cid, (rank, name) in found.items():
         matches.append({'name': name, 'channelId': cid, 'rank': rank})
 matches.sort(key=lambda row: row['rank'])
 print('new exact matches', len(matches))
+if '--suggest' in sys.argv:
+    from difflib import SequenceMatcher
+    partner_titles = next(category['titles'] for category in sub['categories']
+                          if category['name'] == '치지직 파트너 스트리머')
+    suggestions = []
+    for title in partner_titles:
+        if title in known_names or title.removesuffix('(인터넷 방송인)') in known_names:
+            continue
+        base_name = title.removesuffix('(인터넷 방송인)')
+        candidates = sorted(((SequenceMatcher(None, base_name, name).ratio(), rank, name, cid)
+                             for cid, (rank, name) in found.items() if cid not in known_ids),
+                            reverse=True)
+        if candidates and candidates[0][0] >= 0.5:
+            suggestions.append((title, *candidates[0]))
+    print('partner suggestions', json.dumps(suggestions, ensure_ascii=False, indent=2))
 if '--apply' in sys.argv:
     verified['channels'].extend({'name': row['name'], 'channelId': row['channelId']} for row in matches)
     verified_path.write_text(json.dumps(verified, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

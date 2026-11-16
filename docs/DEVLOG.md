@@ -135,3 +135,10 @@ D-06 원본 선정·이전 검토안은 [별도 문서](./D06-legacy-schedule-pl
 - 검증: 수집 스크립트 재실행 시 새 일치 0건. 로컬 DB에서 스트리머 시드를 세 차례 적용해 신규 74명, 101명, 38명을 추가했고, 최종 `streamer` 265건(PUBG MOBILE Esports KR 1건 포함), 후보 1,659건, 일정 11건을 확인했다. 후보 중 `channel-verified`는 211건이다. 운영 DB는 변경하지 않았다.
 - 남은 위험: 랭킹은 치지직 운영 주체가 아닌 제3자 서비스이며 채널명과 활동 상태가 변할 수 있다. 공개 목록은 로컬 개발 DB에만 적용됐다. 나머지 후보는 채널 연결을 추가 확인해야 한다.
 
+# 2026-11-16 남은 랭킹 구간·별칭 대조
+
+- 변경 파일: `apps/back-end/scripts/collect-semorank-candidates.py`, `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [세모랭크 치지직 팔로워 랭킹](https://www.semorank.kr/ranking/chzzk)의 451~500위 구간을 추가 대조해 나무위키 후보와 이름이 맞는 16개 채널을 확인했다. 별칭 3건은 별도로 확인했다: `김정민(게임 해설가)` ↔ `김정민 해변킴`([나무위키 미러](https://www.namu.moe/w/김정민(게임%20해설가)), [치지직 채널](https://chzzk.naver.com/368ca51e82c85583e059fe669ef0f028)), `미치르 메르헨` ↔ `미치르`([나무위키 미러](https://www.namu.moe/w/미치르%20메르헨), [치지직 채널](https://chzzk.naver.com/390efc6c5186f85427b2d61297a9d4ed)), `영듀` ↔ `0영듀0`([본인 채널 안내](https://www.twitchmetrics.net/c/773078501-0due_), [치지직 채널](https://chzzk.naver.com/732f6f16d20991243ec3f2d7afed8821)).
+- 일정 재확인: [치지직 e스포츠 화면](https://m.chzzk.naver.com/home/esports)에 기존 PUBG MOBILE Esports KR 예정 일정 11건의 제목·시작 시각이 그대로 표시됐다. 종료 시각은 여전히 표시되지 않는다. 로컬 일정 변경은 없었다.
+- 검증: 로컬 시드 적용으로 신규 스트리머 19건 추가. 로컬 DB 조회 결과 공개 스트리머 284건(PUBG 채널 1건 포함), 후보 1,659건, `channel-verified` 후보 226건, 일정 11건. 운영 DB는 변경하지 않았다.
+- 남은 위험: 제3자 랭킹과 채널명은 변경될 수 있다. 다른 후보의 동명이인·별칭은 자동 연결하지 않았다.
+
