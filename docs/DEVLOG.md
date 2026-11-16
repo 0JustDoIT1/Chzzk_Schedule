@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 NCRC 결승 중계 채널 조사
+
+- 변경 파일: `docs/DEVLOG.md`. [NCRC 공식 대회 안내](https://robotics.connect.or.kr/info)는 11월 22일 결승·시상식의 치지직 라이브 중계를 명시하고, [치지직 홈](https://chzzk.naver.com/)은 시작 시각 13:00을 표시한다. [기존 NCRC 영상](https://chzzk.naver.com/video/15867426)에서 채널명이 `NCRC`인 것도 확인했다.
+- 검증: 공개 페이지와 검색 결과에서 채널 주소의 32자리 ID를 확인하지 못했다. 로컬 DB와 시드는 변경하지 않았다. 공개 스트리머 315명, 일정 26건을 유지한다.
+- 남은 위험: NCRC라는 이름만으로 채널 ID를 추정하면 다른 채널에 연결될 수 있다. 공식 채널 링크가 확인되면 11월 22일 13시 일정의 중복 여부를 먼저 대조하고 추가해야 한다.
+
 ## 2026-11-16 느바라디오 예정 방송 추가
 
 - 변경 파일: `apps/back-end/scripts/seed-november-2026-featured-broadcasts.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 홈](https://chzzk.naver.com/)과 [편성표](https://chzzk.naver.com/schedule?filterId=world_championship_2026)의 11월 17일 20시 방송을 로컬 일정에 추가했다. [치지직 채널](https://m.chzzk.naver.com/live/2a2aab576b0b60b408a21a3a6b370276)에서 채널 이름과 ID를 대조했다. 종료 시각은 미정이며 `isOfficial: false`로 저장했다.
