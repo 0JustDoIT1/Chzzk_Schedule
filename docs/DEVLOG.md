@@ -1,5 +1,17 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 치지직컵 공식 일정 로컬 입력
+
+- 변경 파일: `apps/back-end/scripts/seed-chzzk-cup-2026-schedules.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직의 2026 치지직컵 페이지](https://chzzk.naver.com/event/chzzkcup2026)에 명시된 팀 드래프트, 풀리그, 그룹배틀, 플레이오프 진출전, 플레이오프의 11개 방송 날짜를 로컬 DB에 입력했다. [치지직 홈](https://chzzk.naver.com/)에 명시된 팀 드래프트 11월 19일 17시만 시작 시각을 설정하고, 다른 10건은 시간 미정으로 기록했다. 공식 페이지가 치지직 공식 채널 생중계를 명시하므로 공식 일정으로 분류했다. 공식 채널 ID는 [공식 채널 링크가 기재된 안내](https://puzzk.tistory.com/entry/치지직-치스티벌-폴가이즈-스트리머-대전-다주쌍베마왕루야따효니)와 [현재 방송 기록](https://inbangmo.com/viewership/streamer/chzzk/c42cd75ec4855a9edf204a407c3c1dd2)을 대조했다. 종료 시각은 공지되지 않았다.
+- 검증: 시드 `node --check` 통과. 적용 전 11건 예정, 적용 후 재실행 추가 0건. 저장된 11건의 KST 날짜, 시각 확인 상태, 공식 분류를 대조해 1건만 시각 확인·10건은 시간 미정임을 확인했다. 로컬 DB 전체 일정 22건, 공개 스트리머 312명. 운영 DB는 변경하지 않았다.
+- 남은 위험: 대회 일정과 시작 시각은 변경될 수 있다. 공식 스크림 11월 20~21일은 공식 페이지에 날짜만 있고 생중계 여부가 분명하지 않아 추가하지 않았다. 참가자별 합방 일정은 만들지 않았다.
+
+## 2026-11-16 농심 레드포스 채널 일괄 대조
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [농심 레드포스 영상 설명에 기재된 채널 링크](https://allsnsrank.com/youtube/video/mUhEv4EqMTU)에서 Kingen·Sponge·Scout·Calix·Diable·Lehends 6명의 이름과 채널 ID를 확인했다. 위키 파트너 후보의 황성훈·배영준·이예찬·선현빈·남대근·손시우와 연결해 로컬 목록에 추가했다. 이 출처는 선수 명단과 링크 확인용이며 미래 일정 근거는 아니다.
+- 검증: 적용 전 추가 예정 6건, 적용 후 재실행 추가 0건. 시드 JSON의 310개 이름과 채널 ID가 각각 모두 고유하다. 로컬 DB 전체 공개 스트리머 312명(기본 시드 310명과 별도 PUBG·치지직 공식 채널), 후보 1,659건. 운영 DB는 변경하지 않았다.
+- 남은 위험: 위키 본명 후보 전체를 채널 ID로 확정할 수 없다. 팀 소속과 파트너 자격은 바뀔 수 있으므로 이번 채널 등록만으로 공식 방송·현재 파트너 자격을 확정하지 않는다.
+
 ## 2026-11-16 프로게이머 본명 후보 2명 추가
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 위키 후보의 최인석(프로게이머)=인섹, 최재원(프로게이머)=크랭크를 대조하고 [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 각 방송명과 채널 ID를 확인해 로컬 시드에 추가했다. 이미 등록된 피닉스박 등은 중복 추가하지 않았다.
