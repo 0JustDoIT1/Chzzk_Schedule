@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 파트너 활동명 채널 대조
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 나무위키 파트너 후보의 본명 표기와 방송 활동명을 대조했다. 박의진=운타라, 배준식=뱅, 강형우=캡틴잭, 이성진=큐베, 이창석=갱맘, 김건우=Zeka로 확인하고 [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 현재 채널명·ID를 다시 수집해 6개 채널을 로컬 시드에 추가했다. 본명 대응은 [나무모에 미러의 이성진 문서](https://www.namu.moe/w/이성진(프로게이머)?from=CuVee) 등 각 인물 문서를 참고했다. 이미 등록된 활동명 채널은 중복 추가하지 않았다.
+- 검증: 적용 전 추가 예정 6건, 적용 후 재실행 추가 0건. 로컬 DB에서 `streamer` 299건(기본 298건과 별도 PUBG MOBILE Esports KR 1건), `streamer_candidate` 1,659건, `schedule` 11건을 확인했다. `git diff --check` 통과. 운영 DB는 변경하지 않았다.
+- 남은 위험: 위키의 파트너 목록과 현재 파트너 자격은 별도로 확정하지 않았다. 시드는 채널만 등록하고 미래 일정을 추정 생성하지 않는다. 공개 랭킹의 채널명과 순위는 바뀔 수 있다.
+
 ## 2026-11-16 후보 채널 추가 확인
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [세모랭크 치지직 랭킹](https://www.semorank.kr/ranking/chzzk)의 공개 페이지에 표시된 이름과 채널 ID를 후보 제목과 대조해 두뭉·바테·꽁아·키유 4명을 로컬 스트리머 목록에 추가했다. 시드 적용 시 제목이 정확히 일치하는 후보에 `channel-verified`와 채널 ID·출처를 기록하도록 했다.
