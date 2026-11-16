@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 전체 위키 후보 대조
+
+- 변경 파일: `apps/back-end/data/verified-namu-title-aliases.json`, `apps/back-end/scripts/audit-namu-streamer-candidates.js`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 1,659개 위키 문서 제목을 검증된 채널 310개와 한 번에 대조했다. 정확한 이름 229개, 문서 구분자 제거 44개, 검토한 본명·활동명 연결 35개로 후보 308개에 채널 ID를 연결했다. [대조 기록](./STREAMER-CATALOG-AUDIT.md)에 파트너 분류의 미연결 26개를 기록했다. 후보는 공개 API가 읽지 않는다.
+- 검증: 감사 스크립트가 308개 연결·1,351개 대기를 계산했다. 로컬 시드를 재적용한 뒤 후보 컬렉션의 `channel-verified` 308건과 `unverified` 1,351건을 확인하고 모든 연결의 채널 ID를 시드와 대조했다. 공개 스트리머 312건, 일정 22건은 변경되지 않았다. 운영 DB는 변경하지 않았다.
+- 남은 위험: 별칭 35개는 사람과 활동명 연결을 개별 검토한 목록이며 현재 파트너 자격을 뜻하지 않는다. 나머지 후보를 일괄 공개하면 이름 충돌·과거 채널 혼입 위험이 있다. 채널 ID가 확인되면 출처를 추가하고 감사를 다시 실행해야 한다.
+
 ## 2026-11-16 치지직컵 공식 일정 로컬 입력
 
 - 변경 파일: `apps/back-end/scripts/seed-chzzk-cup-2026-schedules.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직의 2026 치지직컵 페이지](https://chzzk.naver.com/event/chzzkcup2026)에 명시된 팀 드래프트, 풀리그, 그룹배틀, 플레이오프 진출전, 플레이오프의 11개 방송 날짜를 로컬 DB에 입력했다. [치지직 홈](https://chzzk.naver.com/)에 명시된 팀 드래프트 11월 19일 17시만 시작 시각을 설정하고, 다른 10건은 시간 미정으로 기록했다. 공식 페이지가 치지직 공식 채널 생중계를 명시하므로 공식 일정으로 분류했다. 공식 채널 ID는 [공식 채널 링크가 기재된 안내](https://puzzk.tistory.com/entry/치지직-치스티벌-폴가이즈-스트리머-대전-다주쌍베마왕루야따효니)와 [현재 방송 기록](https://inbangmo.com/viewership/streamer/chzzk/c42cd75ec4855a9edf204a407c3c1dd2)을 대조했다. 종료 시각은 공지되지 않았다.

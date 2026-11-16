@@ -2,6 +2,7 @@
 // Usage: DB_URI=mongodb://127.0.0.1:27017 DB_Name=Chzzk node scripts/seed-starter-streamers.js [--apply]
 const { MongoClient } = require('mongodb');
 const verified = require('../data/verified-chzzk-channels.json');
+const { matchingCandidates } = require('./audit-namu-streamer-candidates');
 
 const starterStreamers = verified.channels.map(({ name, channelId }) => ({
   name,
@@ -10,6 +11,7 @@ const starterStreamers = verified.channels.map(({ name, channelId }) => ({
 }));
 
 async function main() {
+  const candidateMatches = matchingCandidates().matches;
   const uri = process.env.DB_URI;
   const dbName = process.env.DB_Name;
   if (!['mongodb://127.0.0.1:27017', 'mongodb://localhost:27017'].includes(uri) || dbName !== 'Chzzk') {
@@ -33,10 +35,11 @@ async function main() {
     if (process.argv.includes('--apply')) {
       if (missing.length) await collection.insertMany(missing);
       await client.db(dbName).collection('streamer_candidate').bulkWrite(
-        verified.channels.map(({ name, channelId, source }) => ({ updateOne: {
-          filter: { title: name },
-          update: { $set: { status: 'channel-verified', channelId, verifiedSource: source ?? verified.source,
-            verifiedAt: verified.retrievedAt } },
+        candidateMatches.map(({ title, channel, matchType }) => ({ updateOne: {
+          filter: { title },
+          update: { $set: { status: 'channel-verified', channelId: channel.channelId,
+            verifiedSource: channel.source ?? verified.source, verifiedAt: verified.retrievedAt,
+            channelMatchType: matchType } },
         } })),
       );
     }
