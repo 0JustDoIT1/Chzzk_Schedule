@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-17 농심 발로란트 선수 채널 4개 연결
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [농심 발로란트 팀 방송 안내](https://www.sotwe.com/hashtag/NONGSHIM?lang=en)에 게시된 채널 링크 중 Francis와 Xross의 단축 링크가 가리키는 32자리 치지직 ID를 확인했다. [NS Ivy 채널 기록](https://auro.live/creator/chzzk/3aef9a2c159402f5912509d583d46733)과 [NS UdoTan 치지직 채널](https://chzzk.naver.com/live/8831d52ab67ff94acde26137e6617452)을 함께 대조했다. [농심 공식 선수단](https://ns-esports.com/page/24)의 Francis 김무빈, Ivy 박성현, Xross 정환 연결을 후보 별칭에 기록했다.
+- 검증: 후보 감사 결과 연결 323건(이름 일치 229, 문서 구분자 제거 44, 검토한 별칭 50), 대기 1,336건. 로컬 공개 스트리머 4명과 후보 연결 3건을 추가했다. 공개 스트리머 330명, 예정 일정 26건이다. 운영 DB와 배포 환경은 변경하지 않았다.
+- 남은 위험: 팀 방송 공지는 방송 편성 시각을 특정하지 않아 일정을 생성하지 않았다. 미연결 파트너 후보 10명의 채널 ID는 추가 확인이 필요하다. 되돌릴 때는 이 4개 채널 ID의 로컬 스트리머 문서와 3건의 후보 연결을 개별 검토 후 제거하고 해당 시드 항목을 복원한다.
+
 ## 2026-11-17 농심 Rb·플러리 채널 연결
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [농심 레드포스 발로란트 팀 방송 안내](https://x.com/nsr_valorant)와 [NS Rb 채널 기록](https://auro.live/creator/chzzk/67c0edbb3127f93271c552d1dc1e5341)으로 `NS Rb`의 ID를 확인했다. [플러리 방송 기록](https://inbangmo.com/viewership/streamer/chzzk/fe558c6d1b8ef3206ac0bc0419f3f564)에서 채널 ID를 확인했다. 본명 연결은 [구상민 문서](https://www.namu.moe/w/구상민(프로게이머))와 [조현수 인터뷰](https://times.seoultech.ac.kr/reports?category=34&idx=19511)를 대조했다.
