@@ -1292,6 +1292,18 @@
       "retrievedAt": "2026-11-17"
     },
     {
+      "name": "NS RYUK",
+      "channelId": "52fd9d4ab4e019ada4576ae81a2ec78e",
+      "source": "https://chzzk.naver.com/52fd9d4ab4e019ada4576ae81a2ec78e",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "NS Exito",
+      "channelId": "a55bc2d4504e55c5f248a80475e60538",
+      "source": "https://streamrecorder.io/it/czk/a55bc2d4504e55c5f248a80475e60538",
+      "retrievedAt": "2026-11-17"
+    },
+    {
       "name": "소우릎",
       "channelId": "fc00d47a77ed2d1156cd5997eba30310"
     },

@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-17 농심 FC 온라인 선수 채널 연결
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 FC 온라인 선수 채널](https://chzzk.naver.com/home/esports/FCO)에서 NS RYUK와 NS Exito를 확인했다. [RYUK 치지직 채널](https://chzzk.naver.com/52fd9d4ab4e019ada4576ae81a2ec78e)과 [Exito 방송 기록](https://streamrecorder.io/it/czk/a55bc2d4504e55c5f248a80475e60538)의 32자리 ID를 시드에 추가하고, [농심 공식 선수단](https://www.ns-esports.com/page/28)에서 확인한 윤창근·윤형석 본명 후보를 연결했다.
+- 검증: 후보 감사 결과 연결 325건(이름 일치 229, 문서 구분자 제거 44, 검토한 별칭 52), 대기 1,334건. 로컬 공개 스트리머 2명과 후보 연결 2건을 추가했다. 공개 스트리머 332명, 일정 26건이다. 운영 DB와 배포 환경은 변경하지 않았다.
+- 남은 위험: 채널 연결은 미래 방송 예정을 보장하지 않는다. 남은 파트너 후보 8명은 채널 ID 또는 문서 제목의 정확성을 더 확인해야 한다. 되돌릴 때 이번 2개 채널 ID의 로컬 스트리머 문서와 후보 연결을 개별 검토 후 제거하고 해당 시드 항목을 복원한다.
+
 ## 2026-11-17 농심 발로란트 선수 채널 4개 연결
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [농심 발로란트 팀 방송 안내](https://www.sotwe.com/hashtag/NONGSHIM?lang=en)에 게시된 채널 링크 중 Francis와 Xross의 단축 링크가 가리키는 32자리 치지직 ID를 확인했다. [NS Ivy 채널 기록](https://auro.live/creator/chzzk/3aef9a2c159402f5912509d583d46733)과 [NS UdoTan 치지직 채널](https://chzzk.naver.com/live/8831d52ab67ff94acde26137e6617452)을 함께 대조했다. [농심 공식 선수단](https://ns-esports.com/page/24)의 Francis 김무빈, Ivy 박성현, Xross 정환 연결을 후보 별칭에 기록했다.
