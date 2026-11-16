@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 카린 후보 문서 제목 연결
+
+- 변경 파일: `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 파트너 분류에서 잘못 수집된 `분룬:카린(인터넷 방송인)`을 [카린 문서](https://d.namu.moe/w/카린(인터넷%20방송인))와 [소속사 채널 공지](https://charonuniverse.com/notice/?bmode=view&idx=166543713)의 동일 채널 ID를 확인해 기존 카린 채널에 연결했다. 공개 스트리머는 중복 생성하지 않았다.
+- 검증: 후보 감사 결과 연결 309건(정확한 이름 229, 문서 구분자 제거 44, 검토한 연결 36), 대기 1,350건, 파트너 분류 연결 164건. 로컬 후보 DB에 감사를 적용했다. 공개 스트리머 315명과 일정 26건은 변경하지 않았다. 운영 DB는 변경하지 않았다.
+- 남은 위험: 잘못 수집된 제목은 후보 원본에 남아 있다. 연결은 검토한 별칭으로만 적용되며 현재 파트너 자격이나 향후 방송 예정을 뜻하지 않는다.
+
 ## 2026-11-16 NCRC 결승 중계 채널 조사
 
 - 변경 파일: `docs/DEVLOG.md`. [NCRC 공식 대회 안내](https://robotics.connect.or.kr/info)는 11월 22일 결승·시상식의 치지직 라이브 중계를 명시하고, [치지직 홈](https://chzzk.naver.com/)은 시작 시각 13:00을 표시한다. [기존 NCRC 영상](https://chzzk.naver.com/video/15867426)에서 채널명이 `NCRC`인 것도 확인했다.
