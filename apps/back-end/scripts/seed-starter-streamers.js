@@ -33,9 +33,9 @@ async function main() {
     if (process.argv.includes('--apply')) {
       if (missing.length) await collection.insertMany(missing);
       await client.db(dbName).collection('streamer_candidate').bulkWrite(
-        verified.channels.map(({ name, channelId }) => ({ updateOne: {
+        verified.channels.map(({ name, channelId, source }) => ({ updateOne: {
           filter: { title: name },
-          update: { $set: { status: 'channel-verified', channelId, verifiedSource: verified.source,
+          update: { $set: { status: 'channel-verified', channelId, verifiedSource: source ?? verified.source,
             verifiedAt: verified.retrievedAt } },
         } })),
       );

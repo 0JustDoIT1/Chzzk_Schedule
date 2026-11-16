@@ -41,6 +41,11 @@ for focus in focus_ids:
     for rank, name, cid in rows:
         if cid not in found or rank < found[cid][0]:
             found[cid] = (rank, name)
+if '--lookup' in sys.argv:
+    wanted = sys.argv[sys.argv.index('--lookup') + 1:]
+    print('lookup', json.dumps([{'rank': rank, 'name': name, 'channelId': cid}
+                               for cid, (rank, name) in found.items()
+                               if any(term in name for term in wanted)], ensure_ascii=False))
 
 matches = []
 for cid, (rank, name) in found.items():
