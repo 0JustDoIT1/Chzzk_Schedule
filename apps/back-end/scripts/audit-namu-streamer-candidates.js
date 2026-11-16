@@ -55,7 +55,7 @@ async function main() {
         updateOne: {
           filter: { title },
           update: { $set: { status: 'channel-verified', channelId: channel.channelId,
-            verifiedSource: channel.source ?? verified.source, verifiedAt: verified.retrievedAt,
+            verifiedSource: channel.source ?? verified.source, verifiedAt: channel.retrievedAt ?? verified.retrievedAt,
             channelMatchType: matchType } },
         },
       })));

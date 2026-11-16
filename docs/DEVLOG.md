@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-17 한화생명·브리온 파트너 채널 연결
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `apps/back-end/scripts/audit-namu-streamer-candidates.js`, `apps/back-end/scripts/seed-starter-streamers.js`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 파트너 쇼케이스](https://chzzk.naver.com/partner)와 [브리온 팀 링크 모음](https://litt.ly/brionaf)의 채널 주소를 대조해 한화생명 4명과 브리온 5명을 시드에 추가했다. 선수 본명 9건은 [한화생명 선수단 보도](https://www.kfm.co.kr/news/2026101270503)와 [브리온 선수단 보도](https://www.kukinews.com/article/print/kuk202603260021)를 대조해 후보 별칭에 연결했다. 개별 채널 확인일을 후보 검증일에 기록하도록 시드를 수정했다.
+- 검증: 후보 감사 결과 연결 318건(이름 일치 229, 문서 구분자 제거 44, 검토한 별칭 45), 대기 1,341건. 로컬 DB에 스트리머 9명과 후보 연결 9건을 적용했다. 공개 스트리머 324명, 예정 일정 26건. 운영 DB와 배포 환경은 변경하지 않았다.
+- 남은 위험: 채널 연결은 향후 방송 일정이나 지속 활동을 보장하지 않는다. 미연결 파트너 후보 15명은 인물과 채널 ID를 추가 대조해야 한다. 새 시드의 되돌림은 이번에 추가한 9개 채널 ID의 로컬 `streamer` 문서와 해당 후보 연결 9건을 개별 검토 후 제거하고 시드를 이전 버전으로 복원하는 방식이다.
+
 ## 2026-11-16 카린 후보 문서 제목 연결
 
 - 변경 파일: `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. 파트너 분류에서 잘못 수집된 `분룬:카린(인터넷 방송인)`을 [카린 문서](https://d.namu.moe/w/카린(인터넷%20방송인))와 [소속사 채널 공지](https://charonuniverse.com/notice/?bmode=view&idx=166543713)의 동일 채널 ID를 확인해 기존 카린 채널에 연결했다. 공개 스트리머는 중복 생성하지 않았다.

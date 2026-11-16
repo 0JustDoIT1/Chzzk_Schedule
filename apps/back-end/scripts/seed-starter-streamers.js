@@ -38,7 +38,7 @@ async function main() {
         candidateMatches.map(({ title, channel, matchType }) => ({ updateOne: {
           filter: { title },
           update: { $set: { status: 'channel-verified', channelId: channel.channelId,
-            verifiedSource: channel.source ?? verified.source, verifiedAt: verified.retrievedAt,
+            verifiedSource: channel.source ?? verified.source, verifiedAt: channel.retrievedAt ?? verified.retrievedAt,
             channelMatchType: matchType } },
         } })),
       );

@@ -1202,6 +1202,60 @@
       "channelId": "a121dab6835c0613dd5f8ef5acd1f155"
     },
     {
+      "name": "HLE Delight",
+      "channelId": "59dd654778e3d0b64f3ed06baece805d",
+      "source": "https://chzzk.naver.com/59dd654778e3d0b64f3ed06baece805d",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "HLE Gumayusi",
+      "channelId": "7c802d1b0c9c2872952fe1b8ba4268bd",
+      "source": "https://chzzk.naver.com/7c802d1b0c9c2872952fe1b8ba4268bd/about",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "HLE Kanavi",
+      "channelId": "e351edbd85f1ebf4eb975c21179a4c43",
+      "source": "https://chzzk.naver.com/e351edbd85f1ebf4eb975c21179a4c43/about",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "HLE Zeus",
+      "channelId": "434479f33f8afd5bb5089ce4b61babe4",
+      "source": "https://streamrecorder.io/czk/434479f33f8afd5bb5089ce4b61babe4",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "한진 브리온 캐스팅",
+      "channelId": "37d4cf307027dc7474357b6c0d98f748",
+      "source": "https://litt.ly/brionaf",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "한진 브리온 기드온",
+      "channelId": "07cc727b7001fbc0d7491b57180c29a1",
+      "source": "https://litt.ly/brionaf",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "한진 브리온 남궁",
+      "channelId": "f2a7843599c11e809046eb5d6720ce6a",
+      "source": "https://litt.ly/brionaf",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "한진 브리온 로머",
+      "channelId": "57b81c7f224d53221eac898330066927",
+      "source": "https://litt.ly/brionaf",
+      "retrievedAt": "2026-11-17"
+    },
+    {
+      "name": "한진 브리온 테디",
+      "channelId": "37b461a8196dc63fd729db0251f8cdb0",
+      "source": "https://litt.ly/brionaf",
+      "retrievedAt": "2026-11-17"
+    },
+    {
       "name": "소우릎",
       "channelId": "fc00d47a77ed2d1156cd5997eba30310"
     },
