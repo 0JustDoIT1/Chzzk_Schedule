@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-16 느바라디오 예정 방송 추가
+
+- 변경 파일: `apps/back-end/scripts/seed-november-2026-featured-broadcasts.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 홈](https://chzzk.naver.com/)과 [편성표](https://chzzk.naver.com/schedule?filterId=world_championship_2026)의 11월 17일 20시 방송을 로컬 일정에 추가했다. [치지직 채널](https://m.chzzk.naver.com/live/2a2aab576b0b60b408a21a3a6b370276)에서 채널 이름과 ID를 대조했다. 종료 시각은 미정이며 `isOfficial: false`로 저장했다.
+- 검증: 적용 전 채널·일정 각각 1건 추가 예정, 적용 후 재실행 추가 0건. 시드 구문 검사 통과. 로컬 공개 스트리머 315명, 일정 26건. 운영 DB는 변경하지 않았다.
+- 남은 위험: 공식 홍보 편성은 변경될 수 있다. NCRC 결승은 11월 22일 13시 생중계가 확인되지만 채널 ID를 확인하지 못해 추가하지 않았다.
+
 ## 2026-11-16 보이는 라디오볼 예정 방송 추가
 
 - 변경 파일: `apps/back-end/scripts/seed-november-2026-featured-broadcasts.js`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 홈](https://chzzk.naver.com/)의 11월 20일 13시 삼성 이승민 출연 안내를 로컬 일정에 추가했다. [보이는 라디오볼 채널 기록](https://auro.live/creator/chzzk/96d54ad9945bd57c0bd1e7b3342f5985)으로 이름과 채널 ID를 대조했다. 종료 시각은 미정이며 `isOfficial: false`로 저장했다.

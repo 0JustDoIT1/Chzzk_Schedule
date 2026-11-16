@@ -23,6 +23,13 @@ const events = [
     startAt: '2026-11-20T13:00:00+09:00', category: 'content',
     channelSource: 'https://auro.live/creator/chzzk/96d54ad9945bd57c0bd1e7b3342f5985',
   },
+  {
+    name: '느바라디오 NBA RADIO', channelId: '2a2aab576b0b60b408a21a3a6b370276',
+    title: '고품격 NBA 전문방송 | 느바라디오',
+    startAt: '2026-11-17T20:00:00+09:00', category: 'content',
+    channelSource: 'https://m.chzzk.naver.com/live/2a2aab576b0b60b408a21a3a6b370276',
+    eventSource: 'https://chzzk.naver.com/schedule?filterId=world_championship_2026',
+  },
 ];
 
 async function main() {
