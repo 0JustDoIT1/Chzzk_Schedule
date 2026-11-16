@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-17 김호러 채널과 본명 후보 연결
+
+- 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [김호러의 공개 채널 소개](https://tubemon.io/channel/UC_SEr4lmF69s2-c6oY1qkoA)에 본명 김효종과 치지직 채널 주소가 함께 기재되어 있고, [방송 기록](https://inbangmo.com/viewership/streamer/chzzk/59cbccdbc14b3e9318e0d477a35c64c5)에서 동일한 32자리 ID와 최근 방송을 확인했다. `김효종(1992)` 후보를 김호러 채널에 연결했다.
+- 검증: 후보 감사 결과 연결 326건(이름 일치 229, 문서 구분자 제거 44, 검토한 별칭 53), 대기 1,333건. 로컬 공개 스트리머 1명과 후보 연결 1건을 추가했다. 공개 스트리머 333명, 일정 26건이다. 운영 DB와 배포 환경은 변경하지 않았다.
+- 남은 위험: 남은 파트너 후보 7명은 채널 ID 또는 문서 제목의 정확성을 더 확인해야 한다. 이번 채널 연결은 미래 방송 예정을 뜻하지 않는다. 되돌릴 때는 이번 채널 ID의 로컬 스트리머 문서와 후보 연결을 개별 검토 후 제거하고 해당 시드 항목을 복원한다.
+
 ## 2026-11-17 농심 FC 온라인 선수 채널 연결
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [치지직 FC 온라인 선수 채널](https://chzzk.naver.com/home/esports/FCO)에서 NS RYUK와 NS Exito를 확인했다. [RYUK 치지직 채널](https://chzzk.naver.com/52fd9d4ab4e019ada4576ae81a2ec78e)과 [Exito 방송 기록](https://streamrecorder.io/it/czk/a55bc2d4504e55c5f248a80475e60538)의 32자리 ID를 시드에 추가하고, [농심 공식 선수단](https://www.ns-esports.com/page/28)에서 확인한 윤창근·윤형석 본명 후보를 연결했다.
