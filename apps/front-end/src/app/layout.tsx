@@ -27,7 +27,10 @@ const gmarket = localFont({
   ],
 });
 
-export const metadata: Metadata = DEFAULT_META_TAG;
+export const metadata: Metadata = {
+  ...DEFAULT_META_TAG,
+  ...(process.env.SITE_URL ? { metadataBase: new URL(process.env.SITE_URL) } : {}),
+};
 
 const RootLayout = ({
   children,
