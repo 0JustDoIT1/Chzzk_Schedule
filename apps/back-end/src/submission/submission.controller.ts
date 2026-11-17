@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { AdminWriteGuard } from '../lib/guards/admin-write.guard';
 import { ScheduleSubmissionDto, StreamerSubmissionDto, RejectSubmissionDto, ApproveSubmissionDto } from './submission.dto';
 import { SubmissionService } from './submission.service';
@@ -8,13 +9,13 @@ export class SubmissionController {
   constructor(private readonly service: SubmissionService) {}
 
   @Post('streamer')
-  submitStreamer(@Body() input: StreamerSubmissionDto) {
-    return this.service.submitStreamer(input);
+  submitStreamer(@Body() input: StreamerSubmissionDto, @Req() request: Request) {
+    return this.service.submitStreamer(input, request.ip || request.socket.remoteAddress || 'unknown');
   }
 
   @Post('schedule')
-  submitSchedule(@Body() input: ScheduleSubmissionDto) {
-    return this.service.submitSchedule(input);
+  submitSchedule(@Body() input: ScheduleSubmissionDto, @Req() request: Request) {
+    return this.service.submitSchedule(input, request.ip || request.socket.remoteAddress || 'unknown');
   }
 
   @Get('pending')
@@ -30,13 +31,13 @@ export class SubmissionController {
 
   @Patch(':id/approve')
   @UseGuards(AdminWriteGuard)
-  approve(@Param('id') id: string, @Body() input: ApproveSubmissionDto) {
-    return this.service.approve(id, input);
+  approve(@Param('id') id: string, @Body() input: ApproveSubmissionDto, @Req() request: Request & { adminActor?: string }) {
+    return this.service.approve(id, input, request.adminActor);
   }
 
   @Patch(':id/reject')
   @UseGuards(AdminWriteGuard)
-  reject(@Param('id') id: string, @Body() input: RejectSubmissionDto) {
-    return this.service.reject(id, input.reason);
+  reject(@Param('id') id: string, @Body() input: RejectSubmissionDto, @Req() request: Request & { adminActor?: string }) {
+    return this.service.reject(id, input.reason, request.adminActor);
   }
 }

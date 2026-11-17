@@ -1,52 +1,42 @@
 "use server";
 
-import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const cookieName = "admin_review";
-const loginWindowMs = 15 * 60 * 1000;
-const maxLoginFailures = 5;
-let failedLogins = 0;
-let blockedUntil = 0;
-let firstFailureAt = 0;
-const sign = (expires: string) => createHmac("sha256", process.env.ADMIN_REVIEW_PASSWORD ?? "").update(`review-session-v1:${expires}`).digest("hex");
 
 export async function isAdminSession() {
-  const password = process.env.ADMIN_REVIEW_PASSWORD;
-  if (!password || password.length < 32) return false;
-  const value = (await cookies()).get(cookieName)?.value ?? "";
-  const [expires, signature] = value.split(".");
-  if (!expires || !signature || !/^\d+$/.test(expires) || Number(expires) < Date.now()) return false;
-  const expected = Buffer.from(sign(expires));
-  const actual = Buffer.from(signature);
-  return actual.length === expected.length && timingSafeEqual(actual, expected);
+  const token = (await cookies()).get(cookieName)?.value;
+  const baseUrl = process.env.API_URL;
+  if (!token || !baseUrl) return false;
+  try {
+    const response = await fetch(`${baseUrl}/v1/admin/session`, {
+      headers: { Authorization: `Bearer ${token}` }, cache: "no-store",
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
 }
 
 export async function login(formData: FormData) {
-  const now = Date.now();
-  if (blockedUntil > now) redirect("/admin?error=locked");
-  if ((blockedUntil && blockedUntil <= now) || (firstFailureAt && now - firstFailureAt > loginWindowMs)) {
-    failedLogins = 0;
-    blockedUntil = 0;
-    firstFailureAt = 0;
-  }
-  const expected = process.env.ADMIN_REVIEW_PASSWORD ?? "";
-  const supplied = String(formData.get("password") ?? "");
-  const a = Buffer.from(supplied);
-  const b = Buffer.from(expected);
-  if (expected.length < 32 || a.length !== b.length || !timingSafeEqual(a, b)) {
-    if (!firstFailureAt) firstFailureAt = now;
-    failedLogins += 1;
-    if (failedLogins >= maxLoginFailures) blockedUntil = now + loginWindowMs;
+  const baseUrl = process.env.API_URL;
+  if (!baseUrl) redirect("/admin?error=1");
+  let response: Response;
+  try {
+    response = await fetch(`${baseUrl}/v1/admin/login`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: String(formData.get("username") ?? ""), password: String(formData.get("password") ?? "") }),
+      cache: "no-store",
+    });
+  } catch {
     redirect("/admin?error=1");
   }
-  failedLogins = 0;
-  blockedUntil = 0;
-  firstFailureAt = 0;
-  const expires = String(Date.now() + 8 * 60 * 60 * 1000);
-  (await cookies()).set(cookieName, `${expires}.${sign(expires)}`, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/admin", maxAge: 60 * 60 * 8 });
+  if (response.status === 429) redirect("/admin?error=locked");
+  if (!response.ok) redirect("/admin?error=1");
+  const { token } = await response.json() as { token: string };
+  (await cookies()).set(cookieName, token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/admin", maxAge: 60 * 60 * 8 });
   redirect("/admin");
 }
 
@@ -57,7 +47,7 @@ export async function logout() {
 
 export async function review(formData: FormData) {
   if (!(await isAdminSession())) redirect("/admin");
-  const token = process.env.ADMIN_WRITE_TOKEN;
+  const token = (await cookies()).get(cookieName)?.value;
   const baseUrl = process.env.API_URL;
   const id = String(formData.get("id") ?? "");
   const action = String(formData.get("action") ?? "");

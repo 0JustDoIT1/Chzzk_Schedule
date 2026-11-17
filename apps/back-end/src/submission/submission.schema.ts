@@ -22,6 +22,9 @@ export class Submission {
   @Prop({ required: true, unique: true, type: String })
   receiptToken: string;
 
+  @Prop({ type: String })
+  fingerprint?: string;
+
   @Prop({ type: Types.ObjectId, ref: 'Schedule' })
   targetScheduleId?: Types.ObjectId;
 
@@ -30,6 +33,13 @@ export class Submission {
 
   @Prop({ type: Date })
   reviewedAt?: Date;
+
+  @Prop({ type: String })
+  reviewedBy?: string;
 }
 
 export const SubmissionSchema = SchemaFactory.createForClass(Submission);
+SubmissionSchema.index(
+  { fingerprint: 1 },
+  { unique: true, partialFilterExpression: { fingerprint: { $type: 'string' }, status: { $in: ['pending', 'processing'] } } },
+);

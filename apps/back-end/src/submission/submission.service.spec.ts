@@ -8,11 +8,17 @@ describe('SubmissionService', () => {
     findOneAndUpdate: jest.fn(),
     findOne: jest.fn(),
   };
+  const limits = { findOneAndUpdate: jest.fn() };
   const streamers = { create: jest.fn() };
   const schedules = { create: jest.fn(), updateSchedule: jest.fn(), getScheduleById: jest.fn() };
-  const service = new SubmissionService(submissions as any, streamers as any, schedules as any);
+  const service = new SubmissionService(submissions as any, limits as any, streamers as any, schedules as any);
 
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    process.env.ADMIN_WRITE_TOKEN = 'a'.repeat(32);
+    process.env.ADMIN_REVIEW_USERNAME = 'reviewer';
+    limits.findOneAndUpdate.mockReturnValue({ exec: async () => ({ count: 1 }) });
+  });
 
   it('stores a streamer report without publishing it', async () => {
     submissions.create.mockResolvedValue({ receiptToken: 'receipt-token', status: 'pending' });
@@ -25,12 +31,30 @@ describe('SubmissionService', () => {
     expect(streamers.create).not.toHaveBeenCalled();
   });
 
+  it('limits requests before writing a report', async () => {
+    limits.findOneAndUpdate.mockReturnValue({ exec: async () => { throw { code: 11000 }; } });
+    await expect(service.submitStreamer({
+      streamer: { name: 'test', chzzkLink: 'https://chzzk.naver.com/test', isOfficial: false, tag: [] },
+      sourceUrl: 'https://chzzk.naver.com/test',
+    }, '127.0.0.1')).rejects.toThrow('제보 요청이 많습니다');
+    expect(submissions.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a duplicate pending report', async () => {
+    submissions.create.mockRejectedValue({ code: 11000 });
+    await expect(service.submitStreamer({
+      streamer: { name: 'test', chzzkLink: 'https://chzzk.naver.com/test', isOfficial: false, tag: [] },
+      sourceUrl: 'https://chzzk.naver.com/test',
+    }, '127.0.0.1')).rejects.toThrow('동일한 제보');
+  });
+
   it('publishes only after approval', async () => {
-    const report = { id: 'report-id', kind: 'streamer', payload: { name: 'test', chzzkLink: 'https://chzzk.naver.com/test', isOfficial: false }, status: 'processing', sourceUrl: 'https://chzzk.naver.com/test', save: jest.fn() };
+    const report = { id: 'report-id', kind: 'streamer', payload: { name: 'test', chzzkLink: 'https://chzzk.naver.com/test', isOfficial: false }, status: 'processing', sourceUrl: 'https://chzzk.naver.com/test', reviewedBy: '', save: jest.fn() };
     submissions.findOneAndUpdate.mockReturnValue({ exec: async () => report });
     await service.approve('507f1f77bcf86cd799439011', { payload: report.payload, sourceUrl: report.sourceUrl, officialConfirmed: false });
     expect(streamers.create).toHaveBeenCalledWith(report.payload);
     expect(report.status).toBe('approved');
+    expect(report.reviewedBy).toBe('reviewer');
     expect(report.save).toHaveBeenCalled();
   });
 

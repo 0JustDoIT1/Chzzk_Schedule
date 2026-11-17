@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { StreamerModule } from './streamer/streamer.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { SubmissionModule } from './submission/submission.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SubmissionModule } from './submission/submission.module';
     StreamerModule,
     ScheduleModule,
     SubmissionModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

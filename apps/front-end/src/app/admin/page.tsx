@@ -1,4 +1,5 @@
 import { isAdminSession, login, logout, review } from "./actions";
+import { cookies } from "next/headers";
 
 type Submission = {
   _id: string;
@@ -16,14 +17,16 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     return <main className="mx-auto max-w-md p-8"><h1 className="mb-4 text-2xl">관리자 검수</h1>
       {error && <p role="alert" className="mb-4 text-red-700">{error === "locked" ? "로그인 시도가 많아 잠시 후 다시 시도해 주세요." : "로그인 정보를 확인해 주세요."}</p>}
       <form action={login} className="flex flex-col gap-3">
+        <label htmlFor="username">관리자 계정</label>
+        <input id="username" name="username" type="text" autoComplete="username" required className="rounded border p-2" />
         <label htmlFor="password">관리자 비밀번호</label>
-        <input id="password" name="password" type="password" required className="rounded border p-2" />
+        <input id="password" name="password" type="password" autoComplete="current-password" required className="rounded border p-2" />
         <button className="rounded bg-brandMain p-2 text-white">로그인</button>
       </form>
     </main>;
   }
 
-  const token = process.env.ADMIN_WRITE_TOKEN;
+  const token = (await cookies()).get("admin_review")?.value;
   const baseUrl = process.env.API_URL;
   if (!token || !baseUrl) return <main className="p-8">관리자 API 설정이 필요합니다.</main>;
   const response = await fetch(`${baseUrl}/v1/submissions/pending`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });

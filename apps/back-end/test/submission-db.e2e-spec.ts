@@ -3,11 +3,12 @@ import { randomBytes } from 'node:crypto';
 import { Test } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { MongooseModule, getConnectionToken } from '@nestjs/mongoose';
-import { Connection } from 'mongoose';
+import { Connection, Types } from 'mongoose';
 import request from 'supertest';
 import { StreamerModule } from '../src/streamer/streamer.module';
 import { ScheduleModule } from '../src/schedule/schedule.module';
 import { SubmissionModule } from '../src/submission/submission.module';
+import { AdminModule } from '../src/admin/admin.module';
 
 const run = process.env.RUN_DB_INTEGRATION === '1' ? describe : describe.skip;
 
@@ -16,6 +17,8 @@ run('Submission with isolated Mongo database', () => {
   let connection: Connection;
   const dbName = `chzzk_schedule_integration_${randomBytes(8).toString('hex')}`;
   const originalToken = process.env.ADMIN_WRITE_TOKEN;
+  const originalReviewer = process.env.ADMIN_REVIEW_USERNAME;
+  const originalPassword = process.env.ADMIN_REVIEW_PASSWORD;
   const token = randomBytes(32).toString('hex');
 
   beforeAll(async () => {
@@ -23,12 +26,15 @@ run('Submission with isolated Mongo database', () => {
     const uri = process.env.DB_URI ?? line?.slice('DB_URI='.length);
     if (!uri) throw new Error('DB_URI is required for isolated DB integration test');
     process.env.ADMIN_WRITE_TOKEN = token;
+    process.env.ADMIN_REVIEW_USERNAME = 'integration-reviewer';
+    process.env.ADMIN_REVIEW_PASSWORD = 'p'.repeat(32);
     const module = await Test.createTestingModule({
       imports: [
         MongooseModule.forRoot(uri, { dbName, serverSelectionTimeoutMS: 10000, retryAttempts: 0 }),
         StreamerModule,
         ScheduleModule,
         SubmissionModule,
+        AdminModule,
       ],
     }).compile();
     app = module.createNestApplication();
@@ -36,6 +42,8 @@ run('Submission with isolated Mongo database', () => {
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
     await app.init();
     connection = app.get<Connection>(getConnectionToken());
+    await connection.model('Submission').init();
+    await connection.model('SubmissionLimit').init();
   }, 30000);
 
   afterAll(async () => {
@@ -45,6 +53,10 @@ run('Submission with isolated Mongo database', () => {
     if (app) await app.close();
     if (originalToken === undefined) delete process.env.ADMIN_WRITE_TOKEN;
     else process.env.ADMIN_WRITE_TOKEN = originalToken;
+    if (originalReviewer === undefined) delete process.env.ADMIN_REVIEW_USERNAME;
+    else process.env.ADMIN_REVIEW_USERNAME = originalReviewer;
+    if (originalPassword === undefined) delete process.env.ADMIN_REVIEW_PASSWORD;
+    else process.env.ADMIN_REVIEW_PASSWORD = originalPassword;
   }, 30000);
 
   it('keeps reports private until approval, then publishes a streamer', async () => {
@@ -64,6 +76,7 @@ run('Submission with isolated Mongo database', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ payload: pending.body[0].payload, sourceUrl: pending.body[0].sourceUrl, officialConfirmed: false })
       .expect(200);
+    expect((await connection.collection('submissions').findOne({ _id: new Types.ObjectId(id) }))?.reviewedBy).toBe('service-token');
     await request(app.getHttpServer()).get(`/v1/streamer/name/${name}`).expect(200);
     await request(app.getHttpServer()).get(`/v1/submissions/${report.body.id}/status`)
       .expect(200, { id: report.body.id, status: 'approved' });
@@ -227,5 +240,50 @@ run('Submission with isolated Mongo database', () => {
     await request(app.getHttpServer()).get(`/v1/submissions/${rejected.body.id}/status`)
       .expect(200, { id: rejected.body.id, status: 'rejected' });
     await request(app.getHttpServer()).get('/v1/streamer/name/rejected').expect(404);
+  });
+
+  it('blocks a pending duplicate and limits reports from one IP', async () => {
+    await connection.collection('submission_limits').deleteMany({});
+    const base = `limit-${randomBytes(4).toString('hex')}`;
+    const report = (name: string) => ({
+      streamer: { name, chzzkLink: `https://chzzk.naver.com/${name}`, isOfficial: false },
+      sourceUrl: `https://chzzk.naver.com/${name}`,
+    });
+    await request(app.getHttpServer()).post('/v1/submissions/streamer').send(report(base)).expect(201);
+    await request(app.getHttpServer()).post('/v1/submissions/streamer').send({
+      ...report(base), sourceUrl: `https://chzzk.naver.com/${base}?source=other`,
+    }).expect(409);
+    for (let index = 1; index < 9; index++) {
+      await request(app.getHttpServer()).post('/v1/submissions/streamer').send(report(`${base}-${index}`)).expect(201);
+    }
+    await request(app.getHttpServer()).post('/v1/submissions/streamer').send(report(`${base}-blocked`)).expect(429);
+  });
+
+  it('authenticates one account and shares login failure limits', async () => {
+    await connection.collection('submission_limits').deleteMany({});
+    const success = await request(app.getHttpServer()).post('/v1/admin/login')
+      .send({ username: 'integration-reviewer', password: 'p'.repeat(32) }).expect(201);
+    await request(app.getHttpServer()).get('/v1/admin/session')
+      .set('Authorization', `Bearer ${success.body.token}`).expect(200, { valid: true });
+    await request(app.getHttpServer()).get('/v1/admin/session')
+      .set('Authorization', 'Bearer invalid').expect(401);
+    const name = `account-${randomBytes(4).toString('hex')}`;
+    await request(app.getHttpServer()).post('/v1/submissions/streamer').send({
+      streamer: { name, chzzkLink: `https://chzzk.naver.com/${name}`, isOfficial: false },
+      sourceUrl: `https://chzzk.naver.com/${name}`,
+    }).expect(201);
+    const pending = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${success.body.token}`).expect(200);
+    const report = pending.body.find((item: { payload: { name?: string } }) => item.payload.name === name);
+    await request(app.getHttpServer()).patch(`/v1/submissions/${report._id}/approve`)
+      .set('Authorization', `Bearer ${success.body.token}`)
+      .send({ payload: report.payload, sourceUrl: report.sourceUrl, officialConfirmed: false }).expect(200);
+    expect((await connection.collection('submissions').findOne({ _id: new Types.ObjectId(report._id) }))?.reviewedBy).toBe('integration-reviewer');
+    for (let index = 0; index < 5; index++) {
+      await request(app.getHttpServer()).post('/v1/admin/login')
+        .send({ username: 'integration-reviewer', password: 'wrong' }).expect(401);
+    }
+    await request(app.getHttpServer()).post('/v1/admin/login')
+      .send({ username: 'integration-reviewer', password: 'p'.repeat(32) }).expect(429);
   });
 });

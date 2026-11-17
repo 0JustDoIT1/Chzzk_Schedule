@@ -29,7 +29,9 @@ const StreamerAddView = () => {
     },
     onError: (error: IApiError) => {
       if (error.status === 409) {
-        showToast("error", "이미 등록된 스트리머입니다.");
+        showToast("error", "같은 채널의 제보가 검수 대기 중입니다.");
+      } else if (error.status === 429) {
+        showToast("error", "제보 요청이 많습니다. 잠시 후 다시 시도해 주세요.");
       } else if (error.status === 400) {
         showToast("error", "입력값이 올바르지 않습니다.");
       } else {
