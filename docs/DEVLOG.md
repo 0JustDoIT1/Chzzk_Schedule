@@ -273,3 +273,9 @@ D-06 원본 선정·이전 검토안은 [별도 문서](./D06-legacy-schedule-pl
 - 격리 MongoDB 데이터베이스 `chzzk_receipt_http_test_20261118`에 대기·승인·반려 제보 각 1건을 만들고 운영 빌드의 백엔드·프런트엔드를 각각 3101·3100 포트로 실행했다. 운영 데이터는 사용하지 않았다.
 - HTTP 검증: 대기·승인·반려 토큰은 모두 200 및 예상 상태 문구, 미등록 토큰은 404. 반려 화면에는 정형 사유만 나타났고 비공개 내부 메모는 HTML에 없었다. 모든 응답에서 `X-Robots-Tag: noindex, nofollow`와 `Cache-Control: private, no-store`를 확인했다.
 - 검증 후 두 서버를 종료하고 격리 DB 삭제 및 부재를 확인했으며 MongoDB 컨테이너를 중지했다. 남은 위험: 실제 브라우저 시각·모바일 화면, 배포 환경의 프록시 IP·운영 로그/백업, 배포 주소 기반 metadataBase는 검증 전이다.
+
+# 2026-11-18 프록시 IP 설정
+
+- 변경 파일: `apps/back-end/src/lib/trust-proxy.ts`, `apps/back-end/src/main.ts`, `apps/back-end/test/submission.e2e-spec.ts`, `docs/DEPLOYMENT.md`, `docs/DEVLOG.md`. 명시적인 `TRUST_PROXY_HOPS`(1~5)가 있을 때만 Express의 신뢰 프록시 수를 설정한다. 기본값에서는 전달 IP 헤더를 무시한다.
+- 격리 HTTP 테스트에서 기본 설정은 소켓 IP를, 1홉은 가장 가까운 전달 IP를, 2홉은 그 앞의 IP를 제보 서비스에 전달함을 확인했다. 잘못된 설정값은 시작 오류로 처리한다.
+- 남은 위험: 실제 배포 프록시 토폴로지와 백엔드 직접 접속 차단은 배포 환경에서 확인해야 한다. 공개 주소가 확정되지 않아 `metadataBase`는 설정하지 않았다. 스키마 변경은 없다.
