@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import { createHmac, randomBytes } from 'node:crypto';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import { Submission, SubmissionDocument, SubmissionKind } from './submission.schema';
+import { RejectionCode, Submission, SubmissionDocument, SubmissionKind } from './submission.schema';
 import { StreamerSubmissionDto, ScheduleSubmissionDto, ApproveSubmissionDto } from './submission.dto';
 import { StreamerService } from '../streamer/streamer.service';
 import { ScheduleService } from '../schedule/schedule.service';
@@ -86,9 +86,13 @@ export class SubmissionService {
 
   async getStatus(id: string) {
     if (!/^[0-9a-f]{48}$/i.test(id)) throw new BadRequestException('Invalid receipt token');
-    const submission = await this.submissions.findOne({ receiptToken: id }).select('status').lean().exec();
+    const submission = await this.submissions.findOne({ receiptToken: id }).select('status rejectionCode').lean().exec();
     if (!submission) throw new NotFoundException('Submission not found');
-    return { id, status: submission.status === 'processing' ? 'pending' : submission.status };
+    return {
+      id,
+      status: submission.status === 'processing' ? 'pending' : submission.status,
+      ...(submission.status === 'rejected' && submission.rejectionCode ? { rejectionCode: submission.rejectionCode } : {}),
+    };
   }
 
   async approve(id: string, input: ApproveSubmissionDto, actor?: string) {
@@ -167,13 +171,13 @@ export class SubmissionService {
     return payload;
   }
 
-  async reject(id: string, reason: string, actor?: string) {
+  async reject(id: string, rejectionCode: RejectionCode, reason?: string, actor?: string) {
     const reviewer = actor ?? process.env.ADMIN_REVIEW_USERNAME;
     if (!reviewer) throw new ServiceUnavailableException('Admin account is not configured');
     if (!Types.ObjectId.isValid(id)) throw new BadRequestException('Invalid submission id');
     const updated = await this.submissions.findOneAndUpdate(
       { _id: id, status: 'pending' },
-      { $set: { status: 'rejected', reason, reviewedAt: new Date(), reviewedBy: reviewer } },
+      { $set: { status: 'rejected', rejectionCode, reason: reason ?? '', reviewedAt: new Date(), reviewedBy: reviewer } },
       { new: true },
     ).exec();
     if (!updated) throw new NotFoundException('Pending submission not found');

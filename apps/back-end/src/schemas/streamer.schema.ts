@@ -14,6 +14,9 @@ export class Streamer {
   @Prop({ required: true, unique: true, type: String })
   chzzkLink: string;
 
+  @Prop({ type: String, unique: true, sparse: true })
+  channelId?: string;
+
   @Prop({ required: false, type: () => [String] })
   tag?: string[];
 }

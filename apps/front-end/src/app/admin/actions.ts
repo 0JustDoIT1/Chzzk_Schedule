@@ -80,7 +80,10 @@ export async function review(formData: FormData) {
       changeNote: String(formData.get("changeNote") ?? ""),
     };
   } else {
-    body = { reason: String(formData.get("reason") ?? "") };
+    body = {
+      rejectionCode: String(formData.get("rejectionCode") ?? ""),
+      reason: String(formData.get("reason") ?? ""),
+    };
   }
   const response = await fetch(`${baseUrl}/v1/submissions/${id}/${action}`, {
     method: "PATCH",

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Streamer, StreamerDocument } from 'src/schemas/streamer.schema';
 import { CreateStreamerDto } from './dto/create-streamer.dto';
 import { UserValidate } from './user.validate';
+import { channelIdFromChzzkLink } from './channel-id';
 
 @Injectable()
 export class StreamerService {
@@ -37,17 +38,19 @@ export class StreamerService {
 
   // Create Streamer
   async create(streamerData: CreateStreamerDto): Promise<StreamerDocument> {
+    const channelId = channelIdFromChzzkLink(streamerData.chzzkLink);
     const existStreamer = await this.streamerModel
       .findOne({
         $or: [
           { name: streamerData.name },
           { chzzkLink: streamerData.chzzkLink },
+          ...(channelId ? [{ channelId }] : []),
         ],
       })
       .exec();
     // Validate streamer
     this.userValidate.throwIfUserExists(existStreamer);
 
-    return await this.streamerModel.create(streamerData);
+    return await this.streamerModel.create({ ...streamerData, ...(channelId ? { channelId } : {}) });
   }
 }

@@ -63,7 +63,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         </label>}
         <label className="flex w-full items-center gap-2"><input type="checkbox" name="officialConfirmed" />공식으로 게시하는 경우, 치지직 직접 주최·공식 채널 공지를 확인했습니다.</label>
         <button name="action" value="approve" className="rounded bg-green-700 px-4 py-2 text-white">수정한 내용으로 게시</button>
-        <input name="reason" aria-label="반려 사유" placeholder="반려 사유" maxLength={500} className="rounded border p-2" />
+        <label className="flex flex-col gap-1">공개 반려 사유
+          <select name="rejectionCode" required className="rounded border p-2">
+            <option value="source_unverifiable">출처를 확인할 수 없음</option>
+            <option value="duplicate">이미 접수되거나 게시된 내용</option>
+            <option value="insufficient_details">일정 정보가 부족함</option>
+            <option value="out_of_scope">서비스 범위에 맞지 않음</option>
+          </select>
+        </label>
+        <input name="reason" aria-label="내부 검수 메모" placeholder="내부 검수 메모 (제보자에게 비공개)" maxLength={500} className="rounded border p-2" />
         <button name="action" value="reject" className="rounded bg-red-700 px-4 py-2 text-white">반려</button>
       </form>
     </article>)}</div>

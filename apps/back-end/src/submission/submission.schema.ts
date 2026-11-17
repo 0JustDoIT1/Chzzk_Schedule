@@ -4,6 +4,8 @@ import { HydratedDocument, Types } from 'mongoose';
 export type SubmissionDocument = HydratedDocument<Submission>;
 export type SubmissionKind = 'streamer' | 'schedule' | 'schedule-edit';
 export type SubmissionStatus = 'pending' | 'processing' | 'approved' | 'rejected';
+export const rejectionCodes = ['source_unverifiable', 'duplicate', 'insufficient_details', 'out_of_scope'] as const;
+export type RejectionCode = typeof rejectionCodes[number];
 
 @Schema({ collection: 'submissions', timestamps: true })
 export class Submission {
@@ -30,6 +32,9 @@ export class Submission {
 
   @Prop({ type: String })
   reason?: string;
+
+  @Prop({ type: String, enum: rejectionCodes })
+  rejectionCode?: RejectionCode;
 
   @Prop({ type: Date })
   reviewedAt?: Date;

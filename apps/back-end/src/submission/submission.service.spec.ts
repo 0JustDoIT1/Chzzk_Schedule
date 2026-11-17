@@ -84,4 +84,10 @@ describe('SubmissionService', () => {
     expect(await service.getStatus(id)).toEqual({ id, status: 'rejected' });
     expect(submissions.findOne).toHaveBeenCalledWith({ receiptToken: id });
   });
+
+  it('returns a standardized rejection code without the private note', async () => {
+    submissions.findOne.mockReturnValue({ select: () => ({ lean: () => ({ exec: async () => ({ status: 'rejected', rejectionCode: 'duplicate', reason: 'private note' }) }) }) });
+    const id = 'b'.repeat(48);
+    expect(await service.getStatus(id)).toEqual({ id, status: 'rejected', rejectionCode: 'duplicate' });
+  });
 });

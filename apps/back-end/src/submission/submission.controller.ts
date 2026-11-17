@@ -38,6 +38,6 @@ export class SubmissionController {
   @Patch(':id/reject')
   @UseGuards(AdminWriteGuard)
   reject(@Param('id') id: string, @Body() input: RejectSubmissionDto, @Req() request: Request & { adminActor?: string }) {
-    return this.service.reject(id, input.reason, request.adminActor);
+    return this.service.reject(id, input.rejectionCode, input.reason, request.adminActor);
   }
 }

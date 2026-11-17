@@ -44,6 +44,7 @@ run('Submission with isolated Mongo database', () => {
     connection = app.get<Connection>(getConnectionToken());
     await connection.model('Submission').init();
     await connection.model('SubmissionLimit').init();
+    await connection.model('Streamer').init();
   }, 30000);
 
   afterAll(async () => {
@@ -236,9 +237,13 @@ run('Submission with isolated Mongo database', () => {
       .set('Authorization', `Bearer ${token}`).expect(200);
     const rejectedId = pendingRejection.body.find((item: { kind: string; payload: { name?: string } }) => item.payload.name === 'rejected')._id as string;
     await request(app.getHttpServer()).patch(`/v1/submissions/${rejectedId}/reject`)
-      .set('Authorization', `Bearer ${token}`).send({ reason: 'Test rejection' }).expect(200);
+      .set('Authorization', `Bearer ${token}`)
+      .send({ rejectionCode: 'arbitrary', reason: 'Private reviewer note' }).expect(400);
+    await request(app.getHttpServer()).patch(`/v1/submissions/${rejectedId}/reject`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ rejectionCode: 'source_unverifiable', reason: 'Private reviewer note' }).expect(200);
     await request(app.getHttpServer()).get(`/v1/submissions/${rejected.body.id}/status`)
-      .expect(200, { id: rejected.body.id, status: 'rejected' });
+      .expect(200, { id: rejected.body.id, status: 'rejected', rejectionCode: 'source_unverifiable' });
     await request(app.getHttpServer()).get('/v1/streamer/name/rejected').expect(404);
   });
 
@@ -285,5 +290,20 @@ run('Submission with isolated Mongo database', () => {
     }
     await request(app.getHttpServer()).post('/v1/admin/login')
       .send({ username: 'integration-reviewer', password: 'p'.repeat(32) }).expect(429);
+  });
+
+  it('keeps existing streamer IDs while preventing duplicate channel IDs', async () => {
+    const channelId = randomBytes(16).toString('hex');
+    const first = await request(app.getHttpServer()).post('/v1/streamer/add')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: `channel-${channelId}`, chzzkLink: `https://chzzk.naver.com/${channelId}`, isOfficial: false })
+      .expect(201);
+    expect(first.body.channelId).toBe(channelId);
+    const byName = await request(app.getHttpServer()).get(`/v1/streamer/name/channel-${channelId}`).expect(200);
+    expect(byName.body._id).toBe(first.body._id);
+    await request(app.getHttpServer()).post('/v1/streamer/add')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: `channel-duplicate-${channelId}`, chzzkLink: `https://chzzk.naver.com/${channelId}/`, isOfficial: false })
+      .expect(409);
   });
 });
