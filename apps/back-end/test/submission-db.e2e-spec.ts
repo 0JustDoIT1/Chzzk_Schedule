@@ -264,6 +264,45 @@ run('Submission with isolated Mongo database', () => {
     await request(app.getHttpServer()).post('/v1/submissions/streamer').send(report(`${base}-blocked`)).expect(429);
   });
 
+  it('keeps a rejected schedule private and prevents review after rejection', async () => {
+    await connection.collection('submission_limits').deleteMany({});
+    const suffix = randomBytes(4).toString('hex');
+    const streamerName = `rejection-host-${suffix}`;
+    const title = `rejection-schedule-${suffix}`;
+    await request(app.getHttpServer()).post('/v1/streamer/add')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: streamerName, chzzkLink: `https://chzzk.naver.com/${suffix}`, isOfficial: false })
+      .expect(201);
+
+    const submitted = await request(app.getHttpServer()).post('/v1/submissions/schedule').send({
+      schedule: { isOfficial: false, streamerName, category: 'personal', title, fullDay: false,
+        startAt: '2026-11-16T12:00:00+09:00', endAt: '2026-11-16T13:00:00+09:00' },
+      sourceUrl: `https://chzzk.naver.com/${suffix}`,
+    }).expect(201);
+    await request(app.getHttpServer()).get(`/v1/submissions/${submitted.body.id}/status`)
+      .expect(200, { id: submitted.body.id, status: 'pending' });
+    const before = await request(app.getHttpServer()).get('/v1/schedule/month/2026-11-16').expect(200);
+    expect(JSON.stringify(before.body)).not.toContain(title);
+
+    const pending = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    const report = pending.body.find((item: { payload: { title?: string } }) => item.payload.title === title);
+    await request(app.getHttpServer()).patch(`/v1/submissions/${report._id}/reject`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ rejectionCode: 'source_unverifiable', reason: 'private reviewer note' }).expect(200);
+    await request(app.getHttpServer()).get(`/v1/submissions/${submitted.body.id}/status`)
+      .expect(200, { id: submitted.body.id, status: 'rejected', rejectionCode: 'source_unverifiable' });
+    const after = await request(app.getHttpServer()).get('/v1/schedule/month/2026-11-16').expect(200);
+    expect(JSON.stringify(after.body)).not.toContain(title);
+    const remaining = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    expect(remaining.body.some((item: { _id: string }) => item._id === report._id)).toBe(false);
+    await request(app.getHttpServer()).patch(`/v1/submissions/${report._id}/approve`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ payload: report.payload, sourceUrl: report.sourceUrl, officialConfirmed: false })
+      .expect(409);
+  });
+
   it('authenticates one account and shares login failure limits', async () => {
     await connection.collection('submission_limits').deleteMany({});
     const success = await request(app.getHttpServer()).post('/v1/admin/login')
