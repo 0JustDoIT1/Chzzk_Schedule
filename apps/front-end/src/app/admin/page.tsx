@@ -45,7 +45,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <input type="hidden" name="id" value={submission._id} />
         <input type="hidden" name="kind" value={submission.kind} />
         <label className="flex w-full flex-col gap-1">게시할 내용(JSON)
-          <textarea name="payload" defaultValue={JSON.stringify(submission.payload, null, 2)} rows={10} required className="rounded border p-2 font-mono text-sm" />
+          <textarea name="payload" defaultValue={JSON.stringify(submission.payload, null, 2)} rows={10} required className="w-full min-w-0 rounded border p-2 font-mono text-sm" />
         </label>
         {submission.kind !== "streamer" ? <label className="flex flex-col gap-1">방송 분류
           <select name="category" defaultValue={String(submission.payload.category ?? "personal")} className="rounded border p-2">

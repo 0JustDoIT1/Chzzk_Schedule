@@ -26,7 +26,7 @@ export default async function SubmissionStatusPage({ params }: { params: Promise
   const label = { pending: "검수 대기", approved: "게시 승인", rejected: "반려" }[receipt.status];
   return <main className="mx-auto max-w-xl p-8">
     <h1 className="mb-4 text-2xl">제보 처리 상태</h1>
-    <p className="mb-2">접수 번호: <code>{receipt.id}</code></p>
+    <p className="mb-2 break-all">접수 번호: <code>{receipt.id}</code></p>
     <p className="mb-4">현재 상태: <strong>{label}</strong></p>
     {receipt.status === "rejected" && receipt.rejectionCode && rejectionLabels[receipt.rejectionCode] &&
       <p className="mb-4">반려 사유: {rejectionLabels[receipt.rejectionCode]}</p>}
