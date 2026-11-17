@@ -8,6 +8,12 @@
 
 IP 판정에는 서버가 직접 확인하는 접속 주소를 사용한다. 역방향 프록시 뒤에서는 신뢰할 프록시와 실제 사용자 IP 전달 설정을 배포 시 검증해야 한다. 이를 하지 않으면 여러 사용자가 프록시 주소 하나의 한도를 공유할 수 있다.
 
+## 백업·복구 검증
+
+로컬 MongoDB 컨테이너를 시작한 뒤 저장소 루트에서 `node apps/back-end/scripts/verify-backup-restore.js`를 실행한다. 스크립트는 `127.0.0.1:27017`에 임시 DB 두 개를 만들고, `mongodump --archive`와 `mongorestore`로 문서·인덱스를 복원해 비교한 다음 두 DB를 삭제한다. 기존 `Chzzk` DB와 운영 DB는 읽거나 수정하지 않는다. 실제 운영 백업은 운영 DB의 덤프를 별도 보관 위치에 저장하고, 운영 DB를 덮어쓰지 않은 새 격리 DB에 복원한 뒤 문서 수·인덱스·핵심 조회를 확인해야 한다. 이 로컬 샘플 검증은 운영 백업의 존재나 복구 가능성을 증명하지 않는다.
+
+프런트 개발 서버(`next dev --turbopack`)와 프로덕션 서버(`next start`)는 같은 `.next` 산출물을 공유하므로 동시에 실행하지 않는다. 개발 서버를 실행한 뒤 프로덕션 서버를 확인하려면 개발 서버를 종료하고 `yarn workspace front-end build`를 다시 실행한다.
+
 Docker Desktop을 실행한 뒤 저장소 루트에서 `docker compose up -d mongodb`를 실행한다. MongoDB는 이 컴퓨터의 `127.0.0.1:27017`에서만 접근할 수 있고, 데이터는 Docker 이름 붙은 볼륨 `mongodb_data`에 보존된다.
 
 `apps/back-end/.env`의 DB 설정을 다음처럼 지정한다. 이 파일은 Git에 포함하지 않는다.
