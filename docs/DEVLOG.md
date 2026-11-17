@@ -279,3 +279,9 @@ D-06 원본 선정·이전 검토안은 [별도 문서](./D06-legacy-schedule-pl
 - 변경 파일: `apps/back-end/src/lib/trust-proxy.ts`, `apps/back-end/src/main.ts`, `apps/back-end/test/submission.e2e-spec.ts`, `docs/DEPLOYMENT.md`, `docs/DEVLOG.md`. 명시적인 `TRUST_PROXY_HOPS`(1~5)가 있을 때만 Express의 신뢰 프록시 수를 설정한다. 기본값에서는 전달 IP 헤더를 무시한다.
 - 격리 HTTP 테스트에서 기본 설정은 소켓 IP를, 1홉은 가장 가까운 전달 IP를, 2홉은 그 앞의 IP를 제보 서비스에 전달함을 확인했다. 잘못된 설정값은 시작 오류로 처리한다.
 - 남은 위험: 실제 배포 프록시 토폴로지와 백엔드 직접 접속 차단은 배포 환경에서 확인해야 한다. 공개 주소가 확정되지 않아 `metadataBase`는 설정하지 않았다. 스키마 변경은 없다.
+
+# 2026-11-18 공개 사이트 메타데이터 주소
+
+- 변경 파일: `apps/front-end/src/app/layout.tsx`, `docs/DEPLOYMENT.md`, `docs/DEVLOG.md`. 프런트엔드 빌드 환경의 `SITE_URL`이 있을 때 루트 메타데이터의 `metadataBase`로 사용한다. 운영 도메인을 코드에 고정하지 않았다.
+- 검증: `SITE_URL=https://example.com`으로 프런트 프로덕션 빌드 통과. 생성된 홈페이지 HTML의 Open Graph·Twitter 이미지 주소에 `https://example.com/opengraph-image.png`가 반영됐다. 로컬 테스트 도메인은 검증 전용이며 배포 주소로 채택한 값이 아니다.
+- 남은 위험: 같은 빌드에서 Next.js 15.1.4의 `metadataBase` 경고가 계속 출력됐다. 실제 배포 도메인 설정과 배포 후 메타 태그 확인은 남아 있다. 스키마 변경은 없다.
