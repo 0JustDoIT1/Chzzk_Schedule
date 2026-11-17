@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Header, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import type { Request } from 'express';
 import { AdminWriteGuard } from '../lib/guards/admin-write.guard';
 import { ScheduleSubmissionDto, StreamerSubmissionDto, RejectSubmissionDto, ApproveSubmissionDto } from './submission.dto';
@@ -25,6 +25,7 @@ export class SubmissionController {
   }
 
   @Get(':id/status')
+  @Header('Cache-Control', 'private, no-store')
   getStatus(@Param('id') id: string) {
     return this.service.getStatus(id);
   }

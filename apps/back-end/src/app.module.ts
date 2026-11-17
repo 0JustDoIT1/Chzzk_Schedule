@@ -7,6 +7,7 @@ import { StreamerModule } from './streamer/streamer.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { SubmissionModule } from './submission/submission.module';
 import { AdminModule } from './admin/admin.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AdminModule } from './admin/admin.module';
     ScheduleModule,
     SubmissionModule,
     AdminModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

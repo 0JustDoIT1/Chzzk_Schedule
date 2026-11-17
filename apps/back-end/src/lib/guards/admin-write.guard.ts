@@ -11,7 +11,7 @@ export class AdminWriteGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request & { adminActor?: string }>();
     const authorization = request.headers.authorization;
 
-    // Fail closed until a dedicated admin login is implemented.
+    // Reject requests when the server credential is not configured.
     if (!secret || secret.length < 32 || !authorization?.startsWith('Bearer ')) {
       throw new UnauthorizedException();
     }

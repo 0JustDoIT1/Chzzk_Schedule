@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 type RejectionCode = "source_unverifiable" | "duplicate" | "insufficient_details" | "out_of_scope";
 type Receipt = { id: string; status: "pending" | "approved" | "rejected"; rejectionCode?: RejectionCode };
