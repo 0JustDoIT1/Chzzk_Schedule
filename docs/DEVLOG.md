@@ -285,3 +285,9 @@ D-06 원본 선정·이전 검토안은 [별도 문서](./D06-legacy-schedule-pl
 - 변경 파일: `apps/front-end/src/app/layout.tsx`, `docs/DEPLOYMENT.md`, `docs/DEVLOG.md`. 프런트엔드 빌드 환경의 `SITE_URL`이 있을 때 루트 메타데이터의 `metadataBase`로 사용한다. 운영 도메인을 코드에 고정하지 않았다.
 - 검증: `SITE_URL=https://example.com`으로 프런트 프로덕션 빌드 통과. 생성된 홈페이지 HTML의 Open Graph·Twitter 이미지 주소에 `https://example.com/opengraph-image.png`가 반영됐다. 로컬 테스트 도메인은 검증 전용이며 배포 주소로 채택한 값이 아니다.
 - 남은 위험: 같은 빌드에서 Next.js 15.1.4의 `metadataBase` 경고가 계속 출력됐다. 실제 배포 도메인 설정과 배포 후 메타 태그 확인은 남아 있다. 스키마 변경은 없다.
+
+# 2026-11-18 오류 로그 HTTP 검증
+
+- 변경 파일: `apps/back-end/test/error-log.e2e-spec.ts`, `docs/DEVLOG.md`. 실제 Nest HTTP 요청으로 500 응답과 400 응답을 발생시켜 서버 오류 로그 미들웨어의 출력을 검사했다.
+- 검증: 500 로그에는 메서드·상태·라우트 패턴이 기록되고 URL의 확인 토큰·쿼리 비밀값·요청 본문은 없었다. 400 응답은 서버 오류 로그를 추가하지 않았다. 격리 HTTP 테스트 1건과 백엔드 빌드 통과. 데이터베이스와 운영 데이터는 사용하지 않았다.
+- 남은 위험: 이번 테스트는 이 HTTP 오류 로그 미들웨어를 검증한다. 배포 플랫폼·프록시의 별도 접근 로그와 실제 로그 수집 설정은 배포 단계에서 확인해야 한다. 스키마 변경은 없다.
