@@ -1,7 +1,7 @@
 import { getScheduleListByMonth } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import TimelineView from "@/lib/screens/timelineView";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
@@ -20,7 +20,7 @@ const AllTimelinePage = async ({ searchParams }: IAllTimelinePage) => {
     queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  return <TimelineView date={targetDate} />;
+  return <HydrationBoundary state={dehydrate(queryClient)}><TimelineView date={targetDate} /></HydrationBoundary>;
 };
 
 export default AllTimelinePage;

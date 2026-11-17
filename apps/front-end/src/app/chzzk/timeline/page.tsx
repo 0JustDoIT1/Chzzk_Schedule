@@ -2,7 +2,7 @@ import { getOfficialScheduleListByMonth } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 
 import TimelineView from "@/lib/screens/timelineView";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
@@ -21,7 +21,7 @@ const ChzzkTimelinePage = async ({ searchParams }: IChzzkTimelinePage) => {
     queryFn: () => getOfficialScheduleListByMonth(targetDate),
   });
 
-  return <TimelineView date={targetDate} isOfficial={true} />;
+  return <HydrationBoundary state={dehydrate(queryClient)}><TimelineView date={targetDate} isOfficial={true} /></HydrationBoundary>;
 };
 
 export default ChzzkTimelinePage;

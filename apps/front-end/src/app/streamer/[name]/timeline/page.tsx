@@ -1,7 +1,7 @@
-import { getScheduleListByMonth } from "@/api/schedule-api";
+import { getScheduleListByMonthWithName } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import TimelineView from "@/lib/screens/timelineView";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
@@ -21,11 +21,11 @@ const StreamerTimelinePage = async ({
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery<TMonthSchedule>({
-    queryKey: queryKeys.getScheduleListByMonth(targetDate),
-    queryFn: () => getScheduleListByMonth(targetDate),
+    queryKey: queryKeys.getScheduleListByMonthWithName(targetDate, name),
+    queryFn: () => getScheduleListByMonthWithName(targetDate, name),
   });
 
-  return <TimelineView date={targetDate} name={name} />;
+  return <HydrationBoundary state={dehydrate(queryClient)}><TimelineView date={targetDate} name={name} /></HydrationBoundary>;
 };
 
 export default StreamerTimelinePage;

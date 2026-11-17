@@ -1,7 +1,7 @@
 import { getScheduleListByMonthWithName } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import CalendarView from "@/lib/screens/calendarView";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
@@ -25,7 +25,7 @@ const StreamerCalendarPage = async ({
     queryFn: () => getScheduleListByMonthWithName(targetDate, name),
   });
 
-  return <CalendarView date={targetDate} name={name} />;
+  return <HydrationBoundary state={dehydrate(queryClient)}><CalendarView date={targetDate} name={name} /></HydrationBoundary>;
 };
 
 export default StreamerCalendarPage;

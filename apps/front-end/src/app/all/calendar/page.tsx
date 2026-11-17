@@ -1,7 +1,7 @@
 import { getScheduleListByMonth } from "@/api/schedule-api";
 import { queryKeys } from "@/lib/constants/react-query";
 import CalendarView from "@/lib/screens/calendarView";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { TMonthSchedule } from "@shared/types";
 import { dateToFormatString, dateTypeToDate, getToday } from "@shared/utils";
 
@@ -20,7 +20,7 @@ const AllCalendarPage = async ({ searchParams }: IAllCalendarPage) => {
     queryFn: () => getScheduleListByMonth(targetDate),
   });
 
-  return <CalendarView date={targetDate} />;
+  return <HydrationBoundary state={dehydrate(queryClient)}><CalendarView date={targetDate} /></HydrationBoundary>;
 };
 
 export default AllCalendarPage;
