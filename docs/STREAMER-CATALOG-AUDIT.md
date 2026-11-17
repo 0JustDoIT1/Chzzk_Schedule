@@ -36,3 +36,7 @@
 검증된 본명·활동명과 잘못 수집된 제목의 연결은 `apps/back-end/data/verified-namu-title-aliases.json`에 명시했다. `apps/back-end/scripts/audit-namu-streamer-candidates.js`를 실행하면 최신 채널 시드에 대해 분류별 건수와 미연결 파트너 제목을 다시 계산한다. 로컬 DB에는 `audit-namu-streamer-candidates.js --apply`로 연결 상태를 반영한다.
 
 남은 전체 후보 1,333개에는 위키의 과거 활동명, 현재 비활동 채널, 같은 이름의 다른 인물, 채널 링크를 확인할 수 없는 문서가 섞일 수 있다. 향후 채널을 추가할 때에는 채널 ID와 인물 연결 출처를 함께 기록하고 이 감사를 재실행한다.
+
+## 2026-11-18 로컬 후보 감사 재확인
+
+`node apps/back-end/scripts/audit-namu-streamer-candidates.js`를 변경 적용 없이 실행했다. 후보 1,659개, 채널 연결 326개(제목 일치 229개, 문서 구분자 제거 44개, 검토한 별칭 53개), 미연결 1,333개로 위 표와 일치했다. 파트너 분류 미연결 8개 중 1개는 인물 문서가 아니며, 나머지 7명의 채널 ID는 여전히 확정되지 않았다. 이번 재확인에서는 공개 시드와 DB를 변경하지 않았다.
