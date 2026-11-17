@@ -1,7 +1,7 @@
 import { DEFAULT_META_TAG } from "@/lib/constants/metaTag";
 import ChzzkCommonLayout from "@/lib/screens/layout/chzzkLayout";
 import { Metadata } from "next";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, Suspense } from "react";
 
 export const metadata: Metadata = {
   ...DEFAULT_META_TAG,
@@ -14,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default async function ChzzkLayout({ children }: PropsWithChildren) {
-  return <ChzzkCommonLayout>{children}</ChzzkCommonLayout>;
+  return <Suspense fallback={null}><ChzzkCommonLayout>{children}</ChzzkCommonLayout></Suspense>;
 }

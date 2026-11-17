@@ -41,7 +41,7 @@ const RootLayout = ({
       <body className={gmarket.className}>
         <RootProvider>
           <Header />
-          <Suspense fallback={null}>{children}</Suspense>
+          {children}
           <Suspense fallback={null}>{modal}</Suspense>
           <div id="portal" />
           <FloatingButton />

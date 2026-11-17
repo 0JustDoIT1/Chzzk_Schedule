@@ -1,7 +1,7 @@
 import StreamerCommonLayout from "@/lib/screens/layout/streamerLayout";
 import { generatePostMetadata } from "@/lib/utils/metaTag";
 import { Metadata } from "next";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 interface IChzzkLayout {
   children: ReactNode;
@@ -25,6 +25,6 @@ export default async function ChzzkLayout({ children, params }: IChzzkLayout) {
   const decodeName = decodeURIComponent(name);
 
   return (
-    <StreamerCommonLayout name={decodeName}>{children}</StreamerCommonLayout>
+    <Suspense fallback={null}><StreamerCommonLayout name={decodeName}>{children}</StreamerCommonLayout></Suspense>
   );
 }
