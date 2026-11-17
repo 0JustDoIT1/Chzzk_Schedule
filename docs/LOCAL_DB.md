@@ -22,6 +22,8 @@ IP 판정에는 서버가 직접 확인하는 접속 주소를 사용한다. 역
 
 백엔드 `/v1/health/live`는 프로세스 응답을, `/v1/health/ready`는 MongoDB ping 성공을 확인한다. 배포 환경에서는 준비 상태가 200인지 확인하고 DB를 사용할 수 없을 때 503으로 바뀌는지 점검한다. 프런트 `/admin`과 `/submissions/<확인 토큰>`은 `Cache-Control: private, no-store`, `Referrer-Policy: no-referrer`, `X-Robots-Tag: noindex, nofollow`를 반환해야 한다. 제보 상태 API도 `Cache-Control: private, no-store`를 반환한다. 이 응답 검증은 화면의 시각적 배치나 모바일 레이아웃 검증을 대신하지 않는다.
 
+백엔드와 프런트의 프로덕션 서버를 시작한 뒤 저장소 루트에서 `node apps/front-end/scripts/verify-http-rendering.js`를 실행하면 존재하지 않는 제보 확인 주소의 HTTP 404와 월간 화면 6개의 서버 HTML을 읽기 전용으로 점검한다. 로컬 이외 주소를 확인할 때는 `SITE_BASE_URL`, `API_BASE_URL`을 명시한다.
+
 Docker Desktop을 실행한 뒤 저장소 루트에서 `docker compose up -d mongodb`를 실행한다. MongoDB는 이 컴퓨터의 `127.0.0.1:27017`에서만 접근할 수 있고, 데이터는 Docker 이름 붙은 볼륨 `mongodb_data`에 보존된다.
 
 `apps/back-end/.env`의 DB 설정을 다음처럼 지정한다. 이 파일은 Git에 포함하지 않는다.
