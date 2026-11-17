@@ -5,9 +5,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './lib/exceptions/http-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { errorLogMiddleware } from './lib/error-log.middleware';
+import { configureTrustProxy } from './lib/trust-proxy';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  configureTrustProxy(app);
   app.use(errorLogMiddleware(new Logger('HttpServerError')));
 
   // 요청 바디 크기 제한 늘리기 (10MB)

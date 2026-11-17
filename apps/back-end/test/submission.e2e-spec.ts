@@ -4,6 +4,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { SubmissionController } from '../src/submission/submission.controller';
 import { SubmissionService } from '../src/submission/submission.service';
+import { configureTrustProxy } from '../src/lib/trust-proxy';
 
 describe('Submission HTTP flow', () => {
   let app: INestApplication;
@@ -42,6 +43,29 @@ describe('Submission HTTP flow', () => {
     }).expect(201, { id: 'a'.repeat(48), status: 'pending' });
     await request(app.getHttpServer()).get(`/v1/submissions/${'a'.repeat(48)}/status`)
       .expect(200, { id: 'a'.repeat(48), status: 'pending' });
+  });
+
+  it('ignores forwarded IP headers until a proxy hop is explicitly trusted', async () => {
+    expect(() => configureTrustProxy(app.getHttpAdapter().getInstance(), '6')).toThrow('TRUST_PROXY_HOPS');
+    service.submitStreamer.mockClear();
+    const report = {
+      streamer: { name: 'test', chzzkLink: 'https://chzzk.naver.com/test', isOfficial: false },
+      sourceUrl: 'https://chzzk.naver.com/test',
+    };
+    await request(app.getHttpServer()).post('/v1/submissions/streamer')
+      .set('X-Forwarded-For', '198.51.100.42, 203.0.113.9').send(report).expect(201);
+    expect(service.submitStreamer.mock.calls[0][1]).toMatch(/^(::ffff:)?127\.0\.0\.1$/);
+
+    configureTrustProxy(app.getHttpAdapter().getInstance(), '1');
+    await request(app.getHttpServer()).post('/v1/submissions/streamer')
+      .set('X-Forwarded-For', '198.51.100.42, 203.0.113.9').send(report).expect(201);
+    expect(service.submitStreamer.mock.calls[1][1]).toBe('203.0.113.9');
+
+    configureTrustProxy(app.getHttpAdapter().getInstance(), '2');
+    await request(app.getHttpServer()).post('/v1/submissions/streamer')
+      .set('X-Forwarded-For', '198.51.100.42, 203.0.113.9').send(report).expect(201);
+    expect(service.submitStreamer.mock.calls[2][1]).toBe('198.51.100.42');
+    app.getHttpAdapter().getInstance().set('trust proxy', false);
   });
 
   it('rejects anonymous review requests', async () => {
