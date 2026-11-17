@@ -5,7 +5,7 @@ export const DEFAULT_META_TAG: Metadata = {
     template: "%s | 0군의 삶",
     default: "0군의 삶",
   },
-  description: "치지직 스케줄을 만들어보세요.",
+  description: "치지직 스트리머의 예정 방송 일정을 확인하고 제보하세요.",
   authors: {
     name: "0JustDoIT1",
   },
@@ -15,7 +15,7 @@ export const DEFAULT_META_TAG: Metadata = {
       template: "%s | 0군의 삶",
       default: "0군의 삶",
     },
-    description: "치지직 스케줄을 만들어보세요.",
+    description: "치지직 스트리머의 예정 방송 일정을 확인하고 제보하세요.",
   },
   twitter: {
     card: "summary_large_image",

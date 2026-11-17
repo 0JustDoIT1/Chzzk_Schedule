@@ -37,7 +37,7 @@ const RootLayout = ({
   modal: ReactNode;
 }>) => {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={gmarket.className}>
         <RootProvider>
           <Header />
