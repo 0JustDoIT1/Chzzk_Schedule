@@ -1,7 +1,5 @@
-import MainView from "@/lib/screens/main";
+import { redirect } from "next/navigation";
 
-const MainPage = async () => {
-  return <MainView />;
-};
+const MainPage = () => redirect("/all/calendar");
 
 export default MainPage;

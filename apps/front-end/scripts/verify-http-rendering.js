@@ -20,7 +20,10 @@ async function main() {
   const ready = await fetch(`${api}/v1/health/ready`);
   if (!ready.ok) throw new Error(`Backend not ready: HTTP ${ready.status}`);
 
-  await check('/', 200);
+  const entry = await fetch(site, { redirect: 'manual' });
+  if (entry.status !== 307 || new URL(entry.headers.get('location') ?? '/', site).pathname !== '/all/calendar') {
+    throw new Error(`/: expected redirect to /all/calendar, got HTTP ${entry.status} ${entry.headers.get('location')}`);
+  }
   await check('/today', 200, { rendered: true });
   await check('/admin', 200, { private: true });
   await check(`/submissions/${randomBytes(24).toString('hex')}`, 404, { private: true });
