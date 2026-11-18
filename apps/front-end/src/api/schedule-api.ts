@@ -24,8 +24,8 @@ export const createSchedule = async (
   return await postFetch(isServer(), url, data, token);
 };
 
-export const submitSchedule = (schedule: Partial<TScheduleSchema>, sourceUrl: string): Promise<{ id: string; status: string }> =>
-  postFetch(isServer(), 'v1/submissions/schedule', { schedule, sourceUrl });
+export const submitSchedule = (schedule: Partial<TScheduleSchema>): Promise<{ id: string; status: string }> =>
+  postFetch(isServer(), 'v1/submissions/schedule', { schedule });
 
 // Update schedule
 export const updateSchedule = async (

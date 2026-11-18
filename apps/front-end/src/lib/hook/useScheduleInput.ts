@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import useReactHookForm from "./useReactHookForm";
 import { useToastStore } from "@/lib/providers/toast-provider";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,6 @@ const useScheduleInput = (
   initData?: TScheduleSchema // optional 초기값
 ) => {
   const router = useRouter();
-  const [sourceUrl, setSourceUrl] = useState("");
   const showToast = useToastStore((state) => state.showToast);
 
   const initValue: IScheduleInput = useMemo(
@@ -155,7 +154,7 @@ const useScheduleInput = (
   // create schedule
   const createScheduleMutation = useMutation({
     mutationFn: async (data: Partial<TScheduleSchema>) =>
-      await submitSchedule(data, sourceUrl),
+      await submitSchedule(data),
     onSuccess: (receipt) => {
       showToast("success", "제보가 접수되었습니다. 검수 후 게시됩니다.");
       router.push(`/submissions/${receipt.id}`);
@@ -219,10 +218,6 @@ const useScheduleInput = (
 
   // Submit event
   const onSubmit = handleSubmit((data) => {
-    if (!initData && !sourceUrl) {
-      showToast("error", "출처 링크를 입력해 주세요.");
-      return;
-    }
     const inputData: IScheduleInput = {
       ...data,
       isOfficial,
@@ -254,8 +249,6 @@ const useScheduleInput = (
     onAddMember,
     onRemoveMember,
     onFocusTiptapLabel,
-    sourceUrl,
-    setSourceUrl,
   };
 };
 

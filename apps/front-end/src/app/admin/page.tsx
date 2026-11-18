@@ -8,7 +8,6 @@ type Submission = {
   _id: string;
   kind: string;
   payload: Record<string, unknown>;
-  sourceUrl: string;
   createdAt?: string;
 };
 
@@ -39,7 +38,6 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     {submissions.length === 0 && <p>대기 중인 제보가 없습니다.</p>}
     <div className="space-y-6">{submissions.map((submission) => <article key={submission._id} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <h2 className="font-bold">{submission.kind} · {submission.createdAt ?? ""}</h2>
-      <p className="my-2 break-all">출처: <a className="underline" href={submission.sourceUrl} target="_blank" rel="noreferrer">{submission.sourceUrl}</a></p>
       <pre className="overflow-auto whitespace-pre-wrap rounded bg-gray-100 p-3 text-sm">{JSON.stringify(submission.payload, null, 2)}</pre>
       <form action={review} className="mt-4 flex flex-wrap gap-2">
         <input type="hidden" name="id" value={submission._id} />
@@ -53,9 +51,6 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             <option value="official">치지직 공식 콘텐츠</option><option value="watch">치지직 공식 같이보기</option>
           </select>
         </label> : <label className="flex items-center gap-2"><input type="checkbox" name="isOfficial" defaultChecked={submission.payload.isOfficial === true} />치지직 공식 채널</label>}
-        <label className="flex w-full flex-col gap-1">확인한 출처 URL
-          <input name="sourceUrl" type="url" required defaultValue={submission.sourceUrl} className="rounded border p-2" />
-        </label>
         {submission.kind !== "streamer" && <label className="flex w-full flex-col gap-1">{submission.kind === "schedule-edit" ? "변경 요약 *" : "게시 메모"}
           <input name="changeNote" type="text" required={submission.kind === "schedule-edit"} maxLength={300} placeholder="예: 방송 시작 시간을 변경했습니다" className="rounded border p-2" />
         </label>}
@@ -68,7 +63,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <button name="action" value="approve" className="rounded bg-green-700 px-4 py-2 text-white">수정한 내용으로 게시</button>
         <label className="flex flex-col gap-1">공개 반려 사유
           <select name="rejectionCode" required className="rounded border p-2">
-            <option value="source_unverifiable">출처를 확인할 수 없음</option>
+            <option value="source_unverifiable">일정 내용을 확인하기 어려움</option>
             <option value="duplicate">이미 접수되거나 게시된 내용</option>
             <option value="insufficient_details">일정 정보가 부족함</option>
             <option value="out_of_scope">서비스 범위에 맞지 않음</option>

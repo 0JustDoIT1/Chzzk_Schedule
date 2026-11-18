@@ -8,8 +8,3 @@ export function safeExternalUrl(value?: string): string | null {
     return null;
   }
 }
-
-export function isGenericChzzkHome(value: string): boolean {
-  const url = new URL(value);
-  return ['chzzk.naver.com', 'm.chzzk.naver.com'].includes(url.hostname) && url.pathname === '/';
-}

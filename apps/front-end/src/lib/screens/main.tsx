@@ -11,7 +11,7 @@ const MainView = () => (
           치지직 방송 일정을<br />한눈에 확인하세요
         </h1>
         <p className="max-w-xl text-base leading-relaxed text-textNormal">
-          스트리머별 예정 방송과 공식 방송을 찾아보고, 빠진 일정은 출처와 함께 제보할 수 있습니다.
+          스트리머별 예정 방송과 공식 방송을 찾아보고, 빠진 일정은 제보할 수 있습니다.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href={route.today} className="rounded-xl bg-brandMain px-5 py-3 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brandMainHover">오늘 일정 보기</Link>

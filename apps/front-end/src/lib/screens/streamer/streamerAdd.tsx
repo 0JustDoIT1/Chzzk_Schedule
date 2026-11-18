@@ -22,7 +22,7 @@ const StreamerAddView = () => {
 
 
   const createStreamerMutation = useMutation({
-    mutationFn: async (data: { streamer: IStreamer; sourceUrl: string }) => await submitStreamer(data.streamer, data.sourceUrl),
+    mutationFn: async (streamer: IStreamer) => await submitStreamer(streamer),
     onSuccess: (receipt) => {
       showToast("success", "제보가 접수되었습니다. 검수 후 게시됩니다.");
       router.push(`/submissions/${receipt.id}`);
@@ -57,7 +57,6 @@ const StreamerAddView = () => {
   } = useReactHookForm(initValue);
 
   const [tag, setTag] = useState<string[]>([]);
-  const [sourceUrl, setSourceUrl] = useState("");
 
   const onKeyDownAddTag = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
@@ -85,7 +84,6 @@ const StreamerAddView = () => {
     reset();
     clearErrors();
     setTag([]);
-    setSourceUrl("");
   };
 
   const onSubmit = handleSubmit((data) => {
@@ -96,7 +94,7 @@ const StreamerAddView = () => {
     };
     if (tag.length === 0) delete result.tag;
 
-    createStreamerMutation.mutate({ streamer: result, sourceUrl: sourceUrl.trim() || data.chzzkLink.trim() });
+    createStreamerMutation.mutate(result);
   });
 
   return (
@@ -167,14 +165,6 @@ const StreamerAddView = () => {
                 </HelperText>
               )}
             </div>
-            <details className="mb-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
-              <summary className="cursor-pointer text-sm font-medium text-textMain">다른 확인 자료가 있나요? (선택)</summary>
-              <div className="mt-4 flex flex-col">
-                <label htmlFor="sourceUrl" className="mb-2 text-sm font-medium text-textMain">추가 확인 자료 링크</label>
-                <input id="sourceUrl" type="url" value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm focus:border-brandMain focus:outline-none focus:ring-2 focus:ring-green-100" placeholder="채널 주소와 다른 확인 자료가 있을 때만 입력" />
-                <p className="mt-1 text-xs text-textNormal">입력하지 않으면 치지직 채널 주소를 확인 자료로 사용합니다.</p>
-              </div>
-            </details>
             <div className="flex flex-col mb-4">
               <label htmlFor="tag" className="text-sm text-textMain mb-2">
                 태그 &#40;MCN이나 소속&#41;

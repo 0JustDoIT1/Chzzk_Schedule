@@ -8,7 +8,7 @@ type RejectionCode = "source_unverifiable" | "duplicate" | "insufficient_details
 type Receipt = { id: string; status: "pending" | "approved" | "rejected"; rejectionCode?: RejectionCode };
 
 const rejectionLabels: Record<RejectionCode, string> = {
-  source_unverifiable: "출처를 확인할 수 없음",
+  source_unverifiable: "일정 내용을 확인하기 어려움",
   duplicate: "이미 접수되거나 게시된 내용",
   insufficient_details: "일정 정보가 부족함",
   out_of_scope: "서비스 범위에 맞지 않음",

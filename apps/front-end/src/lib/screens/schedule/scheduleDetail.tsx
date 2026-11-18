@@ -16,7 +16,7 @@ import { displayDate } from "@/lib/utils/chzzk-date";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { queryKeys } from "@/lib/constants/react-query";
 import CategoryTag from "@/lib/components/common/categoryTag";
-import { isGenericChzzkHome, safeExternalUrl } from "@/lib/utils/externalUrl";
+import { safeExternalUrl } from "@/lib/utils/externalUrl";
 
 interface IScheduleDetailView {
   id: string;
@@ -89,25 +89,15 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
               </div>
             )}
           </div>
-          <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-textNormal">
-            <p className="mb-2 font-semibold text-textMain">일정 확인 자료</p>
-            {safeExternalUrl(data.sourceUrl)
-              ? <>
-                  <a href={safeExternalUrl(data.sourceUrl)!} target="_blank" rel="noopener noreferrer" className="break-all font-medium text-brandDark underline">{isGenericChzzkHome(safeExternalUrl(data.sourceUrl)!) ? "치지직 홈 열기" : "자료 링크 열기"}</a>
-                  {isGenericChzzkHome(safeExternalUrl(data.sourceUrl)!) && <p className="mt-2">개별 공지 주소가 아닌 치지직 홈 링크입니다.</p>}
-                </>
-              : <p>확인 가능한 자료 링크가 없습니다.</p>}
-            {data.revisionHistory && data.revisionHistory.length > 1 && <details className="mt-4 border-t border-gray-200 pt-3">
+          {data.revisionHistory && data.revisionHistory.length > 1 && <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-textNormal"><details>
               <summary className="cursor-pointer font-medium text-textMain">변경 이력 {data.revisionHistory.length - 1}건 보기</summary>
               <ol className="mt-3 space-y-3">
                 {[...data.revisionHistory].slice(1).reverse().map((revision) => <li key={revision.version} className="border-t border-gray-200 pt-2">
                   <p>{new Date(revision.reviewedAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })} · {revision.note}</p>
                   {revision.changedFields.length > 0 && <p>변경 항목: {revision.changedFields.map((field) => fieldLabel[field] ?? field).join(", ")}</p>}
-                  {safeExternalUrl(revision.sourceUrl) && revision.sourceUrl !== data.sourceUrl && <a href={safeExternalUrl(revision.sourceUrl)!} target="_blank" rel="noopener noreferrer" className="font-medium text-brandDark underline">당시 확인 자료</a>}
                 </li>)}
               </ol>
-            </details>}
-          </div>
+            </details></div>}
           {data.contents && (
             <div className="relative mb-4">
               <div
