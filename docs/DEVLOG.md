@@ -309,3 +309,10 @@ D-06 원본 선정·이전 검토안은 [별도 문서](./D06-legacy-schedule-pl
 - 변경 파일: `docs/STREAMER-CATALOG-AUDIT.md`, `docs/DEVLOG.md`. 로컬 후보 감사 스크립트를 변경 적용 없이 재실행해 후보·연결·미연결 수와 미연결 파트너 목록을 기존 문서와 대조했다.
 - 검증 결과: 후보 1,659개 중 연결 326개(229·44·53개), 미연결 1,333개. 파트너 분류의 미연결 8개에는 인물 문서가 아닌 목록 문서 1개가 포함된다. 수치와 목록은 기존 감사 문서와 일치했다.
 - 남은 위험: 나머지 파트너 후보 7명의 본인 채널 ID는 확인되지 않아 공개 시드·DB를 변경하지 않았다. 제3자 자료의 이름만으로 현재 파트너 자격이나 미래 일정을 확정할 수 없다.
+
+# 2026-11-18 일정 달력 화면 조정
+
+- 변경 파일: `apps/front-end/src/lib/screens/layout/{allLayout,chzzkLayout,streamerLayout}.tsx`, `apps/front-end/src/lib/components/calendar/{calendar,calendarHeaderRow,calendarDateGrid,calendarScheduleOverlay}.tsx`, `apps/front-end/src/lib/components/common/floatingButton.tsx`, `docs/DEVLOG.md`. 기존 어두운 헤더와 치지직 계열 녹색을 유지하면서 참고 이미지의 넓은 날짜 조작 영역·왼쪽 보기 선택·명확한 날짜 칸을 일정 화면에 적용했다. 회의실 예약·개인 캘린더 기능은 추가하지 않았다.
+- 월간 달력은 방송 종류별 옅은 색 배경과 기존 분류를 유지하고, 모바일에서는 7일 칸을 가로 스크롤로 확인하게 했다. 390px 화면에서는 고정 제보 버튼을 아이콘으로 줄여 일정 칸 가림을 줄였다. 전체·공식·스트리머별 화면에 같은 틀을 적용했다.
+- 검증: 프런트 프로덕션 빌드 통과. 로컬 DB에 연결한 백엔드와 프런트를 각각 3201·3200 포트로 실행하고 데스크톱 1440px·모바일 390px 헤드리스 Chrome 캡처를 직접 확인했다. 최종 빌드에서 월간 6개 경로 HTTP 200 및 없는 제보 확인 주소 404 검증 통과. 캡처용 임시 파일은 삭제했다.
+- 남은 위험: 달력의 실제 터치 스크롤과 다른 기기 크기, 관리자·제보 폼의 시각 검수는 별도다. 기존 `metadataBase`·Browserslist 빌드 경고가 남는다. 로컬 확인용 서버는 사용자가 화면을 볼 수 있도록 실행 상태로 둔다.
