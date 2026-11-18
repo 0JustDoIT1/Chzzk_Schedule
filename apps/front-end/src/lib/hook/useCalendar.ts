@@ -20,8 +20,8 @@ const useCalendar = () => {
 
   const weekHeader = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const calendarRows = 7;
-  const calendarColumns = 6;
+  const daysPerWeek = 7;
+  const maxWeeks = 6;
 
   // Set today by url query
   useEffect(() => {
@@ -46,7 +46,7 @@ const useCalendar = () => {
 
     const preCalendar = [...preEmptyDates, ...days];
 
-    const calendarLength = calendarRows * calendarColumns;
+    const calendarLength = daysPerWeek * maxWeeks;
     const currentDayLength = preCalendar.length;
     const nextDayLength = calendarLength - currentDayLength;
 
@@ -57,16 +57,18 @@ const useCalendar = () => {
     const fullCalendar = [...preCalendar, ...nextEmptyDates];
     const result = [];
 
-    for (let i = 0; i < calendarRows; i++) {
+    for (let i = 0; i < maxWeeks; i++) {
       result.push({
         [i]: fullCalendar.slice(
-          i * calendarRows,
-          i * calendarRows + calendarRows
+          i * daysPerWeek,
+          i * daysPerWeek + daysPerWeek
         ),
       });
     }
 
-    setDayArray(result);
+    setDayArray(result.filter((week) =>
+      Object.values(week)[0].some((day) => day.isSame(today, "M"))
+    ));
   }, [today]);
 
   // Change url query when today update

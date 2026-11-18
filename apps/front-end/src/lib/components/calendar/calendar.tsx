@@ -4,6 +4,7 @@ import CalendarScheduleOverlay from "./calendarScheduleOverlay";
 import CalendarHeaderRow from "./calendarHeaderRow";
 import { TMonthSchedule } from "@shared/types";
 import { TDayjsType } from "@shared/utils";
+import MobileCalendar from "./mobileCalendar";
 
 interface ICustomCalendar {
   today: TDayjsType;
@@ -24,8 +25,8 @@ const CustomCalendar = ({
 
   return (
     <div className="w-full">
-      <p className="border-b border-gray-100 px-4 py-3 text-xs text-textNormal md:hidden">달력을 좌우로 밀어 전체 날짜를 볼 수 있어요.</p>
-      <div className="overflow-x-auto overscroll-x-contain" aria-label="월간 일정 달력">
+      <MobileCalendar month={today} dayArray={dayArray} scheduleList={scheduleList} />
+      <div className="hidden overflow-x-auto overscroll-x-contain md:block" aria-label="월간 일정 달력">
       <div className="box-border min-w-[700px] w-full md:min-w-0">
         <CalendarHeaderRow weekHeader={weekHeader} />
         {dayArray.map((week, weekIdx) => (
