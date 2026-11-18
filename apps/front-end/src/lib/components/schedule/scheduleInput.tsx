@@ -99,14 +99,15 @@ const ScheduleInput = ({
 
   return (
     <form
-      className="container mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
+      className="mx-auto w-full max-w-4xl rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8"
       onSubmit={handleSubmit}
       onKeyDown={preventEnterKey}
     >
       <div>
         {!initData && <div className="flex flex-col mb-4">
-          <label htmlFor="sourceUrl" className="text-sm text-textMain mb-2">일정 출처 링크 *</label>
-          <input id="sourceUrl" type="url" required value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-md bg-white p-2 text-sm ring-1 ring-textLight" placeholder="https://..." />
+          <label htmlFor="sourceUrl" className="mb-2 text-sm font-medium text-textMain">일정 확인 자료 링크 *</label>
+          <input id="sourceUrl" type="url" required value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm focus:border-brandMain focus:outline-none focus:ring-2 focus:ring-green-100" placeholder="방송 날짜와 시간이 적힌 공지·게시물 주소" />
+          <p className="mt-1 text-xs text-textNormal">채널 홈 주소만으로 방송 날짜를 확인할 수 없다면 일정 공지 링크를 넣어 주세요.</p>
         </div>}
         {!isOfficial && (
           <div className="flex flex-col mb-4">

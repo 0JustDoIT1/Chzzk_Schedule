@@ -61,7 +61,7 @@ export const getScheduleListByDate = async (
       ApiPath.PREFIX,
       ApiPath.SCHEDULE,
       ApiPath.SCHEDULE_BY_DATE
-    )({ date: date.toDateString() })
+    )({ date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}` })
   );
 };
 

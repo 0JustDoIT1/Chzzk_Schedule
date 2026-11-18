@@ -35,10 +35,10 @@ const TodayStreamingLink = ({ scheduleId }: TodayStreamingLinkProps) => {
 
 const DaylineItem = ({ item, isToday }: IDaylineItem) => {
   return (
-    <div className="flex flex-wrap items-center justify-between mb-4 border-b border-textSuperLight">
+    <div className="mb-4 flex flex-wrap items-center justify-between rounded-xl border border-gray-200 bg-white p-3 shadow-sm transition-colors hover:border-green-200">
       <Link
         href={getRoute(route.detail, item._id)}
-        className="flex-grow min-w-0 p-2 hover:bg-textHover"
+        className="min-w-0 flex-grow rounded-lg p-2 hover:bg-green-50"
         aria-label={`방송 상세 보기: ${item.title}`}
         scroll={false}
         onClick={() => {
@@ -48,9 +48,9 @@ const DaylineItem = ({ item, isToday }: IDaylineItem) => {
           );
         }}
       >
-        <h3 className="flex items-center mb-2 text-lg font-normal text-textMain">
+        <h3 className="mb-2 flex flex-wrap items-center gap-2 text-lg font-semibold text-textMain">
           <CategoryTag category={item.category} />
-          <span className="ml-1">{item.status === "cancelled" ? `[취소] ${item.title}` : item.title}</span>
+          <span>{item.status === "cancelled" ? `[취소] ${item.title}` : item.title}</span>
         </h3>
         <div className="flex items-center mb-1 text-sm font-normal leading-none text-textNormal">
           <CalendarIcon className="mr-1 w-4 h-4 text-textIcon" />

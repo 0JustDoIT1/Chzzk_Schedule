@@ -10,6 +10,8 @@ import {
 } from "@tanstack/react-query";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   ...DEFAULT_META_TAG,
   title: `오늘의 스케줄`,

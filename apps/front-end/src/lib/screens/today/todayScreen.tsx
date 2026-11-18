@@ -31,10 +31,10 @@ const TodayScreen = () => {
 
   return (
     <>
-      <section className="w-full border-b border-b-textLight py-6">
-        <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
+      <section className="border-b border-gray-100 bg-white py-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:px-6 md:flex-row lg:px-8">
           <div className="flex flex-col">
-            <p className="text-2xl">오늘의 일정</p>
+            <h1 className="mb-1 text-3xl font-bold text-textMain">오늘의 일정</h1>
             <p className="text-sm text-textNormal">
               <span className="text-base text-brandMain">
                 {dateToFormatString(getToday(), "YYYY년 MM월 DD일 dddd")}
@@ -47,8 +47,10 @@ const TodayScreen = () => {
           </div>
         </div>
       </section>
-      <main className="w-full py-12">
-        {isSuccess && <CustomTimeline schedule={data} />}
+      <main className="min-h-[calc(100vh-180px)] bg-[#f7faf8] px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+          {isSuccess && <CustomTimeline schedule={data} />}
+        </div>
       </main>
     </>
   );

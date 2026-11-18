@@ -56,26 +56,26 @@ const StreamerCategoryView = () => {
 
   return (
     <main>
-      <section className="w-full border-b border-b-textLight py-6">
-        <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-6xl">
-          <div className="flex flex-col items-center w-full md:w-1/3 md:items-start">
-            <p className="text-2xl">스트리머별 일정</p>
+      <section className="border-b border-gray-100 bg-white py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center md:text-left">
+            <h1 className="mb-1 text-3xl font-bold text-textMain">스트리머별 일정</h1>
             <p className="text-sm text-textNormal">
               원하는 스트리머 방송 일정을 살펴보세요.
             </p>
           </div>
         </div>
       </section>
-      <section className="w-full py-12">
-        <div className="container mx-auto px-4 md:px-8 lg:max-w-6xl">
+      <section className="min-h-[calc(100vh-180px)] bg-[#f7faf8] py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {streamerList && (
             <>
-              <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
+              <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm md:justify-start">
                 {initialList.map((initial) => (
                   <button
                     key={initial}
                     type="button"
-                    className="py-1 px-6 text-xl text-textMain ring-2 ring-brandMain shadow-md rounded-lg"
+                    className="rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-base font-semibold text-brandDark hover:bg-green-100"
                     onClick={() => scrollSection(initial)}
                     aria-label={`${initial} 이니셜로 이동`}
                   >
@@ -83,15 +83,15 @@ const StreamerCategoryView = () => {
                   </button>
                 ))}
               </div>
-              <div className="mt-16">
+              <div className="mt-6 space-y-5">
                 {initialList.map((initial) => (
                   <div
                     key={initial}
                     id={initial}
-                    className="flex flex-col mt-16"
+                    className="scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
                   >
-                    <p className="text-lg text-textMain mb-2">
-                      &#42; {initial}
+                    <p className="mb-4 text-lg font-bold text-textMain">
+                      {initial}
                     </p>
                     <div className="flex flex-wrap items-center gap-2">
                       {streamerList[initial].map((streamer) => (
@@ -102,7 +102,7 @@ const StreamerCategoryView = () => {
                             streamer.name,
                             route.calendar
                           )}
-                          className="py-1 px-2 text-sm text-white bg-brandMain ring-1 ring-textLight shadow-sm rounded-lg hover:bg-brandMainHover"
+                          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-textMain transition-colors hover:border-green-200 hover:bg-green-50 hover:text-brandDark"
                           aria-label={`${streamer.name} 일정 보기`}
                         >
                           {streamer.name}

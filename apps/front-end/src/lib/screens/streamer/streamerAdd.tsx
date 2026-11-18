@@ -85,6 +85,7 @@ const StreamerAddView = () => {
     reset();
     clearErrors();
     setTag([]);
+    setSourceUrl("");
   };
 
   const onSubmit = handleSubmit((data) => {
@@ -95,44 +96,24 @@ const StreamerAddView = () => {
     };
     if (tag.length === 0) delete result.tag;
 
-    createStreamerMutation.mutate({ streamer: result, sourceUrl });
+    createStreamerMutation.mutate({ streamer: result, sourceUrl: sourceUrl.trim() || data.chzzkLink.trim() });
   });
 
   return (
     <>
-      <section className="w-full border-b border-b-textLight p-4">
-        {/* <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
-          <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
-            <p className="text-2xl">스트리머 추가</p>
-            <p className="text-sm text-textNormal">
-              원하는 스트리머를 추가 요청해 주세요.
-              <br />
-              요청을 확인한 후, 문제가 없으면 추가됩니다.
-            </p>
-          </div>
-        </div> */}
-        <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
-          <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
-            <p className="text-2xl">스트리머 추가</p>
-            <p className="text-sm text-textNormal">
-              원하는 스트리머를 추가 요청해 주세요.
-              <br />
-              요청을 확인한 후, 문제가 없으면 추가됩니다.
-            </p>
-          </div>
+      <section className="border-b border-gray-100 bg-white py-8">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <h1 className="mb-2 text-3xl font-bold text-textMain">스트리머 제보</h1>
+          <p className="text-sm leading-relaxed text-textNormal">치지직 채널 주소를 알려주세요. 확인 후 목록에 반영합니다.</p>
         </div>
       </section>
-      <main className="w-full p-4">
+      <main className="min-h-[calc(100vh-180px)] bg-[#f7faf8] px-4 py-8 sm:px-6">
         <form
-          className="container flex flex-col justify-between mx-auto px-4 py-4 md:px-8 lg:max-w-2xl"
+          className="mx-auto flex max-w-4xl flex-col justify-between rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8"
           onSubmit={onSubmit}
           onKeyDown={preventEnterKey}
         >
           <div>
-            <div className="flex flex-col mb-4">
-              <label htmlFor="sourceUrl" className="text-sm text-textMain mb-2">출처 링크 *</label>
-              <input id="sourceUrl" type="url" required value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-md bg-white p-2 text-sm ring-1 ring-textLight" placeholder="https://..." />
-            </div>
             <div className="flex flex-col mb-4">
               <label htmlFor="name" className="text-sm text-textMain mb-2">
                 <span className="text-brandMain">&#42;</span> 닉네임
@@ -159,14 +140,14 @@ const StreamerAddView = () => {
             </div>
             <div className="flex flex-col mb-4">
               <label htmlFor="chzzkLink" className="text-sm text-textMain mb-2">
-                <span className="text-brandMain">&#42;</span> 방송 링크
+                <span className="text-brandMain">&#42;</span> 치지직 채널 주소
               </label>
               <input
                 {...register("chzzkLink", {
                   value: initValue.chzzkLink,
                   required: {
                     value: true,
-                    message: "치지직 방송 링크를 입력해 주세요.",
+                    message: "치지직 채널 주소를 입력해 주세요.",
                   },
                 })}
                 id="chzzkLink"
@@ -175,15 +156,25 @@ const StreamerAddView = () => {
                     ? "ring-error focus:ring-2 focus:ring-error"
                     : "ring-textLight focus:ring-brandMain"
                 }`}
-                type="text"
-                placeholder="치지직 방송 링크를 입력해 주세요."
+                type="url"
+                pattern="https://chzzk\.naver\.com/[a-fA-F0-9]{32}/?"
+                placeholder="https://chzzk.naver.com/채널ID"
               />
+              <p className="mt-1 text-xs text-textNormal">방송 영상 주소가 아닌 스트리머의 채널 페이지 주소를 입력해 주세요.</p>
               {errors.chzzkLink && (
                 <HelperText className="text-error">
                   {errors.chzzkLink?.message as string}
                 </HelperText>
               )}
             </div>
+            <details className="mb-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <summary className="cursor-pointer text-sm font-medium text-textMain">다른 확인 자료가 있나요? (선택)</summary>
+              <div className="mt-4 flex flex-col">
+                <label htmlFor="sourceUrl" className="mb-2 text-sm font-medium text-textMain">추가 확인 자료 링크</label>
+                <input id="sourceUrl" type="url" value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} className="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm focus:border-brandMain focus:outline-none focus:ring-2 focus:ring-green-100" placeholder="채널 주소와 다른 확인 자료가 있을 때만 입력" />
+                <p className="mt-1 text-xs text-textNormal">입력하지 않으면 치지직 채널 주소를 확인 자료로 사용합니다.</p>
+              </div>
+            </details>
             <div className="flex flex-col mb-4">
               <label htmlFor="tag" className="text-sm text-textMain mb-2">
                 태그 &#40;MCN이나 소속&#41;

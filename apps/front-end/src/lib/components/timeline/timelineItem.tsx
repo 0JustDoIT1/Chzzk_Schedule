@@ -12,11 +12,11 @@ interface ITimelineItem {
 
 const TimelineItem = ({ schedule }: ITimelineItem) => {
   return (
-    <div className="flex flex-wrap items-center justify-between mb-4 border-b border-textSuperLight">
+    <div className="mb-4 flex flex-wrap items-center justify-between rounded-xl border border-gray-200 bg-white p-3 shadow-sm transition-colors hover:border-green-200">
       <div className="p-2">
-        <h3 className="flex items-center mb-2 text-lg font-normal text-textMain">
+        <h3 className="mb-2 flex flex-wrap items-center gap-2 text-lg font-semibold text-textMain">
           <CategoryTag category={schedule.category} />
-          <span className="ml-1">{schedule.status === "cancelled" ? `[취소] ${schedule.title}` : schedule.title}</span>
+          <span>{schedule.status === "cancelled" ? `[취소] ${schedule.title}` : schedule.title}</span>
         </h3>
         <div className="flex items-center mb-1 text-sm font-normal leading-none text-textNormal">
           <CalendarIcon className="mr-1 w-4 h-4 text-textIcon" />

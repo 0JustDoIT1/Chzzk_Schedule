@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   if (!(await isAdminSession())) {
     const { error } = await searchParams;
-    return <main className="mx-auto max-w-md p-8"><h1 className="mb-4 text-2xl">관리자 검수</h1>
+    return <main className="min-h-[calc(100vh-72px)] bg-[#f7faf8] px-4 py-10"><div className="mx-auto max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8"><h1 className="mb-4 text-2xl font-bold">관리자 검수</h1>
       {error && <p role="alert" className="mb-4 text-red-700">{error === "locked" ? "로그인 시도가 많아 잠시 후 다시 시도해 주세요." : "로그인 정보를 확인해 주세요."}</p>}
       <form action={login} className="flex flex-col gap-3">
         <label htmlFor="username">관리자 계정</label>
@@ -26,7 +26,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <input id="password" name="password" type="password" autoComplete="current-password" required className="rounded border p-2" />
         <button className="rounded bg-brandMain p-2 text-white">로그인</button>
       </form>
-    </main>;
+    </div></main>;
   }
 
   const token = (await cookies()).get("admin_review")?.value;
@@ -35,9 +35,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const response = await fetch(`${baseUrl}/v1/submissions/pending`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
   if (!response.ok) return <main className="p-8">제보 목록을 불러오지 못했습니다.</main>;
   const submissions = await response.json() as Submission[];
-  return <main className="mx-auto max-w-4xl p-8"><div className="mb-6 flex items-center justify-between"><h1 className="text-2xl">검수 대기 제보</h1><form action={logout}><button className="underline">로그아웃</button></form></div>
+  return <main className="min-h-[calc(100vh-72px)] bg-[#f7faf8] px-4 py-8 sm:px-6"><div className="mx-auto max-w-4xl"><div className="mb-6 flex items-center justify-between"><h1 className="text-2xl font-bold text-textMain">검수 대기 제보</h1><form action={logout}><button className="font-medium text-brandDark underline">로그아웃</button></form></div>
     {submissions.length === 0 && <p>대기 중인 제보가 없습니다.</p>}
-    <div className="space-y-6">{submissions.map((submission) => <article key={submission._id} className="rounded border p-4">
+    <div className="space-y-6">{submissions.map((submission) => <article key={submission._id} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <h2 className="font-bold">{submission.kind} · {submission.createdAt ?? ""}</h2>
       <p className="my-2 break-all">출처: <a className="underline" href={submission.sourceUrl} target="_blank" rel="noreferrer">{submission.sourceUrl}</a></p>
       <pre className="overflow-auto whitespace-pre-wrap rounded bg-gray-100 p-3 text-sm">{JSON.stringify(submission.payload, null, 2)}</pre>
@@ -78,5 +78,5 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <button name="action" value="reject" className="rounded bg-red-700 px-4 py-2 text-white">반려</button>
       </form>
     </article>)}</div>
-  </main>;
+  </div></main>;
 }

@@ -21,6 +21,7 @@ async function main() {
   if (!ready.ok) throw new Error(`Backend not ready: HTTP ${ready.status}`);
 
   await check('/', 200);
+  await check('/today', 200, { rendered: true });
   await check('/admin', 200, { private: true });
   await check(`/submissions/${randomBytes(24).toString('hex')}`, 404, { private: true });
   await check('/submissions/invalid', 404, { private: true });
@@ -34,7 +35,7 @@ async function main() {
     monthly.push(`/streamer/${name}/calendar`, `/streamer/${name}/timeline`);
   }
   for (const path of monthly) await check(`${path}?date=2026-11-20`, 200, { rendered: true });
-  process.stdout.write(`HTTP rendering verified: receipt 404 and ${monthly.length} monthly views.\n`);
+  process.stdout.write(`HTTP rendering verified: receipt 404, today, and ${monthly.length} monthly views.\n`);
 }
 
 main().catch((error) => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });

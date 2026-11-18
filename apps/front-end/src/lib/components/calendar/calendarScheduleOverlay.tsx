@@ -14,6 +14,7 @@ import {
   isScheduleAlreadyRenderedInWeek,
 } from "@/lib/utils/calendarUtils";
 import { TMonthSchedule, TScheduleSchema } from "@shared/types";
+import { categoryStyleMap } from "@/lib/constants/streamingCategory";
 import { dateToFormatString, getDateDiff, getStartDate, TDayjsType } from "@shared/utils";
 
 interface IDayScheduleItemProps {
@@ -45,15 +46,6 @@ interface ICalendarScheduleOverlay {
   scheduleList: TMonthSchedule;
 }
 
-const scheduleTone: Record<string, string> = {
-  personal: "border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100",
-  together: "border-violet-200 bg-violet-50 text-violet-900 hover:bg-violet-100",
-  content: "border-cyan-200 bg-cyan-50 text-cyan-900 hover:bg-cyan-100",
-  match: "border-rose-200 bg-rose-50 text-rose-900 hover:bg-rose-100",
-  official: "border-green-200 bg-green-50 text-green-900 hover:bg-green-100",
-  watch: "border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100",
-};
-
 const DayScheduleItem = ({
   schedule,
   dayIdx,
@@ -66,7 +58,10 @@ const DayScheduleItem = ({
     colSpan[span - 1],
     rowStart[row],
     "flex items-center h-6 min-w-0 truncate rounded-md border px-2 text-xs font-medium transition-colors",
-    scheduleTone[schedule.category] ?? scheduleTone.personal
+    categoryStyleMap[schedule.category].bg,
+    categoryStyleMap[schedule.category].text,
+    categoryStyleMap[schedule.category].border,
+    categoryStyleMap[schedule.category].hover
   );
 
   return (

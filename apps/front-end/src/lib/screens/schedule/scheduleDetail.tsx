@@ -16,6 +16,7 @@ import { displayDate } from "@/lib/utils/chzzk-date";
 import { useAsPathStore } from "@/lib/providers/asPath-provider";
 import { queryKeys } from "@/lib/constants/react-query";
 import CategoryTag from "@/lib/components/common/categoryTag";
+import { isGenericChzzkHome, safeExternalUrl } from "@/lib/utils/externalUrl";
 
 interface IScheduleDetailView {
   id: string;
@@ -27,8 +28,6 @@ const fieldLabel: Record<string, string> = {
   startAt: "시작 시간", endAt: "종료 시간", contents: "내용",
   startTimeKnown: "시작 시간 확정", endTimeKnown: "종료 시간 확정", status: "일정 상태",
 };
-
-const safeSource = (url?: string) => Boolean(url && /^https?:\/\//i.test(url));
 
 const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
   const router = useRouter();
@@ -44,9 +43,9 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
   if (isError) return <IsError />;
 
   return (
-    <section className="w-full">
+    <section className="min-h-[calc(100vh-72px)] bg-[#f7faf8] px-4 py-8 sm:px-6 md:py-12">
       {isSuccess && (
-        <div className="w-full mx-auto flex flex-col md:container md:p-8 lg:max-w-6xl">
+        <div className="mx-auto flex w-full max-w-4xl flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
           <div className="mb-1">
             <CategoryTag
               category={data.category}
@@ -54,12 +53,12 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
             />
           </div>
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xl mr-2">
+            <h1 className="mr-2 text-2xl font-bold leading-snug text-textMain">
               <span>{data.status === "cancelled" ? `[취소] ${data.title}` : data.title}</span>
-            </h3>
-            <Link target="_blank" href={data.chzzkLink}>
+            </h1>
+            {safeExternalUrl(data.chzzkLink) && <Link target="_blank" rel="noopener noreferrer" aria-label="방송 채널 열기" href={safeExternalUrl(data.chzzkLink)!}>
               <ArrowUpRightFromSquareIcon className="w-6 h-6 text-brandMain" />
-            </Link>
+            </Link>}
           </div>
           <div className="flex flex-col gap-2 mb-2 text-textNormal text-sm">
             <div className="flex items-center">
@@ -74,7 +73,7 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
             </div>
           </div>
           <div className="flex flex-col gap-2 mb-8 text-textNormal text-sm">
-            {data.member && (
+            {data.member && data.member.length > 0 && (
               <div className="flex flex-wrap items-center">
                 <UsersIcon className="w-6 h-6 mr-2" />
                 {data.member.map((name, index) => {
@@ -90,21 +89,24 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
               </div>
             )}
           </div>
-          <div className="mb-6 rounded-lg border border-textLight p-4 text-sm text-textNormal">
-            <p className="mb-2 font-medium text-textMain">일정 출처</p>
-            {safeSource(data.sourceUrl)
-              ? <a href={data.sourceUrl} target="_blank" rel="noreferrer" className="break-all text-brandMain underline">원문 확인</a>
-              : <p>등록 출처가 기록되지 않은 일정입니다.</p>}
-            {data.revisionHistory && data.revisionHistory.length > 0 && <div className="mt-4">
-              <p className="mb-2 font-medium text-textMain">게시·변경 이력</p>
-              <ol className="space-y-3">
-                {[...data.revisionHistory].reverse().map((revision) => <li key={revision.version} className="border-t border-textLight pt-2">
+          <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-textNormal">
+            <p className="mb-2 font-semibold text-textMain">일정 확인 자료</p>
+            {safeExternalUrl(data.sourceUrl)
+              ? <>
+                  <a href={safeExternalUrl(data.sourceUrl)!} target="_blank" rel="noopener noreferrer" className="break-all font-medium text-brandDark underline">{isGenericChzzkHome(safeExternalUrl(data.sourceUrl)!) ? "치지직 홈 열기" : "자료 링크 열기"}</a>
+                  {isGenericChzzkHome(safeExternalUrl(data.sourceUrl)!) && <p className="mt-2">개별 공지 주소가 아닌 치지직 홈 링크입니다.</p>}
+                </>
+              : <p>확인 가능한 자료 링크가 없습니다.</p>}
+            {data.revisionHistory && data.revisionHistory.length > 1 && <details className="mt-4 border-t border-gray-200 pt-3">
+              <summary className="cursor-pointer font-medium text-textMain">변경 이력 {data.revisionHistory.length - 1}건 보기</summary>
+              <ol className="mt-3 space-y-3">
+                {[...data.revisionHistory].slice(1).reverse().map((revision) => <li key={revision.version} className="border-t border-gray-200 pt-2">
                   <p>{new Date(revision.reviewedAt).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })} · {revision.note}</p>
                   {revision.changedFields.length > 0 && <p>변경 항목: {revision.changedFields.map((field) => fieldLabel[field] ?? field).join(", ")}</p>}
-                  {safeSource(revision.sourceUrl) && <a href={revision.sourceUrl} target="_blank" rel="noreferrer" className="text-brandMain underline">변경 근거</a>}
+                  {safeExternalUrl(revision.sourceUrl) && revision.sourceUrl !== data.sourceUrl && <a href={safeExternalUrl(revision.sourceUrl)!} target="_blank" rel="noopener noreferrer" className="font-medium text-brandDark underline">당시 확인 자료</a>}
                 </li>)}
               </ol>
-            </div>}
+            </details>}
           </div>
           {data.contents && (
             <div className="relative mb-4">

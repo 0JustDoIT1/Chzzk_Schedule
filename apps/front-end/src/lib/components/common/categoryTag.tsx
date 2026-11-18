@@ -14,10 +14,11 @@ const CategoryTag = ({ category, className = "text-xs" }: CategoryTagProps) => {
   return (
     <span
       className={clsx(
-        "px-2 py-1 rounded-full font-medium",
+        "inline-flex rounded-full border px-2.5 py-1 font-semibold",
         className,
         categoryStyleMap[category].bg,
-        categoryStyleMap[category].text
+        categoryStyleMap[category].text,
+        categoryStyleMap[category].border
       )}
     >
       {AllCategoryLabel[category]}

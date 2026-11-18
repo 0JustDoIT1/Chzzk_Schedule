@@ -58,7 +58,7 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
 
   return (
     <>
-      <section className="w-full border-b border-b-textLight p-4">
+      <section className="border-b border-gray-100 bg-white py-8">
         <div className="container mx-auto flex flex-col gap-4 items-center justify-between px-4 md:px-8 md:flex-row lg:max-w-2xl">
           <div className="flex flex-col items-center w-full md:w-2/3 md:items-start">
             <p className="text-2xl">일정 수정</p>
@@ -82,7 +82,7 @@ const ScheduleEditView = ({ id }: IScheduleEditView) => {
           </div>
         </div>
       </section>
-      <main className="w-full p-4">
+      <main className="min-h-[calc(100vh-180px)] bg-[#f7faf8] px-4 py-8 sm:px-6">
         {streamerSuccess && scheduleSuccess && (
           <ScheduleInput
             streamerList={filteredList}
