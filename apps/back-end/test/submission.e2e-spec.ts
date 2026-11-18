@@ -11,7 +11,7 @@ describe('Submission HTTP flow', () => {
   const originalToken = process.env.ADMIN_WRITE_TOKEN;
   const service = {
     submitStreamer: jest.fn().mockResolvedValue({ id: 'a'.repeat(48), status: 'pending' }),
-    submitSchedule: jest.fn(),
+    submitSchedule: jest.fn().mockResolvedValue({ id: 'b'.repeat(48), status: 'pending' }),
     getStatus: jest.fn().mockResolvedValue({ id: 'a'.repeat(48), status: 'pending' }),
     listPending: jest.fn().mockResolvedValue([]),
     approve: jest.fn().mockResolvedValue({ status: 'approved' }),
@@ -39,20 +39,26 @@ describe('Submission HTTP flow', () => {
   it('accepts a public report and exposes only its status', async () => {
     await request(app.getHttpServer()).post('/v1/submissions/streamer').send({
       streamer: { name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false },
-      sourceUrl: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     }).expect(201, { id: 'a'.repeat(48), status: 'pending' });
     await request(app.getHttpServer()).get(`/v1/submissions/${'a'.repeat(48)}/status`)
       .expect(200, { id: 'a'.repeat(48), status: 'pending' });
   });
 
+  it('accepts a schedule report without a source link', async () => {
+    await request(app.getHttpServer()).post('/v1/submissions/schedule').send({
+      schedule: {
+        isOfficial: false, streamerName: 'test', category: 'personal', title: 'Tomorrow stream',
+        fullDay: false, startAt: '2026-11-19T10:00:00+09:00', endAt: '2026-11-19T11:00:00+09:00',
+      },
+    }).expect(201, { id: 'b'.repeat(48), status: 'pending' });
+  });
+
   it('rejects non-channel streamer links before accepting a report', async () => {
     await request(app.getHttpServer()).post('/v1/submissions/streamer').send({
       streamer: { name: 'test', chzzkLink: 'https://example.com/video/123', isOfficial: false },
-      sourceUrl: 'https://example.com/video/123',
     }).expect(400);
     await request(app.getHttpServer()).post('/v1/submissions/streamer').send({
       streamer: { name: 'test', chzzkLink: 'https://chzzk.naver.com/video', isOfficial: false },
-      sourceUrl: 'https://chzzk.naver.com/video',
     }).expect(400);
   });
 
@@ -61,7 +67,6 @@ describe('Submission HTTP flow', () => {
     service.submitStreamer.mockClear();
     const report = {
       streamer: { name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false },
-      sourceUrl: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     };
     await request(app.getHttpServer()).post('/v1/submissions/streamer')
       .set('X-Forwarded-For', '198.51.100.42, 203.0.113.9').send(report).expect(201);
@@ -89,7 +94,7 @@ describe('Submission HTTP flow', () => {
       .set('Authorization', `Bearer ${'a'.repeat(32)}`).expect(200, []);
     await request(app.getHttpServer()).patch('/v1/submissions/507f1f77bcf86cd799439011/approve')
       .set('Authorization', `Bearer ${'a'.repeat(32)}`)
-      .send({ payload: { name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false }, sourceUrl: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', officialConfirmed: false })
+      .send({ payload: { name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false }, officialConfirmed: false })
       .expect(200, { status: 'approved' });
   });
 });

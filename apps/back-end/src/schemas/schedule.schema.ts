@@ -9,8 +9,8 @@ export class ScheduleRevision {
   @Prop({ required: true, type: Number })
   version: number;
 
-  @Prop({ required: true, type: String })
-  sourceUrl: string;
+  @Prop({ type: String })
+  sourceUrl?: string;
 
   @Prop({ required: true, type: Date })
   reviewedAt: Date;

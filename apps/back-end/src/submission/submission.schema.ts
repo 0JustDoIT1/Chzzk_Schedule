@@ -18,8 +18,8 @@ export class Submission {
   @Prop({ required: true, type: Object })
   payload: Record<string, unknown>;
 
-  @Prop({ required: true, type: String })
-  sourceUrl: string;
+  @Prop({ type: String })
+  sourceUrl?: string;
 
   @Prop({ required: true, unique: true, type: String })
   receiptToken: string;

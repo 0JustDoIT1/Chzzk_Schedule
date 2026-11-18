@@ -20,7 +20,6 @@ import {
 import { OfficialName } from '@shared/constants';
 
 export interface PublicationEvidence {
-  sourceUrl: string;
   note: string;
   reviewedAt: Date;
 }
@@ -77,8 +76,7 @@ export class ScheduleService {
       member: members.map((member) => member.name),
       memberIds: members.map((member) => member._id),
       ...(evidence ? {
-        sourceUrl: evidence.sourceUrl,
-        revisionHistory: [{ version: 1, sourceUrl: evidence.sourceUrl, reviewedAt: evidence.reviewedAt, note: evidence.note, changedFields: [] }],
+        revisionHistory: [{ version: 1, reviewedAt: evidence.reviewedAt, note: evidence.note, changedFields: [] }],
       } : {}),
     };
     return this.scheduleModel.create(createData);
@@ -133,7 +131,6 @@ export class ScheduleService {
 
     const revision: ScheduleRevision | undefined = evidence ? {
       version: (existSchedule.revisionHistory?.length ?? 0) + 1,
-      sourceUrl: evidence.sourceUrl,
       reviewedAt: evidence.reviewedAt,
       note: evidence.note,
       changedFields: trackedFields.filter((field) =>
@@ -142,7 +139,7 @@ export class ScheduleService {
 
     const updated = await this.scheduleModel
       .findByIdAndUpdate(id, revision ? {
-        $set: { ...updateData, sourceUrl: evidence!.sourceUrl },
+        $set: updateData,
         $push: { revisionHistory: revision },
       } : updateData, {
         new: true,

@@ -34,7 +34,7 @@ export class SubmissionService {
     private readonly schedules: ScheduleService,
   ) {}
 
-  private async create(kind: SubmissionKind, payload: Record<string, unknown>, sourceUrl: string, clientIp: string, targetScheduleId?: string) {
+  private async create(kind: SubmissionKind, payload: Record<string, unknown>, clientIp: string, targetScheduleId?: string) {
     const secret = process.env.ADMIN_WRITE_TOKEN;
     if (!secret || secret.length < 32) throw new ServiceUnavailableException('Submission protection is not configured');
     const hash = (value: string) => createHmac('sha256', secret).update(value).digest('hex');
@@ -54,7 +54,7 @@ export class SubmissionService {
     const fingerprint = hash(duplicateKey(kind, payload, targetScheduleId));
     try {
       const saved = await this.submissions.create({
-        kind, status: 'pending', payload, sourceUrl, fingerprint,
+        kind, status: 'pending', payload, fingerprint,
         receiptToken: randomBytes(24).toString('hex'),
         ...(targetScheduleId ? { targetScheduleId: new Types.ObjectId(targetScheduleId) } : {}),
       });
@@ -67,7 +67,7 @@ export class SubmissionService {
 
   submitStreamer(input: StreamerSubmissionDto, clientIp = 'unknown') {
     if (input.streamer.isOfficial) throw new BadRequestException('Official classification is admin only');
-    return this.create('streamer', { ...input.streamer }, input.sourceUrl, clientIp);
+    return this.create('streamer', { ...input.streamer }, clientIp);
   }
 
   async submitSchedule(input: ScheduleSubmissionDto, clientIp = 'unknown') {
@@ -77,7 +77,7 @@ export class SubmissionService {
     if (input.targetScheduleId) {
       await this.schedules.getScheduleById(input.targetScheduleId);
     }
-    return this.create(input.targetScheduleId ? 'schedule-edit' : 'schedule', { ...input.schedule }, input.sourceUrl, clientIp, input.targetScheduleId);
+    return this.create(input.targetScheduleId ? 'schedule-edit' : 'schedule', { ...input.schedule }, clientIp, input.targetScheduleId);
   }
 
   listPending() {
@@ -113,7 +113,7 @@ export class SubmissionService {
       if (submission.kind === 'schedule-edit' && !note) {
         throw new BadRequestException('수정 내용을 요약해 주세요.');
       }
-      const evidence: PublicationEvidence = { sourceUrl: input.sourceUrl, note, reviewedAt };
+      const evidence: PublicationEvidence = { note, reviewedAt };
       if (submission.kind === 'streamer') {
         await this.streamers.create(payload as any);
       } else {
@@ -132,7 +132,6 @@ export class SubmissionService {
 
       submission.status = 'approved';
       submission.payload = payload;
-      submission.sourceUrl = input.sourceUrl;
       submission.reviewedAt = reviewedAt;
       submission.reviewedBy = reviewer;
       await submission.save();
@@ -154,7 +153,7 @@ export class SubmissionService {
     const payload = { ...input.payload };
     const isOfficial = payload.isOfficial === true;
     if (isOfficial && !input.officialConfirmed) {
-      throw new BadRequestException('공식 출처 확인이 필요합니다.');
+      throw new BadRequestException('공식 방송 여부 확인이 필요합니다.');
     }
     if (kind !== 'streamer') {
       if (kind === 'schedule' && payload.status === 'cancelled') {

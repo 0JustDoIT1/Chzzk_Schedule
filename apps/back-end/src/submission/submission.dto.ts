@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsIn, IsMongoId, IsObject, IsOptional, IsString, IsUrl, Matches, MaxLength, ValidateNested } from 'class-validator';
+import { IsBoolean, IsIn, IsMongoId, IsObject, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
 import { CreateScheduleDto } from '../schedule/dto/create-schedule.dto';
 import { CreateStreamerDto } from '../streamer/dto/create-streamer.dto';
 import { RejectionCode, rejectionCodes } from './submission.schema';
@@ -9,10 +9,6 @@ export class StreamerSubmissionDto {
   @Type(() => CreateStreamerDto)
   streamer: CreateStreamerDto;
 
-  @IsUrl({ require_protocol: true })
-  @Matches(/^https?:\/\//)
-  @MaxLength(2048)
-  sourceUrl: string;
 }
 
 export class ScheduleSubmissionDto {
@@ -20,10 +16,6 @@ export class ScheduleSubmissionDto {
   @Type(() => CreateScheduleDto)
   schedule: CreateScheduleDto;
 
-  @IsUrl({ require_protocol: true })
-  @Matches(/^https?:\/\//)
-  @MaxLength(2048)
-  sourceUrl: string;
 
   @IsOptional()
   @IsMongoId()
@@ -44,10 +36,6 @@ export class ApproveSubmissionDto {
   @IsObject()
   payload: Record<string, unknown>;
 
-  @IsUrl({ require_protocol: true })
-  @Matches(/^https?:\/\//)
-  @MaxLength(2048)
-  sourceUrl: string;
 
   @IsBoolean()
   officialConfirmed: boolean;

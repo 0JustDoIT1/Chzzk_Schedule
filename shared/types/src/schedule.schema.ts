@@ -20,7 +20,7 @@ export interface ISchedule {
   sourceUrl?: string;
   revisionHistory?: {
     version: number;
-    sourceUrl: string;
+    sourceUrl?: string;
     reviewedAt: Date;
     note: string;
     changedFields: string[];
