@@ -6,9 +6,9 @@ interface CalendarHeaderRowProps {
 
 const CalendarHeaderRow = ({ weekHeader }: CalendarHeaderRowProps) => {
   const baseWeekClass =
-    "h-8 leading-8 text-center text-sm border-b border-textLight";
+    "h-11 leading-[44px] text-center text-xs font-semibold border-b border-gray-200 bg-gray-50";
   return (
-    <div className="grid grid-cols-7 divide-x divide-x-textLight">
+    <div className="grid grid-cols-7 divide-x divide-gray-100">
       {weekHeader.map((item, index) => (
         <div
           key={item}

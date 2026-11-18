@@ -23,8 +23,10 @@ const CustomCalendar = ({
   scheduleList = isHasSchedule ? scheduleList : undefined;
 
   return (
-    <div className="w-full mx-auto lg:max-w-6xl">
-      <div className="box-border w-full border border-textLight border-y-0">
+    <div className="w-full">
+      <p className="border-b border-gray-100 px-4 py-3 text-xs text-textNormal md:hidden">달력을 좌우로 밀어 전체 날짜를 볼 수 있어요.</p>
+      <div className="overflow-x-auto overscroll-x-contain" aria-label="월간 일정 달력">
+      <div className="box-border min-w-[700px] w-full md:min-w-0">
         <CalendarHeaderRow weekHeader={weekHeader} />
         {dayArray.map((week, weekIdx) => (
           <div key={weekIdx} className="relative w-full">
@@ -38,6 +40,7 @@ const CustomCalendar = ({
             )}
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

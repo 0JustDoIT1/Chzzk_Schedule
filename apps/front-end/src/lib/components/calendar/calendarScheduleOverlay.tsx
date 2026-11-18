@@ -13,7 +13,6 @@ import {
   findAvailableRow,
   isScheduleAlreadyRenderedInWeek,
 } from "@/lib/utils/calendarUtils";
-import { categoryStyleMap } from "@/lib/constants/streamingCategory";
 import { TMonthSchedule, TScheduleSchema } from "@shared/types";
 import { dateToFormatString, getDateDiff, getStartDate, TDayjsType } from "@shared/utils";
 
@@ -46,6 +45,15 @@ interface ICalendarScheduleOverlay {
   scheduleList: TMonthSchedule;
 }
 
+const scheduleTone: Record<string, string> = {
+  personal: "border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100",
+  together: "border-violet-200 bg-violet-50 text-violet-900 hover:bg-violet-100",
+  content: "border-cyan-200 bg-cyan-50 text-cyan-900 hover:bg-cyan-100",
+  match: "border-rose-200 bg-rose-50 text-rose-900 hover:bg-rose-100",
+  official: "border-green-200 bg-green-50 text-green-900 hover:bg-green-100",
+  watch: "border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100",
+};
+
 const DayScheduleItem = ({
   schedule,
   dayIdx,
@@ -57,9 +65,8 @@ const DayScheduleItem = ({
     colStart[dayIdx],
     colSpan[span - 1],
     rowStart[row],
-    "flex items-center h-5 px-1 bg-white rounded-md text-textMain text-xs truncate border",
-    categoryStyleMap[schedule.category].border,
-    categoryStyleMap[schedule.category].hover
+    "flex items-center h-6 min-w-0 truncate rounded-md border px-2 text-xs font-medium transition-colors",
+    scheduleTone[schedule.category] ?? scheduleTone.personal
   );
 
   return (
@@ -85,7 +92,7 @@ const DayOverflowLink = ({
       className={clsx(
         colStart[dayIdx],
         rowStart[maxRenderCount + 1],
-        "flex items-center justify-center w-full h-5 px-1 mt-[2px] bg-brandMain rounded-md text-white text-xs font-light truncate hover:bg-brandMainHover"
+        "flex items-center justify-center w-full h-6 px-1 mt-[2px] rounded-md bg-green-100 text-xs font-semibold text-brandDark truncate hover:bg-green-200"
       )}
       scroll={false}
     >

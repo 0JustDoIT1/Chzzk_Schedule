@@ -8,10 +8,10 @@ import PlusIcon from "~/public/assets/svg/plus";
 export const FloatingButton = () => {
   const pathName = usePathname();
   if (pathName === route.index || pathName === route.scheduleAdd) return null;
-  return <div className="fixed bottom-8 right-8 z-40 md:bottom-12 md:right-16">
-    <Link className="flex items-center bg-brandMain text-white py-3 px-4 rounded-full shadow-lg hover:bg-brandDark" href={route.add} scroll={false}>
-      <PlusIcon className="w-[20px] h-[20px] text-white md:w-[24px] md:h-[24px] md:mr-1" />
-      <p className="text-sm mt-[1.5px] md:text-base">스트리머 제보</p>
+  return <div className="fixed bottom-4 right-4 z-40 md:bottom-12 md:right-16">
+    <Link aria-label="스트리머 제보" className="flex h-12 w-12 items-center justify-center rounded-full bg-brandMain text-white shadow-lg hover:bg-brandDark md:h-auto md:w-auto md:px-4 md:py-3" href={route.add} scroll={false}>
+      <PlusIcon className="h-6 w-6 text-white md:mr-1" />
+      <p className="hidden text-base md:block">스트리머 제보</p>
     </Link>
   </div>;
 };
