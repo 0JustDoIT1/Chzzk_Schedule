@@ -5,6 +5,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
+  Matches,
 } from 'class-validator';
 
 export class CreateStreamerDto {
@@ -18,9 +20,11 @@ export class CreateStreamerDto {
   @IsString()
   readonly name: string;
 
-  @ApiProperty({ description: '치지직 방송 링크' })
+  @ApiProperty({ description: '치지직 채널 주소' })
   @IsNotEmpty()
   @IsString()
+  @IsUrl({ require_protocol: true })
+  @Matches(/^https:\/\/chzzk\.naver\.com\/[a-f0-9]{32}\/?$/i)
   readonly chzzkLink: string;
 
   @ApiProperty({
