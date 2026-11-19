@@ -3,6 +3,7 @@ const { randomBytes } = require('node:crypto');
 
 const site = process.env.SITE_BASE_URL ?? 'http://localhost:3000';
 const api = process.env.API_BASE_URL ?? 'http://localhost:3001';
+const expectedMetadataBase = process.env.EXPECTED_METADATA_BASE;
 
 async function check(path, expectedStatus, options = {}) {
   const response = await fetch(`${site}${path}`);
@@ -25,6 +26,13 @@ async function main() {
     throw new Error(`/: expected redirect to /all/calendar, got HTTP ${entry.status} ${entry.headers.get('location')}`);
   }
   await check('/today', 200, { rendered: true });
+  if (expectedMetadataBase) {
+    const html = await (await fetch(`${site}/today`)).text();
+    const image = html.match(/<meta property="og:image" content="([^"]+)"\s*\/>/)?.[1];
+    if (!image || new URL(image).origin !== new URL(expectedMetadataBase).origin) {
+      throw new Error(`/today: Open Graph image origin does not match EXPECTED_METADATA_BASE`);
+    }
+  }
   await check('/admin', 200, { private: true });
   await check(`/submissions/${randomBytes(24).toString('hex')}`, 404, { private: true });
   await check('/submissions/invalid', 404, { private: true });

@@ -1,6 +1,6 @@
 // Headless Chrome mobile viewport check. Start the production servers first.
 const { spawn } = require('node:child_process');
-const { mkdtempSync, readFileSync, existsSync, rmSync, writeFileSync } = require('node:fs');
+const { mkdtempSync, readFileSync, existsSync, rmSync, writeFileSync, mkdirSync } = require('node:fs');
 const { tmpdir } = require('node:os');
 const { join } = require('node:path');
 
@@ -64,8 +64,28 @@ async function main() {
   await sleep(200);
   const moved = await send('Runtime.evaluate', { expression: `document.body.innerText.includes('2026년 12월')`, returnByValue: true });
   if (moved.result.value !== true) throw new Error('Next month did not update');
+  await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: width / 2, y: 700 }] });
+  await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: width / 2, y: 400 }] });
+  await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await sleep(300);
+  const scroll = await send('Runtime.evaluate', { expression: 'window.scrollY', returnByValue: true });
+  if (scroll.result.value <= 0) throw new Error('Touch scroll did not move the page');
+  const routes = ['/today', '/all/timeline', '/schedule/add', '/streamer', '/admin'];
+  for (const route of routes) {
+    await send('Page.navigate', { url: `${site}${route}` });
+    await sleep(750);
+    await send('Runtime.evaluate', { expression: 'window.scrollTo(0, 0)' });
+    const check = await send('Runtime.evaluate', { expression: 'JSON.stringify({ width: innerWidth, scrollWidth: document.documentElement.scrollWidth, text: document.body.innerText.slice(0, 100) })', returnByValue: true });
+    const page = JSON.parse(check.result.value);
+    if (page.width !== width || page.scrollWidth > width || !page.text) throw new Error(`${route}: mobile layout failed: ${JSON.stringify(page)}`);
+    if (process.env.MOBILE_SCREENSHOT_DIR) {
+      mkdirSync(process.env.MOBILE_SCREENSHOT_DIR, { recursive: true });
+      const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+      writeFileSync(join(process.env.MOBILE_SCREENSHOT_DIR, `${route.slice(1).replaceAll('/', '-')}.png`), Buffer.from(shot.data, 'base64'));
+    }
+  }
   ws.close();
-  process.stdout.write(`Mobile viewport verified: ${JSON.stringify(result)}\n`);
+  process.stdout.write(`Mobile viewport verified: ${JSON.stringify(result)}, touch scroll and ${routes.length} routes\n`);
 }
 main().catch((error) => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; })
   .finally(async () => {
