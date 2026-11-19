@@ -4,9 +4,11 @@ const { MongoClient } = require('mongodb');
 const root = require('../data/namu-chzzk-streamer-candidates.json');
 const subcategories = require('../data/namu-chzzk-subcategories.json');
 const nestedTitles = require('../data/namu-chzzk-subcategory-titles.json');
+const excluded = require('../data/excluded-namu-streamer-candidates.json');
 
 function candidates() {
   const byTitle = new Map();
+  const excludedTitles = new Set(excluded.titles);
   const categories = [
     { name: '치지직 스트리머', titles: root.titles },
     ...subcategories.categories.map(({ name, titles }) => ({ name, titles })),
@@ -14,6 +16,7 @@ function candidates() {
   ];
   for (const category of categories) {
     for (const title of category.titles) {
+      if (excludedTitles.has(title)) continue;
       if (!byTitle.has(title)) byTitle.set(title, []);
       byTitle.get(title).push(category.name);
     }

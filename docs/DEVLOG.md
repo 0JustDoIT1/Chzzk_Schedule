@@ -1,5 +1,12 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-19 후보 6건 제거·홈 출처 일정 유지
+
+- 사용자 결정: 본인 채널을 확인하지 못한 인물 후보 6명은 비공개 후보 목록에서도 제거한다. 개별 공지 URL이 없는 기존 일정 4건은 치지직 홈 주소를 출처로 사용한 채 등록 상태를 유지한다. 이는 해당 일정의 개별 공지나 현재 방송을 새로 확인했다는 뜻이 아니다.
+- 변경 파일: `apps/back-end/data/excluded-namu-streamer-candidates.json`, `apps/back-end/scripts/import-namu-streamer-candidates.js`, `apps/back-end/scripts/prune-excluded-namu-candidates.js`, `docs/LOCAL_DB.md`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/DEVLOG.md`. 원본 위키 수집 파일은 과거 자료로 보존하고 가져오기에서 정확한 제목 6개를 제외한다. 로컬 전용 제거 스크립트는 삭제 전 해당 문서를 Git 제외 폴더에 백업하며 `--rollback`을 지원한다.
+- 검증: 적용 전 제거 대상 후보 6건과 일정 시드의 추가 예정 0건을 확인했다. 로컬 `Chzzk.streamer_candidate`에서 6건을 백업 후 제거했고 재실행 결과 대상 0건, 후보 가져오기 미리보기 추가 0건이었다. 후보 감사 결과 총 1,653건·연결 327건·미연결 1,326건이며 파트너 분류의 미연결 항목은 인물 아닌 목록 문서 1건이다. 로컬 `schedule`에서 4건의 제목·시각·`scheduled` 상태와 `https://chzzk.naver.com/` 출처를 읽기 전용으로 확인했다. 공개 스트리머와 일정 문서는 변경하지 않았다.
+- 남은 위험·되돌림: 수집 원본에는 여섯 이름이 남지만 제외 규칙 때문에 다시 가져오지 않는다. 로컬 후보 문서를 복원하려면 생성된 `.migration-backups/excluded-candidates-*.json`을 `--rollback`에 전달하고 제외 목록도 복원해야 한다. 실제 운영 DB는 조회·수정하지 않았으며 이 로컬 전용 변경은 운영 배포 데이터에 자동 반영되지 않는다.
+
 ## 2026-11-19 모바일 화면·배포 준비 재검증
 
 - 변경 파일: `apps/front-end/scripts/verify-mobile-layout.cjs`, `apps/front-end/scripts/verify-http-rendering.js`, `docs/DEPLOYMENT.md`, `docs/DEVLOG.md`. 헤드리스 모바일 검증에 터치 스크롤과 오늘·타임라인·일정 제보·스트리머·관리자 화면의 가로 넘침 점검을 추가했다. 배포 HTTP 점검에는 선택적 `EXPECTED_METADATA_BASE`를 추가해 Open Graph 이미지 주소가 공개 사이트 주소와 일치하는지 확인한다.

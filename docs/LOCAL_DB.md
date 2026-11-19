@@ -37,7 +37,7 @@ DB_Name=Chzzk
 
 새로 만든 로컬 DB는 처음에 빈 상태다. 기존 Atlas 데이터가 자동으로 이동하지 않는다. 기존 데이터나 백업을 찾으면 별도 백업을 먼저 확보하고, 격리된 DB에 복원해 문서 수와 ID를 확인한 다음 가져온다. 기존 복제 일정은 자동 병합하지 않는다. 이 로컬 DB를 운영 DB나 격리 테스트 DB로 사용하지 않는다.
 
-개발용 기본 스트리머 328명과 나무위키 분류 문서 제목 후보 1,659개는 `apps/back-end`에서 다음 명령으로 추가할 수 있다. 공개 랭킹 또는 개별 치지직 채널·방송 기록에서 이름과 채널 ID를 대조한 스트리머만 공개 컬렉션에 들어간다. 이름이 일치하거나 문서 구분자·검토된 활동명 연결로 채널을 확정한 후보 326개에는 `channel-verified` 상태와 채널 ID를 기록한다. 나머지 1,333개는 `unverified` 상태로 보관한다. [후보 대조 기록](./STREAMER-CATALOG-AUDIT.md)에 세부 건수와 미연결 파트너 후보가 있다. 후보 컬렉션은 공개 API가 읽지 않는다. `--apply`를 빼면 변경 없이 추가 예정 건수를 확인한다. 재실행은 중복을 추가하지 않는다. 이 기본 스트리머 시드는 예정 일정을 생성하지 않는다. 아래의 세 일정 시드를 모두 적용하면 공개 스트리머 333명, 예정 일정 26건이다.
+개발용 기본 스트리머 328명과 현재 포함 대상인 나무위키 분류 문서 제목 후보 1,653개는 `apps/back-end`에서 다음 명령으로 추가할 수 있다. 원본 수집 목록은 보존하고, 사용자가 제거를 요청한 후보 6명은 `excluded-namu-streamer-candidates.json`으로 가져오기에서 제외한다. 공개 랭킹 또는 개별 치지직 채널·방송 기록에서 이름과 채널 ID를 대조한 스트리머만 공개 컬렉션에 들어간다. 현재 읽기 전용 감사 결과는 채널 연결 327개, 미연결 1,326개다. 후보 컬렉션은 공개 API가 읽지 않는다. `--apply`를 빼면 변경 없이 추가 예정 건수를 확인한다. 재실행은 중복을 추가하지 않는다. 이 기본 스트리머 시드는 예정 일정을 생성하지 않는다. 현재 로컬 개발 DB에는 공개 스트리머 334명과 일정 26건이 있다.
 
 ```powershell
 $env:DB_URI='mongodb://127.0.0.1:27017'
@@ -49,3 +49,5 @@ node scripts/seed-chzzk-cup-2026-schedules.js --apply
 node scripts/seed-november-2026-featured-broadcasts.js --apply
 node scripts/audit-namu-streamer-candidates.js
 ```
+
+기존 로컬 후보 컬렉션에서 제외 대상 6명을 제거하려면 `node scripts/prune-excluded-namu-candidates.js`로 건수를 먼저 확인하고 `--apply`를 실행한다. 적용 전에 `.migration-backups/excluded-candidates-*.json`에 해당 문서의 되돌림 사본을 만든다. 되돌릴 때는 같은 로컬 DB 설정으로 `node scripts/prune-excluded-namu-candidates.js --rollback <사본의 절대 경로>`를 실행한다. 공개 스트리머와 일정 컬렉션은 이 작업의 대상이 아니다. 치지직 홈 주소만 출처로 저장된 기존 일정 4건은 그대로 등록하며, 개별 공지 URL이 없어도 제거하거나 중복 생성하지 않는다.
