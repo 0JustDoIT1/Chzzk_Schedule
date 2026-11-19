@@ -1,5 +1,11 @@
 # 0군의 삶 — 작업·검증 기록
 
+## 2026-11-19 치지직 홈 출처 일정 4건 재확인
+
+- 변경 파일: `docs/DEVLOG.md`. 로컬 시드 `seed-november-2026-featured-broadcasts.js`의 4건을 원문과 대조했다. [치지직 홈](https://chzzk.naver.com/)에는 11월 18일 18시 워독스 본 대회, 22시 우키팝 음악 방송, 11월 20일 13시 보라볼 이승민 출연 안내가 표시된다. [인방모 대회 일정](https://inbangmo.com/live-events/schedule)도 워독스 본 대회 18시를 표시한다. 검색 가능한 자료에서 느바라디오 11월 17일 20시의 개별 공지는 확인하지 못했다.
+- 검증: 시드의 제목·시각·채널 ID·출처 URL을 읽기 전용으로 확인하고 공개 자료를 검색했다. 네 건 모두 저장된 `sourceUrl`이 치지직 홈 주소이므로 개별 공지로 교체하지 않았다. 로컬·운영 DB는 변경하지 않았다.
+- 남은 위험: 홈의 홍보 문구는 바뀔 수 있고, 4건의 영구적인 개별 공지 URL은 확인되지 않았다. 특히 느바라디오 일정은 게시 전 원문 재확인이 필요하다. 브라우저 연결 호스트 오류로 실제 모바일 화면 검증은 수행하지 못했다.
+
 ## 2026-11-17 김호러 채널과 본명 후보 연결
 
 - 변경 파일: `apps/back-end/data/verified-chzzk-channels.json`, `apps/back-end/data/verified-namu-title-aliases.json`, `docs/STREAMER-CATALOG-AUDIT.md`, `docs/LOCAL_DB.md`, `docs/DEVLOG.md`. [김호러의 공개 채널 소개](https://tubemon.io/channel/UC_SEr4lmF69s2-c6oY1qkoA)에 본명 김효종과 치지직 채널 주소가 함께 기재되어 있고, [방송 기록](https://inbangmo.com/viewership/streamer/chzzk/59cbccdbc14b3e9318e0d477a35c64c5)에서 동일한 32자리 ID와 최근 방송을 확인했다. `김효종(1992)` 후보를 김호러 채널에 연결했다.
