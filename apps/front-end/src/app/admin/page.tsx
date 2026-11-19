@@ -7,7 +7,9 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 type Submission = {
   _id: string;
   kind: string;
+  status: "pending" | "processing";
   payload: Record<string, unknown>;
+  publicationInput?: { payload: Record<string, unknown>; officialConfirmed: boolean; changeNote?: string };
   createdAt?: string;
 };
 
@@ -38,30 +40,31 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     {submissions.length === 0 && <p>대기 중인 제보가 없습니다.</p>}
     <div className="space-y-6">{submissions.map((submission) => <article key={submission._id} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <h2 className="font-bold">{submission.kind} · {submission.createdAt ?? ""}</h2>
-      <pre className="overflow-auto whitespace-pre-wrap rounded bg-gray-100 p-3 text-sm">{JSON.stringify(submission.payload, null, 2)}</pre>
+      {submission.publicationInput && <p className="mt-2 text-sm text-textNormal">중단된 승인 재처리에는 이전에 확인한 게시 내용과 메모가 적용됩니다.</p>}
+      <pre className="overflow-auto whitespace-pre-wrap rounded bg-gray-100 p-3 text-sm">{JSON.stringify(submission.publicationInput?.payload ?? submission.payload, null, 2)}</pre>
       <form action={review} className="mt-4 flex flex-wrap gap-2">
         <input type="hidden" name="id" value={submission._id} />
         <input type="hidden" name="kind" value={submission.kind} />
         <label className="flex w-full flex-col gap-1">게시할 내용(JSON)
-          <textarea name="payload" defaultValue={JSON.stringify(submission.payload, null, 2)} rows={10} required className="w-full min-w-0 rounded border p-2 font-mono text-sm" />
+          <textarea name="payload" defaultValue={JSON.stringify(submission.publicationInput?.payload ?? submission.payload, null, 2)} rows={10} required readOnly={!!submission.publicationInput} className="w-full min-w-0 rounded border p-2 font-mono text-sm" />
         </label>
         {submission.kind !== "streamer" ? <label className="flex flex-col gap-1">방송 분류
-          <select name="category" defaultValue={String(submission.payload.category ?? "personal")} className="rounded border p-2">
+          <select name="category" defaultValue={String((submission.publicationInput?.payload ?? submission.payload).category ?? "personal")} className="rounded border p-2">
             <option value="personal">개인</option><option value="together">합방</option><option value="content">콘텐츠</option><option value="match">대회</option>
             <option value="official">치지직 공식 콘텐츠</option><option value="watch">치지직 공식 같이보기</option>
           </select>
-        </label> : <label className="flex items-center gap-2"><input type="checkbox" name="isOfficial" defaultChecked={submission.payload.isOfficial === true} />치지직 공식 채널</label>}
+        </label> : <label className="flex items-center gap-2"><input type="checkbox" name="isOfficial" defaultChecked={(submission.publicationInput?.payload ?? submission.payload).isOfficial === true} />치지직 공식 채널</label>}
         {submission.kind !== "streamer" && <label className="flex w-full flex-col gap-1">{submission.kind === "schedule-edit" ? "변경 요약 *" : "게시 메모"}
-          <input name="changeNote" type="text" required={submission.kind === "schedule-edit"} maxLength={300} placeholder="예: 방송 시작 시간을 변경했습니다" className="rounded border p-2" />
+          <input name="changeNote" type="text" required={submission.kind === "schedule-edit"} defaultValue={submission.publicationInput?.changeNote} readOnly={!!submission.publicationInput} maxLength={300} placeholder="예: 방송 시작 시간을 변경했습니다" className="rounded border p-2" />
         </label>}
         {submission.kind === "schedule-edit" && <label className="flex flex-col gap-1">일정 상태
-          <select name="status" defaultValue={String(submission.payload.status ?? "scheduled")} className="rounded border p-2">
+          <select name="status" defaultValue={String((submission.publicationInput?.payload ?? submission.payload).status ?? "scheduled")} className="rounded border p-2">
             <option value="scheduled">예정</option><option value="cancelled">취소</option>
           </select>
         </label>}
-        <label className="flex w-full items-center gap-2"><input type="checkbox" name="officialConfirmed" />공식으로 게시하는 경우, 치지직 직접 주최·공식 채널 공지를 확인했습니다.</label>
+        <label className="flex w-full items-center gap-2"><input type="checkbox" name="officialConfirmed" defaultChecked={submission.publicationInput?.officialConfirmed} />공식으로 게시하는 경우, 치지직 직접 주최·공식 채널 공지를 확인했습니다.</label>
         <button name="action" value="approve" className="rounded bg-green-700 px-4 py-2 text-white">수정한 내용으로 게시</button>
-        <label className="flex flex-col gap-1">공개 반려 사유
+        {submission.status === "pending" && <><label className="flex flex-col gap-1">공개 반려 사유
           <select name="rejectionCode" required className="rounded border p-2">
             <option value="source_unverifiable">일정 내용을 확인하기 어려움</option>
             <option value="duplicate">이미 접수되거나 게시된 내용</option>
@@ -70,7 +73,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </select>
         </label>
         <input name="reason" aria-label="내부 검수 메모" placeholder="내부 검수 메모 (제보자에게 비공개)" maxLength={500} className="rounded border p-2" />
-        <button name="action" value="reject" className="rounded bg-red-700 px-4 py-2 text-white">반려</button>
+        <button name="action" value="reject" className="rounded bg-red-700 px-4 py-2 text-white">반려</button></>}
       </form>
     </article>)}</div>
   </div></main>;

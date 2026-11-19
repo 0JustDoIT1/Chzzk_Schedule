@@ -46,6 +46,7 @@ run('Submission with isolated Mongo database', () => {
     await connection.model('Submission').init();
     await connection.model('SubmissionLimit').init();
     await connection.model('Streamer').init();
+    await connection.model('Schedule').init();
   }, 30000);
 
   afterAll(async () => {
@@ -338,5 +339,66 @@ run('Submission with isolated Mongo database', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ name: `channel-duplicate-${channelId}`, chzzkLink: `https://chzzk.naver.com/${channelId}/`, isOfficial: false })
       .expect(409);
+  });
+
+  it('recovers a stale approval without publishing a schedule or edit twice', async () => {
+    await connection.collection('submission_limits').deleteMany({});
+    const suffix = randomBytes(4).toString('hex');
+    const name = `recovery-host-${suffix}`;
+    const title = `recovery-schedule-${suffix}`;
+    await request(app.getHttpServer()).post('/v1/streamer/add')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name, chzzkLink: channelUrl(name), isOfficial: false }).expect(201);
+    await request(app.getHttpServer()).post('/v1/submissions/schedule').send({ schedule: {
+      isOfficial: false, streamerName: name, category: 'personal', title, fullDay: false,
+      startAt: '2026-11-20T12:00:00+09:00', endAt: '2026-11-20T13:00:00+09:00',
+    } }).expect(201);
+    const pending = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    const report = pending.body.find((item: { payload: { title?: string } }) => item.payload.title === title);
+    const approve = (id: string, payload: object, changeNote?: string) => request(app.getHttpServer())
+      .patch(`/v1/submissions/${id}/approve`).set('Authorization', `Bearer ${token}`)
+      .send({ payload, officialConfirmed: false, ...(changeNote ? { changeNote } : {}) }).expect(200);
+    await approve(report._id, report.payload);
+    const published = await connection.collection('schedule').findOne({ publicationSubmissionId: new Types.ObjectId(report._id) });
+    expect(published).toBeTruthy();
+    const stale = { status: 'processing', processingStartedAt: new Date(Date.now() - 6 * 60 * 1000) };
+    await connection.collection('submissions').updateOne({ _id: new Types.ObjectId(report._id) }, { $set: stale });
+    await approve(report._id, { ...report.payload, title: `${title}-ignored-retry` });
+    expect(await connection.collection('schedule').countDocuments({ publicationSubmissionId: new Types.ObjectId(report._id) })).toBe(1);
+    expect((await connection.collection('schedule').findOne({ publicationSubmissionId: new Types.ObjectId(report._id) }))?.title).toBe(title);
+
+    const edited = { ...report.payload, title: `${title}-edited` };
+    await request(app.getHttpServer()).post('/v1/submissions/schedule')
+      .send({ schedule: edited, targetScheduleId: published!._id.toString() }).expect(201);
+    const pendingEdit = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    const edit = pendingEdit.body.find((item: { kind: string; payload: { title?: string } }) =>
+      item.kind === 'schedule-edit' && item.payload.title === edited.title);
+    await approve(edit._id, edit.payload, '제목 변경');
+    await connection.collection('submissions').updateOne({ _id: new Types.ObjectId(edit._id) }, { $set: stale });
+    await approve(edit._id, { ...edit.payload, title: `${title}-ignored-edit-retry` }, '무시할 메모');
+    const after = await connection.collection('schedule').findOne({ _id: published!._id });
+    expect(after?.title).toBe(edited.title);
+    expect(after?.revisionHistory).toHaveLength(2);
+  });
+
+  it('recovers a stale streamer approval without creating a second streamer', async () => {
+    await connection.collection('submission_limits').deleteMany({});
+    const name = `recovery-streamer-${randomBytes(4).toString('hex')}`;
+    await request(app.getHttpServer()).post('/v1/submissions/streamer')
+      .send({ streamer: { name, chzzkLink: channelUrl(name), isOfficial: false } }).expect(201);
+    const pending = await request(app.getHttpServer()).get('/v1/submissions/pending')
+      .set('Authorization', `Bearer ${token}`).expect(200);
+    const report = pending.body.find((item: { payload: { name?: string } }) => item.payload.name === name);
+    const approve = (payload = report.payload) => request(app.getHttpServer()).patch(`/v1/submissions/${report._id}/approve`)
+      .set('Authorization', `Bearer ${token}`).send({ payload, officialConfirmed: false }).expect(200);
+    await approve();
+    await connection.collection('submissions').updateOne({ _id: new Types.ObjectId(report._id) }, {
+      $set: { status: 'processing', processingStartedAt: new Date(Date.now() - 6 * 60 * 1000) },
+    });
+    await approve({ ...report.payload, name: `${name}-ignored-retry` });
+    expect(await connection.collection('streamer').countDocuments({ publicationSubmissionId: new Types.ObjectId(report._id) })).toBe(1);
+    expect((await connection.collection('streamer').findOne({ publicationSubmissionId: new Types.ObjectId(report._id) }))?.name).toBe(name);
   });
 });

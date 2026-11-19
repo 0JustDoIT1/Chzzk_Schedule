@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Streamer, StreamerDocument } from 'src/schemas/streamer.schema';
 import { CreateStreamerDto } from './dto/create-streamer.dto';
 import { UserValidate } from './user.validate';
@@ -37,7 +37,11 @@ export class StreamerService {
   }
 
   // Create Streamer
-  async create(streamerData: CreateStreamerDto): Promise<StreamerDocument> {
+  async create(streamerData: CreateStreamerDto, submissionId?: Types.ObjectId): Promise<StreamerDocument> {
+    if (submissionId) {
+      const published = await this.streamerModel.findOne({ publicationSubmissionId: submissionId }).exec();
+      if (published) return published;
+    }
     const channelId = channelIdFromChzzkLink(streamerData.chzzkLink);
     const existStreamer = await this.streamerModel
       .findOne({
@@ -48,9 +52,19 @@ export class StreamerService {
         ],
       })
       .exec();
+    if (submissionId && existStreamer?.publicationSubmissionId?.equals(submissionId)) return existStreamer;
     // Validate streamer
     this.userValidate.throwIfUserExists(existStreamer);
 
-    return await this.streamerModel.create({ ...streamerData, ...(channelId ? { channelId } : {}) });
+    try {
+      return await this.streamerModel.create({ ...streamerData, ...(channelId ? { channelId } : {}),
+        ...(submissionId ? { publicationSubmissionId: submissionId } : {}) });
+    } catch (error) {
+      if (submissionId && (error as { code?: number }).code === 11000) {
+        const published = await this.streamerModel.findOne({ publicationSubmissionId: submissionId }).exec();
+        if (published) return published;
+      }
+      throw error;
+    }
   }
 }

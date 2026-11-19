@@ -16,6 +16,7 @@ import { SubmissionLimit } from './submission-limit.schema';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_REPORTS = 10;
+const PROCESSING_LEASE_MS = 5 * 60 * 1000;
 const rateLimitError = () => new HttpException('제보 요청이 많습니다. 잠시 후 다시 시도해 주세요.', HttpStatus.TOO_MANY_REQUESTS);
 
 function duplicateKey(kind: SubmissionKind, payload: Record<string, unknown>, targetScheduleId?: string): string {
@@ -81,7 +82,10 @@ export class SubmissionService {
   }
 
   listPending() {
-    return this.submissions.find({ status: 'pending' }).sort({ createdAt: 1 }).lean().exec();
+    return this.submissions.find({ $or: [
+      { status: 'pending' },
+      { status: 'processing', processingStartedAt: { $lt: new Date(Date.now() - PROCESSING_LEASE_MS) } },
+    ] }).sort({ createdAt: 1 }).lean().exec();
   }
 
   async getStatus(id: string) {
@@ -99,46 +103,61 @@ export class SubmissionService {
     const reviewer = actor ?? process.env.ADMIN_REVIEW_USERNAME;
     if (!reviewer) throw new ServiceUnavailableException('Admin account is not configured');
     if (!Types.ObjectId.isValid(id)) throw new BadRequestException('Invalid submission id');
+    const processingStartedAt = new Date();
     const submission = await this.submissions.findOneAndUpdate(
-      { _id: id, status: 'pending' },
-      { $set: { status: 'processing' } },
+      { _id: id, $or: [
+        { status: 'pending' },
+        { status: 'processing', processingStartedAt: { $lt: new Date(processingStartedAt.getTime() - PROCESSING_LEASE_MS) } },
+      ] },
+      { $set: { status: 'processing', processingStartedAt } },
       { new: true },
     ).exec();
     if (!submission) throw new ConflictException('Submission unavailable or already reviewed');
 
+    let publicationAttempted = false;
     try {
-      const payload = this.validatePublication(submission.kind, input);
+      const review = submission.publicationInput ?? input;
+      const payload = this.validatePublication(submission.kind, review);
+      if (!submission.publicationInput) {
+        const locked = await this.submissions.updateOne(
+          { _id: id, status: 'processing', processingStartedAt },
+          { $set: { publicationInput: review } },
+        ).exec();
+        if (locked.modifiedCount !== 1) throw new ConflictException('Submission is being reviewed elsewhere');
+        submission.publicationInput = review;
+      }
       const reviewedAt = new Date();
-      const note = input.changeNote?.trim() || (submission.kind === 'schedule' ? '최초 게시' : '');
+      const note = review.changeNote?.trim() || (submission.kind === 'schedule' ? '최초 게시' : '');
       if (submission.kind === 'schedule-edit' && !note) {
         throw new BadRequestException('수정 내용을 요약해 주세요.');
       }
       const evidence: PublicationEvidence = { note, reviewedAt };
+      publicationAttempted = true;
       if (submission.kind === 'streamer') {
-        await this.streamers.create(payload as any);
+        await this.streamers.create(payload as any, submission._id);
       } else {
         const schedule = { ...payload };
-        // Public detail currently renders HTML. Publish plain escaped text until a sanitizer is added.
-        if (typeof schedule.contents === 'string') {
-          schedule.contents = schedule.contents.replace(/<[^>]*>/g, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
         if (submission.kind === 'schedule') {
-          await this.schedules.create(schedule as any, evidence);
+          await this.schedules.create(schedule as any, evidence, submission._id);
         } else {
           if (!submission.targetScheduleId) throw new BadRequestException('Missing target schedule');
-          await this.schedules.updateSchedule(submission.targetScheduleId.toString(), schedule as any, evidence);
+          await this.schedules.updateSchedule(submission.targetScheduleId.toString(), schedule as any, evidence, submission._id);
         }
       }
-
       submission.status = 'approved';
+      submission.processingStartedAt = undefined;
       submission.payload = payload;
       submission.reviewedAt = reviewedAt;
       submission.reviewedBy = reviewer;
       await submission.save();
       return { id: submission.id as string, status: submission.status };
     } catch (error) {
-      submission.status = 'pending';
-      await submission.save();
+      if (!publicationAttempted || error instanceof HttpException) {
+        await this.submissions.findOneAndUpdate(
+          { _id: id, status: 'processing', processingStartedAt },
+          { $set: { status: 'pending' }, $unset: { processingStartedAt: 1, publicationInput: 1 } },
+        ).exec();
+      }
       throw error;
     }
   }

@@ -76,4 +76,17 @@ run('Monthly calendar boundaries with isolated Mongo database', () => {
       expect(body['2026-12-01']).toBeUndefined();
     }
   });
+
+  it('returns 400 for malformed public month and id parameters', async () => {
+    const paths = [
+      '/v1/schedule/id/not-an-id',
+      '/v1/schedule/link/not-an-id',
+      '/v1/schedule/month/not-a-month',
+      '/v1/schedule/month/2026-99-01',
+      '/v1/schedule/month/2026-11-15/id/not-an-id',
+      '/v1/schedule/month/2026-99-01/name/참여자',
+      '/v1/schedule/official/month/2026-99-01',
+    ];
+    for (const path of paths) await request(app.getHttpServer()).get(path).expect(400);
+  });
 });

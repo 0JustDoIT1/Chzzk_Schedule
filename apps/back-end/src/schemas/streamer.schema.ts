@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type StreamerDocument = HydratedDocument<Streamer>;
 
@@ -16,6 +16,9 @@ export class Streamer {
 
   @Prop({ type: String, unique: true, sparse: true })
   channelId?: string;
+
+  @Prop({ type: Types.ObjectId, unique: true, sparse: true })
+  publicationSubmissionId?: Types.ObjectId;
 
   @Prop({ required: false, type: () => [String] })
   tag?: string[];

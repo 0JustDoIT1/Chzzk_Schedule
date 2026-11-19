@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { ScheduleService } from './schedule.service';
+import { plainScheduleContents, ScheduleService } from './schedule.service';
 
 describe('ScheduleService KST date boundary', () => {
   const entries = [
@@ -33,6 +33,21 @@ describe('ScheduleService KST date boundary', () => {
     model.find.mockClear();
     await expect(service.getScheduleListByDate('2026-02-30')).rejects.toBeInstanceOf(BadRequestException);
     expect(model.find).not.toHaveBeenCalled();
+  });
+
+  it('rejects invalid month and id inputs before querying', async () => {
+    model.find.mockClear();
+    await expect(service.getScheduleListByMonth('2026-99-01')).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.getScheduleListByMonth('not-a-month')).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.getScheduleListByMonthWithId('2026-11-01', 'not-an-id')).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.getScheduleById('not-an-id')).rejects.toBeInstanceOf(BadRequestException);
+    expect(model.find).not.toHaveBeenCalled();
+  });
+
+  it('converts rich text to plain text before storage', () => {
+    expect(plainScheduleContents('<p>안녕 &amp; 반가워</p><p><img src=x onerror=alert(1)>다음</p>'))
+      .toBe('안녕 & 반가워\n다음');
+    expect(plainScheduleContents('줄 1<br>줄 2')).toBe('줄 1\n줄 2');
   });
 
   it('places exact midnight ends only on the preceding calendar day', () => {

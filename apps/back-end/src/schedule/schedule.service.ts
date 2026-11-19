@@ -36,6 +36,29 @@ const sameTrackedValue = (field: typeof trackedFields[number], before: unknown, 
   return JSON.stringify(before) === JSON.stringify(after);
 };
 
+const assertObjectId = (id: string) => {
+  if (!/^[0-9a-f]{24}$/i.test(id)) throw new BadRequestException('일정 또는 스트리머 ID 형식이 올바르지 않습니다.');
+};
+
+const assertKstDate = (date: string) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+  const parsed = new Date(`${date}T00:00:00+09:00`);
+  if (!Number.isFinite(parsed.getTime()) ||
+      new Date(parsed.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10) !== date) {
+    throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+  }
+};
+
+export const plainScheduleContents = (contents?: string): string | undefined => {
+  if (contents === undefined) return undefined;
+  return contents.replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(?:p|div|li|h[1-6])\s*>/gi, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").replace(/&nbsp;/gi, ' ')
+    .trim();
+};
+
 const validateScheduleTime = (data: CreateScheduleDto) => {
   const start = new Date(data.startAt).getTime();
   const end = new Date(data.endAt).getTime();
@@ -63,11 +86,23 @@ export class ScheduleService {
     private scheduleValidate: ScheduleValidate,
   ) {}
 
-  async create(scheduleData: CreateScheduleDto, evidence?: PublicationEvidence): Promise<ScheduleDocument> {
+  async create(scheduleData: CreateScheduleDto, evidence?: PublicationEvidence, submissionId?: Types.ObjectId): Promise<ScheduleDocument> {
     validateScheduleTime(scheduleData);
+    if (submissionId) {
+      const published = await this.scheduleModel.findOne({ publicationSubmissionId: submissionId }).exec();
+      if (published) return published;
+    }
     const streamer = await this.streamerService.getStreamerByName(scheduleData.streamerName);
     const members = await this.resolveMembers(streamer.name, scheduleData.member);
-    await this.validateDuplicateSchedule(streamer.name, scheduleData.title, scheduleData.startAt);
+    try {
+      await this.validateDuplicateSchedule(streamer.name, scheduleData.title, scheduleData.startAt);
+    } catch (error) {
+      if (submissionId) {
+        const published = await this.scheduleModel.findOne({ publicationSubmissionId: submissionId }).exec();
+        if (published) return published;
+      }
+      throw error;
+    }
 
     const createData: Schedule = {
       ...scheduleData,
@@ -75,11 +110,22 @@ export class ScheduleService {
       chzzkLink: streamer.chzzkLink,
       member: members.map((member) => member.name),
       memberIds: members.map((member) => member._id),
+      contents: plainScheduleContents(scheduleData.contents),
+      ...(submissionId ? { publicationSubmissionId: submissionId } : {}),
       ...(evidence ? {
-        revisionHistory: [{ version: 1, reviewedAt: evidence.reviewedAt, note: evidence.note, changedFields: [] }],
+        revisionHistory: [{ version: 1, reviewedAt: evidence.reviewedAt, note: evidence.note, changedFields: [],
+          ...(submissionId ? { submissionId } : {}) }],
       } : {}),
     };
-    return this.scheduleModel.create(createData);
+    try {
+      return await this.scheduleModel.create(createData);
+    } catch (error) {
+      if (submissionId && (error as { code?: number }).code === 11000) {
+        const published = await this.scheduleModel.findOne({ publicationSubmissionId: submissionId }).exec();
+        if (published) return published;
+      }
+      throw error;
+    }
   }
 
   // Update schedule
@@ -87,8 +133,14 @@ export class ScheduleService {
     id: string,
     scheduleData: CreateScheduleDto,
     evidence?: PublicationEvidence,
+    submissionId?: Types.ObjectId,
   ): Promise<ScheduleDocument> {
+    assertObjectId(id);
     validateScheduleTime(scheduleData);
+    if (submissionId) {
+      const published = await this.scheduleModel.findOne({ _id: id, 'revisionHistory.submissionId': submissionId }).exec();
+      if (published) return published;
+    }
     const existSchedule = await this.scheduleModel.findById(id).exec();
     // Validate schedule
     this.scheduleValidate.throwIfScheduleNotFound(existSchedule);
@@ -127,9 +179,11 @@ export class ScheduleService {
       chzzkLink: streamer.chzzkLink,
       member: members.map((member) => member.name),
       memberIds: members.map((member) => member._id),
+      contents: plainScheduleContents(scheduleData.contents),
     };
 
     const revision: ScheduleRevision | undefined = evidence ? {
+      ...(submissionId ? { submissionId } : {}),
       version: (existSchedule.revisionHistory?.length ?? 0) + 1,
       reviewedAt: evidence.reviewedAt,
       note: evidence.note,
@@ -137,14 +191,19 @@ export class ScheduleService {
         !sameTrackedValue(field, existSchedule[field], updateData[field])),
     } : undefined;
 
-    const updated = await this.scheduleModel
-      .findByIdAndUpdate(id, revision ? {
+    const update = revision ? {
         $set: updateData,
         $push: { revisionHistory: revision },
-      } : updateData, {
-        new: true,
-      })
-      .exec();
+      } : updateData;
+    const updated = submissionId
+      ? await this.scheduleModel.findOneAndUpdate(
+        { _id: id, 'revisionHistory.submissionId': { $ne: submissionId } }, update, { new: true }).exec()
+      : await this.scheduleModel.findByIdAndUpdate(id, update, { new: true }).exec();
+
+    if (!updated && submissionId) {
+      const published = await this.scheduleModel.findOne({ _id: id, 'revisionHistory.submissionId': submissionId }).exec();
+      if (published) return published;
+    }
 
     this.scheduleValidate.throwIfScheduleNotFound(updated); // 혹시 null이면 방지
 
@@ -153,6 +212,7 @@ export class ScheduleService {
 
   // Get schedule by Object Id
   async getScheduleById(id: string): Promise<ScheduleDocument> {
+    assertObjectId(id);
     const schedule = await this.scheduleModel.findOne({ _id: id }).exec();
     // Validate schedule
     this.scheduleValidate.throwIfScheduleNotFound(schedule);
@@ -162,12 +222,8 @@ export class ScheduleService {
 
   // Get schedule list by Date
   async getScheduleListByDate(date: string): Promise<IDateSchedule> {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+    assertKstDate(date);
     const startDate = new Date(`${date}T00:00:00+09:00`);
-    if (!Number.isFinite(startDate.getTime()) ||
-      new Date(startDate.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10) !== date) {
-      throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
-    }
     const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
 
     const scheduleList = await this.scheduleModel
@@ -223,6 +279,7 @@ export class ScheduleService {
 
   // Get Schedule list by Month
   async getScheduleListByMonth(month: string): Promise<TMonthSchedule> {
+    assertKstDate(month);
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
@@ -257,6 +314,8 @@ export class ScheduleService {
     month: string,
     id: string,
   ): Promise<TMonthSchedule> {
+    assertKstDate(month);
+    assertObjectId(id);
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
@@ -296,6 +355,7 @@ export class ScheduleService {
     month: string,
     name: string,
   ): Promise<TMonthSchedule> {
+    assertKstDate(month);
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
@@ -332,6 +392,7 @@ export class ScheduleService {
 
   // Get Chzzk official Schedule list by Month (치지직 공식 스케줄)
   async getOfficialScheduleListByMonth(month: string): Promise<TMonthSchedule> {
+    assertKstDate(month);
     const startDate = dateTypeToDate(getStartDate(month, 'M')); // e.g. 2025-03-01
     const endDate = dateTypeToDate(addDate(startDate, 1, 'M'));
 
@@ -434,6 +495,7 @@ export class ScheduleService {
 
   // Get Schedule streamer info by Object id
   async getScheduleLinkById(id: string): Promise<StreamerDocument[]> {
+    assertObjectId(id);
     const schedule = await this.scheduleModel.findOne({ _id: id }).exec();
     // Validate schedule
     this.scheduleValidate.throwIfScheduleNotFound(schedule);

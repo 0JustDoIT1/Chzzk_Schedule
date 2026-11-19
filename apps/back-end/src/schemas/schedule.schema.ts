@@ -6,6 +6,9 @@ export type ScheduleDocument = HydratedDocument<Schedule>;
 
 @Schema({ _id: false })
 export class ScheduleRevision {
+  @Prop({ type: Types.ObjectId })
+  submissionId?: Types.ObjectId;
+
   @Prop({ required: true, type: Number })
   version: number;
 
@@ -26,6 +29,8 @@ export const ScheduleRevisionSchema = SchemaFactory.createForClass(ScheduleRevis
 
 @Schema({ collection: 'schedule', timestamps: true })
 export class Schedule {
+  @Prop({ type: Types.ObjectId, unique: true, sparse: true })
+  publicationSubmissionId?: Types.ObjectId;
   @Prop({ required: true, type: Boolean })
   isOfficial: boolean;
 

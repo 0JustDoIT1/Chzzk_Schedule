@@ -101,9 +101,8 @@ const ScheduleDetailView = ({ id }: IScheduleDetailView) => {
           {data.contents && (
             <div className="relative mb-4">
               <div
-                className="border border-textLight rounded-lg p-4"
-                dangerouslySetInnerHTML={{ __html: data.contents }}
-              />
+                className="whitespace-pre-wrap break-words border border-textLight rounded-lg p-4"
+              >{data.contents}</div>
               <div className="absolute -top-2 left-4 bg-white px-2">
                 <p className="text-sm text-textNormal">일정 내용</p>
               </div>

@@ -1,12 +1,15 @@
 jest.mock('../streamer/streamer.service', () => ({ StreamerService: class {} }));
 jest.mock('../schedule/schedule.service', () => ({ ScheduleService: class {} }));
 import { SubmissionService } from './submission.service';
+import { Types } from 'mongoose';
 
 describe('SubmissionService', () => {
+  const reportId = new Types.ObjectId('507f1f77bcf86cd799439011');
   const submissions = {
     create: jest.fn(),
     findOneAndUpdate: jest.fn(),
     findOne: jest.fn(),
+    updateOne: jest.fn(),
   };
   const limits = { findOneAndUpdate: jest.fn() };
   const streamers = { create: jest.fn() };
@@ -18,6 +21,7 @@ describe('SubmissionService', () => {
     process.env.ADMIN_WRITE_TOKEN = 'a'.repeat(32);
     process.env.ADMIN_REVIEW_USERNAME = 'reviewer';
     limits.findOneAndUpdate.mockReturnValue({ exec: async () => ({ count: 1 }) });
+    submissions.updateOne.mockReturnValue({ exec: async () => ({ modifiedCount: 1 }) });
   });
 
   it('stores a streamer report without publishing it', async () => {
@@ -47,13 +51,24 @@ describe('SubmissionService', () => {
   });
 
   it('publishes only after approval', async () => {
-    const report = { id: 'report-id', kind: 'streamer', payload: { name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false }, status: 'processing', reviewedBy: '', save: jest.fn() };
+    const report = { _id: reportId, id: 'report-id', kind: 'streamer', payload: { name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false }, status: 'processing', reviewedBy: '', save: jest.fn() };
     submissions.findOneAndUpdate.mockReturnValue({ exec: async () => report });
     await service.approve('507f1f77bcf86cd799439011', { payload: report.payload, officialConfirmed: false });
-    expect(streamers.create).toHaveBeenCalledWith(report.payload);
+    expect(streamers.create).toHaveBeenCalledWith(report.payload, reportId);
     expect(report.status).toBe('approved');
     expect(report.reviewedBy).toBe('reviewer');
     expect(report.save).toHaveBeenCalled();
+  });
+
+  it('keeps processing after publication when final status persistence fails', async () => {
+    const report = { _id: reportId, id: 'report-id', kind: 'streamer', payload: {
+      name: 'test', chzzkLink: 'https://chzzk.naver.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', isOfficial: false,
+    }, status: 'processing', save: jest.fn().mockRejectedValue(new Error('save failed')) };
+    submissions.findOneAndUpdate.mockReturnValue({ exec: async () => report });
+    await expect(service.approve(reportId.toString(), { payload: report.payload, officialConfirmed: false }))
+      .rejects.toThrow('save failed');
+    expect(streamers.create).toHaveBeenCalledTimes(1);
+    expect(submissions.findOneAndUpdate).toHaveBeenCalledTimes(1);
   });
 
   it('rejects public official classification', () => {
@@ -64,7 +79,7 @@ describe('SubmissionService', () => {
 
   it('requires explicit official classification confirmation on approval', async () => {
     const payload = { isOfficial: true, streamerName: 'some channel', category: 'official', title: 'event', fullDay: false, startAt: '2026-11-13T00:00:00+09:00', endAt: '2026-11-13T01:00:00+09:00' };
-    const report = { id: 'report-id', kind: 'schedule', payload, status: 'processing', save: jest.fn() };
+    const report = { _id: reportId, id: 'report-id', kind: 'schedule', payload, status: 'processing', save: jest.fn() };
     submissions.findOneAndUpdate.mockReturnValue({ exec: async () => report });
     await expect(service.approve('507f1f77bcf86cd799439011', { payload, officialConfirmed: false })).rejects.toThrow('공식 방송 여부 확인');
     expect(schedules.create).not.toHaveBeenCalled();
@@ -72,6 +87,7 @@ describe('SubmissionService', () => {
     expect(schedules.create).toHaveBeenCalledWith(
       expect.objectContaining({ streamerName: '치지직 공식', isOfficial: true }),
       expect.objectContaining({ note: '최초 게시' }),
+      reportId,
     );
   });
 

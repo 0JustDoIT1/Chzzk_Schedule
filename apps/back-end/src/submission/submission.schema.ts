@@ -30,6 +30,12 @@ export class Submission {
   @Prop({ type: Types.ObjectId, ref: 'Schedule' })
   targetScheduleId?: Types.ObjectId;
 
+  @Prop({ type: Date })
+  processingStartedAt?: Date;
+
+  @Prop({ type: Object })
+  publicationInput?: { payload: Record<string, unknown>; officialConfirmed: boolean; changeNote?: string };
+
   @Prop({ type: String })
   reason?: string;
 
